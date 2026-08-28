@@ -396,7 +396,7 @@ if (Array.isArray(E.feitos)){
   delete E.feitos;
 }
 function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch(e){} }
-const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length;
+const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time;
 
 let aba = "painel", filtro = "tudo", busca = "", medalhasAntes = new Set(), primeira = true;
 let podeBuscar = null; // null = ainda não testado
@@ -1107,10 +1107,23 @@ function boasVindas(){
   h.appendChild(el("p","","Cadastre a sua OAB e o painel lê sozinho as publicações do Diário de Justiça Eletrônico Nacional, calcula os prazos e monta a agenda. Depois é só chamar o time."));
   f.appendChild(h);
 
+  /* Quem recebeu o link e o código do time precisa chegar aqui SEM passar por
+     Ajustes — que, num painel vazio, nem existe ainda. */
+  const faixa = el("div","aviso az");
+  faixa.style.cssText = "margin:0 0 26px";
+  faixa.appendChild(el("span","k","Tem código?"));
+  const fd = el("div");
+  fd.appendChild(el("div",null,"Se alguém do escritório te mandou um código do time, comece por aqui: você entra direto na lista compartilhada, sem configurar nada."));
+  const fb = botao("Entrar num time","pessoa","pri", () => dlgEntrarTime());
+  fb.style.marginTop = "11px";
+  fd.appendChild(fb);
+  faixa.appendChild(fd);
+  f.appendChild(faixa);
+
   const ps = el("div","passos");
   const dados = [
     ["1","var(--azul)","Cadastre uma OAB","O painel busca no DJEN do CNJ — de graça, sem login e sem token. Vale para qualquer advogado, esteja ou não em lista nenhuma.", () => dlgOab(), "Adicionar OAB","mais"],
-    ["2","var(--verde)","Monte o time","Cadastre quem pode receber tarefas: advogados, estagiários, secretaria — qualquer pessoa.", () => dlgPessoa(), "Cadastrar pessoa","pessoa"],
+    ["2","var(--verde)","Monte a equipe","Cadastre quem pode receber tarefas: advogados, estagiários, secretaria — qualquer pessoa.", () => dlgPessoa(), "Cadastrar pessoa","pessoa"],
     ["3","var(--violeta)","Crie tarefas","Além do que vem do diário, escreva as suas providências e delegue para quem for fazer.", () => dlgTarefa(), "Nova tarefa","lista"],
   ];
   dados.forEach(([n,cor,tit,txt,fn,rot,ic]) => {
