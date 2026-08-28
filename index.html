@@ -354,7 +354,14 @@ const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","ag
 const MES3 = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 const br = s => s ? s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4) : "";
 const isoDe = d => d.toISOString().slice(0,10);
-const HOJE = isoDe(new Date());
+/* isoDe serve para as contas de dias úteis, que são feitas em datas UTC puras
+   (new Date(iso+"T00:00:00Z")) e por isso estão certas. Mas o dia de HOJE tem
+   que sair do relógio LOCAL: no Brasil (UTC-3), depois das 21h o toISOString()
+   já aponta para amanhã, e o painel marcaria os prazos de hoje como perdidos. */
+const dataLocal = (d = new Date()) =>
+  d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+const horaLocal = iso => { const d = new Date(iso); return isNaN(d) ? "" : String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); };
+const HOJE = dataLocal();
 const uid = () => "x" + Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
 const iniciais = n => n.trim().split(/\s+/).filter(p => p.length > 2 || /^[A-ZÀ-Ú]/.test(p)).slice(0,2).map(p => p[0]).join("").toUpperCase() || "?";
 
@@ -844,7 +851,7 @@ function pintaSync(){
   if (sincronizando){ n.textContent = "Time " + E.time.nome + " · sincronizando…"; return; }
   if (ultimoErroSync){ n.textContent = "Time " + E.time.nome + " · falhou ao sincronizar"; return; }
   const q = E.time.sincronizadoEm;
-  n.textContent = "Time " + E.time.nome + (q ? " · sincronizado " + q.slice(11,16) : "");
+  n.textContent = "Time " + E.time.nome + (q ? " · sincronizado " + horaLocal(q) : "");
 }
 
 /* ===================== gamificação ===================== */
@@ -1698,7 +1705,7 @@ function secaoTime(){
   const inf = el("div");
   inf.appendChild(el("div","nm", t.nome)).style.cssText = "font:600 17px/1.25 'Source Sans 3',sans-serif";
   inf.appendChild(el("div","pp", "você aparece como " + t.meuNome
-    + (t.sincronizadoEm ? " · sincronizado " + br(t.sincronizadoEm.slice(0,10)) + " às " + t.sincronizadoEm.slice(11,16) : " · ainda não sincronizado")))
+    + (t.sincronizadoEm ? " · sincronizado " + br(dataLocal(new Date(t.sincronizadoEm))) + " às " + horaLocal(t.sincronizadoEm) : " · ainda não sincronizado")))
     .style.cssText = "font:500 12.5px/1.4 'IBM Plex Mono',monospace;color:var(--muted);margin-top:3px";
   top.appendChild(inf);
   cx.appendChild(top);
