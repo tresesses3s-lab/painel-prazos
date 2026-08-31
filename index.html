@@ -198,6 +198,17 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .cr .dir{margin-left:auto; display:flex; gap:8px}
 
 
+.card.dispensada{opacity:.6}
+.card.dispensada .ct{text-decoration:line-through; text-decoration-color:var(--muted)}
+.caixa{background:linear-gradient(135deg,var(--violeta),var(--azul)); color:var(--on-cor); border-radius:16px; padding:20px 22px; margin-bottom:22px; box-shadow:var(--sh-l); display:flex; gap:18px; align-items:center; flex-wrap:wrap}
+.caixa .qt{font:700 40px/1 "IBM Plex Mono",monospace; letter-spacing:-.04em}
+.caixa .tx{flex:1; min-width:220px}
+.caixa .tx b{display:block; font:700 18px/1.3 "Bricolage Grotesque",sans-serif; margin-bottom:4px}
+.caixa .tx span{font-size:14px; opacity:.88; line-height:1.5}
+.caixa .bt{background:rgba(255,255,255,.18); border-color:transparent; color:var(--on-cor)}
+.caixa .bt:hover{background:rgba(255,255,255,.3); color:var(--on-cor)}
+.novo-pill{background:var(--violeta); color:var(--on-cor); animation:pisca 1.6s ease-in-out 3}
+@keyframes pisca{0%,100%{opacity:1}50%{opacity:.45}}
 .card.perdeu{border-color:var(--rosa); box-shadow:0 0 0 1px var(--rosa) inset, var(--sh-m)}
 .card.c-perdeu .fl .m{background:var(--rosa)} .card.c-perdeu .fl .d{color:var(--rosa)}
 .tag.t-perdeu{background:var(--rosa); color:var(--on-cor); letter-spacing:.13em}
@@ -411,12 +422,16 @@ let podeBuscar = null; // null = ainda não testado
 /* ===================== providências (DJEN + manuais) ===================== */
 const PESO = { sessao:15, prazo:10, acao:5, manual:8 };
 const pessoasVivas = () => E.pessoas.filter(p => !p.removido);
+/* Sem saber QUAL pessoa da equipe eu sou, não há como dizer "passaram para você". */
+const euSou = () => (E.time && E.time.pessoaId) ? pessoaDe(E.time.pessoaId) : null;
+const souEu = id => !!(E.time && E.time.pessoaId && id === E.time.pessoaId);
 const pessoaDe = id => E.pessoas.find(p => p.id === id && !p.removido) || null;
 
 /* Estados. O prazo FATAL é a data do ato; o prazo INTERNO é o fatal menos a
    antecedência configurada, em dias úteis. "Perdeu" quer dizer: o fatal passou
    e nada foi marcado como feito AQUI — não é afirmação sobre os autos. */
 function estadoDe(p){
+  if (p.dispensada) return "dispensada";
   if (p.feita) return "feita";
   if (!p.data) return "semdata";
   if (p.tipo === "sessao") return p.data < HOJE ? "passou" : "sessao";
@@ -438,6 +453,7 @@ const ROTULO = {
   sessao:      { cor:"violeta", tag:"t-violeta", txt:"Sessão de julgamento" },
   passou:      { cor:"cinza",   tag:"",          txt:"Sessão realizada" },
   feita:       { cor:"cinza",   tag:"t-verde",   txt:"Concluída" },
+  dispensada:  { cor:"cinza",   tag:"",          txt:"Dispensada" },
   semdata:     { cor:"cinza",   tag:"",          txt:"Sem data" },
 };
 
@@ -449,12 +465,14 @@ function provDjen(){
     titulo: i.sessao ? "Preparar memorial / sustentação oral" : (i.acoes[0] || "Cumprir o determinado"),
     quem: i.pessoaId || null,
     feita: !!i.feita, quemFez: i.feitaPor || null,
+    dispensada: !!i.dispensada, motivo: i.motivoDispensa || null, dePor: i.delegadaPorNome || null,
   }));
 }
 function provManual(){
   return E.tarefas.filter(t => !t.removido).map(t => ({
     key:"t"+t.id, fonte:"manual", bruto:t, tipo:"manual",
     data: t.prazo || null, titulo: t.titulo, quem: t.pessoaId || null, feita: !!t.feita, quemFez: t.feitaPor || null,
+    dispensada: !!t.dispensada, motivo: t.motivoDispensa || null, dePor: t.delegadaPorNome || null,
   }));
 }
 const TODAS = () => provDjen().concat(provManual());
@@ -468,10 +486,22 @@ function casa(p){
 }
 const atrasada = p => ["atrasado","fatalhoje"].includes(estadoDe(p));
 const perdida = p => estadoDe(p) === "perdeu";
+const minha = p => souEu(p.quem);
+const novaParaMim = p => minha(p) && !p.feita && !p.dispensada && p.bruto.delegadaPor
+  && p.bruto.delegadaPor !== (E.time && E.time.pessoaId)
+  && !(p.bruto.vistaPor || []).includes(E.time && E.time.pessoaId);
+function marcarVista(p){
+  const alvo = p.fonte === "manual" ? p.bruto : E.djen.find(x => x.id === p.bruto.id);
+  if (!alvo || !E.time || !E.time.pessoaId) return;
+  alvo.vistaPor = [...new Set([...(alvo.vistaPor || []), E.time.pessoaId])];
+  tocou(alvo); salvar();
+}
 function passa(p){
   if (filtro === "tudo") return true;
-  if (filtro === "aberto") return !p.feita;
+  if (filtro === "aberto") return !p.feita && !p.dispensada;
   if (filtro === "urgente") return !p.feita && !!p.data && p.data >= HOJE && uteisEntre(HOJE,p.data) <= 5;
+  if (filtro === "paramim") return minha(p) && !p.feita && !p.dispensada;
+  if (filtro === "dispensada") return p.dispensada;
   if (filtro === "perdeu") return perdida(p);
   if (filtro === "atraso") return atrasada(p);
   if (filtro === "minhas") return !p.feita && !p.quem;
@@ -481,6 +511,28 @@ function passa(p){
 }
 const base = () => TODAS().filter(casa);
 const vis = () => base().filter(passa);
+
+function dlgDispensar(p){
+  const motivo = entrada("text", "", "Ex.: não precisa de ED neste caso");
+  modal("Dispensar sem fazer", "Use quando a providência apareceu mas não é necessária. Ela sai da contagem de pendências e para de cobrar, mas continua registrada com o motivo.",
+    [campo("Por que não precisa?", motivo)],
+    () => {
+      const alvo = p.fonte === "manual" ? p.bruto : E.djen.find(x => x.id === p.bruto.id);
+      if (alvo){
+        alvo.dispensada = true;
+        alvo.motivoDispensa = motivo.value.trim() || "sem motivo informado";
+        alvo.dispensadaPor = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+        alvo.dispensadaEm = agoraISO();
+        tocou(alvo);
+      }
+      salvar(); render(); return true;
+    }, "Dispensar");
+}
+function reativar(p){
+  const alvo = p.fonte === "manual" ? p.bruto : E.djen.find(x => x.id === p.bruto.id);
+  if (alvo){ alvo.dispensada = false; alvo.motivoDispensa = null; tocou(alvo); }
+  salvar(); render();
+}
 
 function alternar(key){
   const obj = key[0] === "d" ? E.djen.find(x => "d" + x.id === key) : E.tarefas.find(x => "t" + x.id === key);
@@ -601,6 +653,8 @@ function evento(p){
     "STATUS:CONFIRMED",
     "TRANSP:TRANSPARENT"];
   if (resp && resp.email) L.push("ATTENDEE;CN=" + icsEsc(resp.nome) + ";ROLE=REQ-PARTICIPANT:mailto:" + resp.email);
+  const eu = euSou();
+  if (eu && eu.email && (!resp || resp.email !== eu.email)) L.push("ORGANIZER;CN=" + icsEsc(eu.nome) + ":mailto:" + eu.email);
   const ant = Math.max(1, E.antecedencia || 3);
   if (p.tipo !== "sessao"){
     L.push("BEGIN:VALARM","TRIGGER:-P" + ant + "D","ACTION:DISPLAY",
@@ -623,12 +677,23 @@ async function baixarIcs(lista, sufixo){
   if (!comData.length){ alert("Nenhum item com data para mandar ao calendário."); return; }
   await salvarArquivo("prazos-" + (sufixo || "painel") + "-" + HOJE + ".ics", montaIcs(comData), "text/calendar");
 }
-function linkGoogle(p){
-  const q = new URLSearchParams({ action:"TEMPLATE",
+/* Convidados: o Google Agenda aceita "add" com e-mails separados por vírgula.
+   Ao salvar o evento, ELE dispara os convites — coisa que importar .ics não faz. */
+function convidados(p, todos){
+  const emails = [];
+  const resp = pessoaDe(p.quem);
+  if (resp && resp.email) emails.push(resp.email);
+  if (todos) pessoasVivas().forEach(x => { if (x.email && !emails.includes(x.email)) emails.push(x.email); });
+  return emails;
+}
+function linkGoogle(p, todos){
+  const campos = { action:"TEMPLATE",
     text:(p.tipo === "sessao" ? "Sessão: " : "PRAZO: ") + p.titulo,
     dates: compacta(p.data) + "/" + maisUmDia(p.data),
-    details: descreve(p) });
-  return "https://calendar.google.com/calendar/render?" + q.toString();
+    details: descreve(p) };
+  const gente = convidados(p, todos);
+  if (gente.length) campos.add = gente.join(",");
+  return "https://calendar.google.com/calendar/render?" + new URLSearchParams(campos).toString();
 }
 async function salvarArquivo(nome, texto, mime){
   try {
@@ -652,7 +717,9 @@ async function salvarArquivo(nome, texto, mime){
 
 const FS = "https://firestore.googleapis.com/v1";
 const COLECOES = ["pessoas", "tarefas", "djen"];
+const INTERVALO_SINAL = 20000;   // 20s: uma leitura por rodada, por pessoa
 let sincronizando = false, ultimoErroSync = null, timerSync = null;
+let timerSinal = null, sinalVisto = null, aoVivo = false;
 
 const agoraISO = () => new Date().toISOString();
 function b64url(s){ return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
@@ -770,6 +837,35 @@ async function fsLista(col){
 }
 const fsGrava = (col, id, obj) => fsChama(caminho(col, id), { method:"PATCH", body: JSON.stringify(paraDoc(obj)) });
 
+/* ---- sinal: o contador que avisa que alguém mexeu ---- */
+async function lerSinal(){
+  const d = await fsChama(caminho("meta", "sinal"), { method: "GET" });
+  return d ? (deDoc(d).versao || 0) : 0;
+}
+async function baterSinal(){
+  try {
+    const atual = await lerSinal();
+    await fsGrava("meta", "sinal", { versao: atual + 1, em: agoraISO(), por: (E.time && E.time.meuNome) || "" });
+    sinalVisto = atual + 1;
+  } catch(e) { /* o sinal é um acelerador, não pode derrubar a gravação */ }
+}
+async function espiarSinal(){
+  if (!E.time || sincronizando) return;
+  try {
+    const v = await lerSinal();
+    if (sinalVisto === null) { sinalVisto = v; return; }
+    if (v !== sinalVisto) { sinalVisto = v; await sincronizarTime(true); }
+  } catch(e) { /* silencioso: erro real aparece na sincronização */ }
+}
+function ligarAoVivo(){
+  if (aoVivo) return;
+  aoVivo = true;
+  clearInterval(timerSinal);
+  timerSinal = setInterval(espiarSinal, INTERVALO_SINAL);
+  addEventListener("focus", () => { if (E.time && !sincronizando) sincronizarTime(true); });
+  addEventListener("visibilitychange", () => { if (!document.hidden && E.time && !sincronizando) sincronizarTime(true); });
+}
+
 /* ---- entrar / sair ---- */
 async function entrarNoTime(codigo, meuNome){
   const c = decodificaCodigo(codigo);
@@ -780,8 +876,9 @@ async function entrarNoTime(codigo, meuNome){
   await tokenValido();
   await fsGrava("membros", E.time.uid, { nome: E.time.meuNome, entrouEm: agoraISO() });
   await sincronizarTime();
+  ligarAoVivo();
 }
-function sairDoTime(){ E.time = null; salvar(); render(); }
+function sairDoTime(){ E.time = null; sinalVisto = null; clearInterval(timerSinal); aoVivo = false; salvar(); render(); }
 
 /* ---- reconciliação ---- */
 function localDe(col){
@@ -800,6 +897,7 @@ const quando = o => o.atualizadoEm || "1970-01-01T00:00:00.000Z";
 async function sincronizarTime(silencioso){
   if (!E.time || sincronizando) return;
   sincronizando = true; ultimoErroSync = null;
+  let enviou = false;
   if (!silencioso) pintaSync();
   try {
     for (const col of COLECOES){
@@ -825,10 +923,13 @@ async function sincronizarTime(silencioso){
       for (const o of mandar){
         const corpo = Object.assign({}, o); delete corpo.id;
         await fsGrava(col, chaveDe(o), corpo);
+        enviou = true;
       }
     }
     E.time.sincronizadoEm = agoraISO();
     salvar();
+    if (enviou) await baterSinal(); else { try { sinalVisto = await lerSinal(); } catch(x){} }
+    ligarAoVivo();
   } catch(e){
     ultimoErroSync = e.message || String(e);
   } finally {
@@ -856,10 +957,15 @@ function pintaSync(){
 
 /* ===================== gamificação ===================== */
 function placar(){
-  const b = base(), f = b.filter(p => p.feita);
-  const pontos = f.reduce((s,p) => s + PESO[p.tipo], 0);
+  /* Dispensada nao conta em lugar nenhum: nem como pendencia, nem no
+     denominador do progresso, nem como atraso. So os pontos ja ganhos ficam. */
+  const todas = base();
+  const b = todas.filter(p => !p.dispensada);
+  const f = b.filter(p => p.feita);
+  const pontos = todas.filter(p => p.feita).reduce((s,p) => s + PESO[p.tipo], 0);
   return { total:b.length, feitas:f.length, pontos, pct: b.length ? f.length/b.length : 0, abertas:b.length - f.length,
-    atrasadas: b.filter(atrasada).length, perdidas: b.filter(perdida).length };
+    atrasadas: b.filter(atrasada).length, perdidas: b.filter(perdida).length,
+    dispensadas: todas.length - b.length };
 }
 const NIVEIS = [[0,"Aquecendo"],[50,"No ritmo"],[130,"Em dia"],[250,"Adiantado"],[400,"Impecável"],[600,"Lendário"]];
 function nivelDe(p){ let k=0; NIVEIS.forEach((n,i) => { if (p >= n[0]) k = i; });
@@ -1039,7 +1145,17 @@ function dlgDelegar(p){
   modal("Delegar", "Quem fica responsável por: " + p.titulo, [campo("Responsável", quem)],
     () => {
       const alvo = p.fonte === "manual" ? p.bruto : E.djen.find(x => x.id === p.bruto.id);
-      if (alvo){ alvo.pessoaId = quem.value || null; tocou(alvo); }
+      if (alvo){
+        const mudou = alvo.pessoaId !== (quem.value || null);
+        alvo.pessoaId = quem.value || null;
+        if (mudou && alvo.pessoaId){
+          alvo.delegadaPor = (E.time && E.time.pessoaId) || null;
+          alvo.delegadaPorNome = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+          alvo.delegadaEm = agoraISO();
+          alvo.vistaPor = [];
+        }
+        tocou(alvo);
+      }
       salvar(); render(); return true;
     }, "Delegar");
 }
@@ -1162,9 +1278,30 @@ function boasVindas(){
 }
 
 /* ---------- painel ---------- */
+function caixaDeEntrada(){
+  const novas = base().filter(novaParaMim);
+  if (!novas.length) return null;
+  const quem = [...new Set(novas.map(p => p.dePor).filter(Boolean))];
+  const c = el("div","caixa");
+  c.appendChild(el("div","qt", String(novas.length)));
+  const tx = el("div","tx");
+  tx.appendChild(el("b", null, quem.length === 1
+    ? quem[0] + " passou " + (novas.length === 1 ? "uma tarefa" : novas.length + " tarefas") + " para você"
+    : (novas.length === 1 ? "Passaram uma tarefa para você" : "Passaram " + novas.length + " tarefas para você")));
+  const lista = novas.slice(0,3).map(p => p.titulo + (p.data ? " (até " + br(p.data) + ")" : "")).join(" · ");
+  tx.appendChild(el("span", null, lista + (novas.length > 3 ? " · e mais " + (novas.length - 3) : "")));
+  c.appendChild(tx);
+  const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
+  ac.appendChild(botao("Ver as tarefas","seta","", () => { aba = "todo"; filtro = "paramim"; render(); }));
+  ac.appendChild(botao("Já vi","check","", () => { novas.forEach(marcarVista); render(); }));
+  c.appendChild(ac);
+  return c;
+}
+
 function telaPainel(){
   const f = document.createDocumentFragment();
   const pl = placar(), nv = nivelDe(pl.pontos);
+  const cx = caixaDeEntrada(); if (cx) f.appendChild(cx);
 
   const g = el("div","placar");
 
@@ -1293,11 +1430,13 @@ function barraFiltros(){
   const cs = el("div","chips");
   [["tudo","Tudo",b.length,""],["aberto","Em aberto",b.filter(p=>!p.feita).length,""],
    ["urgente","Vence em 5 dias",b.filter(p=>!p.feita&&p.data&&p.data>=HOJE&&uteisEntre(HOJE,p.data)<=5).length,""],
+   ["paramim","Para mim",b.filter(x => minha(x) && !x.feita && !x.dispensada).length,""],
    ["perdeu","PERDEU",b.filter(perdida).length,"perigo"],
    ["atraso","Atrasadas",b.filter(atrasada).length,"perigo"],
    ["minhas","Comigo",b.filter(p=>!p.feita&&!p.quem).length,""],
    ["delegadas","Delegadas",b.filter(p=>!p.feita&&p.quem).length,""],
-   ["feito","Concluídas",b.filter(p=>p.feita).length,"ok"]].forEach(([k,rot,n,cls]) => {
+   ["feito","Concluídas",b.filter(p=>p.feita).length,"ok"],
+   ["dispensada","Dispensadas",b.filter(p=>p.dispensada).length,""]].forEach(([k,rot,n,cls]) => {
     const c = el("button","chip"+(cls?" "+cls:"")); c.type = "button";
     c.setAttribute("aria-pressed", String(filtro === k));
     c.appendChild(el("span",null,rot)); c.appendChild(el("b",null,String(n)));
@@ -1357,7 +1496,7 @@ function cartao(p){
   const b = p.bruto, ehSessao = p.tipo === "sessao";
   const est = estadoDe(p), R = ROTULO[est];
   const faltam = (!p.data || p.data < HOJE) ? null : uteisEntre(HOJE, p.data);
-  const c = el("div","card c-"+R.cor+(p.feita?" done":"")+(est==="perdeu"?" perdeu":""));
+  const c = el("div","card c-"+R.cor+(p.feita?" done":"")+(est==="perdeu"?" perdeu":"")+(p.dispensada?" dispensada":""));
 
   const fl = el("div","fl");
   if (p.data){ fl.appendChild(el("div","m", MES3[+p.data.slice(5,7)-1])); fl.appendChild(el("div","d", p.data.slice(8,10))); }
@@ -1371,6 +1510,7 @@ function cartao(p){
   else if (est === "emdia" || est === "atencao") txt = "Faltam " + faltam + (faltam === 1 ? " dia útil" : " dias úteis");
   else if (est === "atrasado") txt = "Atrasado · fatal em " + faltam + (faltam === 1 ? " dia útil" : " dias úteis");
   ch.appendChild(el("span","tag "+R.tag, txt));
+  if (novaParaMim(p)) ch.appendChild(el("span","tag novo-pill","Nova para você"));
   if (p.fonte === "manual") ch.appendChild(el("span","tag t-teal","Tarefa sua"));
   if (b.classe) ch.appendChild(el("span","tag", b.classe.length > 30 ? b.classe.slice(0,28)+"…" : b.classe));
   ch.appendChild(el("span","pts","+"+PESO[p.tipo]));
@@ -1428,21 +1568,31 @@ function cartao(p){
   const cr = el("div","cr");
   if (p.quem){ const q = el("span","quem"); q.appendChild(avatar(pessoaDe(p.quem))); q.appendChild(el("span",null,(pessoaDe(p.quem)||{}).nome)); cr.appendChild(q); }
   if (p.feita && p.quemFez) cr.appendChild(el("span","tag t-verde","concluída por " + p.quemFez));
+  if (p.dispensada) cr.appendChild(el("span","tag","dispensada: " + (p.motivo || "sem motivo")));
+  if (!p.feita && !p.dispensada && p.dePor && !souEu(p.bruto.delegadaPor))
+    cr.appendChild(el("span","tag t-violeta","de " + p.dePor));
   if (p.fonte === "djen"){
     const a1 = el("a",null,"Certidão (PDF)"); a1.href = "https://comunicaapi.pje.jus.br/api/v1/comunicacao/"+b.hash+"/certidao";
     a1.target = "_blank"; a1.rel = "noopener"; cr.appendChild(a1);
     if (b.link){ const a2 = el("a",null,"Inteiro teor"); a2.href = b.link; a2.target = "_blank"; a2.rel = "noopener"; cr.appendChild(a2); }
   }
   if (p.data){
-    const ga = el("a",null,"Google Agenda");
+    const ga = el("a",null, convidados(p).length ? "Google Agenda (convida " + (pessoaDe(p.quem)||{}).nome + ")" : "Google Agenda");
     ga.href = linkGoogle(p); ga.target = "_blank"; ga.rel = "noopener";
     cr.appendChild(ga);
+    if (pessoasVivas().some(x => x.email)){
+      const gt = el("a",null,"…com a equipe toda");
+      gt.href = linkGoogle(p, true); gt.target = "_blank"; gt.rel = "noopener";
+      cr.appendChild(gt);
+    }
   }
   const dir = el("div","dir");
   if (p.data) dir.appendChild(botao(".ics","calend","pq", () => baixarIcs([p], "prazo")));
   dir.appendChild(botao(p.quem ? "Trocar" : "Delegar", "pessoa", "pq", () => dlgDelegar(p)));
   if (p.fonte === "manual") dir.appendChild(botao("Editar","lapis","pq", () => dlgTarefa(p.bruto)));
-  dir.appendChild(botao(p.feita ? "Concluída" : "Concluir", "check", p.feita ? "ok pq" : "pq", () => alternar(p.key)));
+  if (p.dispensada) dir.appendChild(botao("Reativar","troca","pq", () => reativar(p)));
+  else if (!p.feita) dir.appendChild(botao("Não precisa","lixo","pq", () => dlgDispensar(p)));
+  dir.appendChild(botao(p.feita ? "Concluída" : "Concluir", "check", p.feita ? "ok pq" : "pq", () => { if (novaParaMim(p)) marcarVista(p); alternar(p.key); }));
   cr.appendChild(dir);
   corpo.appendChild(cr);
 
@@ -1459,6 +1609,7 @@ function telaTodo(){
   cab.appendChild(d);
   cab.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
   f.appendChild(cab);
+  const cx = caixaDeEntrada(); if (cx) f.appendChild(cx);
   f.appendChild(barraFiltros());
 
   const itens = vis();
@@ -1486,7 +1637,9 @@ function telaTodo(){
       lin.appendChild(cb);
       const mid = el("div");
       const tt = el("div","tt");
-      if (atrasada(p)) tt.appendChild(el("span","tag t-rosa","Atrasada"));
+      if (p.dispensada) tt.appendChild(el("span","tag","Dispensada"));
+      else if (novaParaMim(p)) tt.appendChild(el("span","tag novo-pill","Nova para você"));
+      else if (atrasada(p)) tt.appendChild(el("span","tag t-rosa","Atrasada"));
       else if (p.tipo === "sessao") tt.appendChild(el("span","tag t-violeta","Sessão"));
       else if (p.fonte === "manual") tt.appendChild(el("span","tag t-teal","Sua"));
       tt.appendChild(document.createTextNode(" " + p.titulo));
@@ -1499,8 +1652,10 @@ function telaTodo(){
       ts.appendChild(el("span","pts","+"+PESO[p.tipo]));
       mid.appendChild(ts);
       lin.appendChild(mid);
-      const dir = el("div","dir"); dir.style.display = "flex"; dir.style.gap = "7px";
+      const dir = el("div","dir"); dir.style.display = "flex"; dir.style.gap = "7px"; dir.style.flexWrap = "wrap";
       dir.appendChild(botao(p.quem ? "Trocar" : "Delegar","pessoa","pq", () => dlgDelegar(p)));
+      if (p.dispensada) dir.appendChild(botao("Reativar","troca","pq", () => reativar(p)));
+      else if (!p.feita) dir.appendChild(botao("Não precisa","lixo","pq", () => dlgDispensar(p)));
       if (p.fonte === "manual"){
         dir.appendChild(botao("Editar","lapis","pq", () => dlgTarefa(b)));
         dir.appendChild(botao("Excluir","lixo","pq", () => {
@@ -1636,6 +1791,25 @@ function dlgCriarTime(){
     }, "Criar e conectar");
 }
 
+function dlgQuemSouEu(){
+  if (!E.time) return;
+  const sel = el("select");
+  sel.appendChild(new Option("— criar meu cadastro como \"" + E.time.meuNome + "\" —", "novo"));
+  pessoasVivas().forEach(p => sel.appendChild(new Option(p.nome + " · " + p.papel, p.id)));
+  const igual = pessoasVivas().find(p => p.nome.trim().toLowerCase() === String(E.time.meuNome).trim().toLowerCase());
+  if (igual) sel.value = igual.id;
+  modal("Quem é você na equipe?",
+    "O painel precisa saber qual cadastro é o seu para mostrar as tarefas que passaram para você. Se o seu nome já está na lista, escolha; se não, ele cria.",
+    [campo("Sou", sel)],
+    () => {
+      if (sel.value === "novo"){
+        const nova = { id: uid(), nome: E.time.meuNome, papel: "Advogado", cor: CORES[pessoasVivas().length % CORES.length], email: null };
+        tocou(nova); E.pessoas.push(nova); E.time.pessoaId = nova.id;
+      } else E.time.pessoaId = sel.value;
+      salvar(); sincronizarTime(true); render(); return true;
+    }, "Sou eu");
+}
+
 function dlgEntrarTime(){
   const cod = el("textarea"); cod.rows = 3; cod.placeholder = "Cole aqui o código que você recebeu";
   const meu = entrada("text", "", "Como você aparece para o time");
@@ -1647,7 +1821,7 @@ function dlgEntrarTime(){
       if (!meu.value.trim()){ st.textContent = "Diga como você aparece para o time."; return false; }
       st.style.color = "var(--azul)"; st.textContent = "Conectando…";
       entrarNoTime(cod.value.trim(), meu.value.trim())
-        .then(() => { fechar(); render(); festa(); })
+        .then(() => { fechar(); render(); festa(); setTimeout(dlgQuemSouEu, 700); })
         .catch(e => { st.style.color = "var(--rosa)"; st.textContent = e.message; });
       return false;
     }, "Entrar");
@@ -1716,6 +1890,14 @@ function secaoTime(){
     e.appendChild(el("div",null, ultimoErroSync));
     cx.appendChild(e);
   }
+
+  const eu = euSou();
+  const idl = el("div"); idl.style.cssText = "display:flex;align-items:center;gap:11px;flex-wrap:wrap";
+  if (eu){ idl.appendChild(avatar(eu)); idl.appendChild(el("span","ps","você é " + eu.nome + " · " + eu.papel + (eu.email ? " · " + eu.email : " · sem e-mail cadastrado"))); }
+  else { const av = el("div","av"); av.style.background = "var(--rosa)"; av.textContent = "?"; idl.appendChild(av);
+    idl.appendChild(el("span","ps","você ainda não disse quem é na equipe — sem isso, tarefas passadas para você não aparecem")); }
+  idl.appendChild(botao(eu ? "Trocar" : "Dizer quem sou","pessoa", eu ? "pq" : "pri pq", () => dlgQuemSouEu()));
+  cx.appendChild(idl);
 
   const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
   ac.appendChild(botao(sincronizando ? "Sincronizando…" : "Sincronizar agora","troca","pri", () => sincronizarTime()));
@@ -1905,10 +2087,7 @@ if (location.protocol === "http:" || location.protocol === "https:"){
 
 /* ===================== início ===================== */
 render();
-if (E.time){
-  sincronizarTime(true);
-  addEventListener("focus", () => { if (E.time && !sincronizando) sincronizarTime(true); });
-}
+if (E.time){ sincronizarTime(true); ligarAoVivo(); }
 testarBusca().then(ok => {
   $("sublinha").textContent = ok ? "DJEN · busca por OAB disponível" : "DJEN · modo local (sem busca automática)";
   if (aba === "config") render();
