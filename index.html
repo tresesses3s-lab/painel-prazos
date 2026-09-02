@@ -228,6 +228,24 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .lin .tt2{font-size:15px; font-weight:600; line-height:1.3}
 .lin .sb2{font:400 12px/1.4 "IBM Plex Mono",monospace; color:var(--muted); margin-top:3px}
 @media (max-width:760px){ .semana{grid-template-columns:repeat(4,1fr)} .lin{grid-template-columns:auto 1fr; gap:9px} .lin .qd{text-align:left} }
+.aviso-flut{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:150; background:var(--verde); color:var(--on-cor); padding:13px 20px; border-radius:12px; box-shadow:var(--sh-l); font:600 14.5px/1.35 "Source Sans 3",sans-serif; display:flex; align-items:center; gap:11px; max-width:min(92vw,540px); animation:sobe .3s ease-out}
+@keyframes sobe{from{opacity:0; transform:translate(-50%,14px)}to{opacity:1; transform:translate(-50%,0)}}
+.aviso-flut svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.dois{display:grid; grid-template-columns:minmax(280px,360px) 1fr; gap:16px; align-items:start}
+.coluna{display:flex; flex-direction:column; gap:8px; max-height:74vh; overflow-y:auto; padding-right:4px}
+.coluna.dir2{max-height:none; overflow:visible}
+.notif{text-align:left; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--line-2); border-radius:11px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; gap:5px; transition:.13s}
+.notif:hover{border-color:var(--azul)}
+.notif.sel{border-color:var(--azul); border-left-color:var(--azul); background:var(--azul-s); box-shadow:var(--sh-s)}
+.notif:focus-visible{outline:2px solid var(--azul); outline-offset:2px}
+.n1{display:flex; gap:7px; align-items:center; flex-wrap:wrap}
+.nd{font:700 12px/1 "IBM Plex Mono",monospace; color:var(--ink-2)}
+.n2{font:600 14.5px/1.3 "Source Sans 3",sans-serif; color:var(--ink)}
+.n3{font:400 11.5px/1.4 "IBM Plex Mono",monospace; color:var(--muted)}
+.bloco{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:17px 19px; display:flex; flex-direction:column; gap:11px}
+.bt2{font:700 10.5px/1 "IBM Plex Mono",monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--muted)}
+.tripla{display:grid; grid-template-columns:2fr 1fr 1.6fr; gap:11px}
+@media (max-width:900px){ .dois{grid-template-columns:1fr} .coluna{max-height:340px} .tripla{grid-template-columns:1fr} }
 .atos{display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:8px}
 .ato{text-align:left; border:1.5px solid var(--line-2); background:var(--surface); border-radius:11px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; gap:3px; transition:.15s}
 .ato:hover{border-color:var(--azul)}
@@ -457,6 +475,7 @@ function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch
 const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length;
 
 let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
+let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas = false;
 function casaParalelo(i){
   if (!buscaPar) return true;
   const q = buscaPar.toLowerCase();
@@ -571,7 +590,10 @@ function dlgDispensar(p){
         alvo.dispensadaEm = agoraISO();
         tocou(alvo);
       }
-      salvar(); render(); return true;
+      if (aba === "notif") proximaNotificacao(p.bruto.id);
+      salvar(); render();
+      avisar("Dispensada: " + (motivo.value.trim() || "sem motivo"));
+      return true;
     }, "Dispensar");
 }
 function reativar(p){
@@ -790,6 +812,47 @@ async function varrerParalelo(aviso){
   return { lidos, comMovimento, novos };
 }
 
+/* Busca incremental: pega só o que entrou desde a última vez, com 3 dias de
+   folga para o caso de o tribunal publicar com atraso. Roda sozinha uma vez
+   por dia; o botão continua existindo para quem quiser agora. */
+const HORAS_ENTRE_BUSCAS = 12;
+function precisaBuscar(){
+  if (!E.oabs.length) return false;
+  if (!E.buscadoEm) return true;
+  const ultimo = new Date(E.buscadoEm + (E.buscadoEm.length === 10 ? "T00:00:00" : ""));
+  return (Date.now() - ultimo.getTime()) > HORAS_ENTRE_BUSCAS * 3600e3;
+}
+async function buscarNovas(aviso){
+  if (!E.oabs.length) throw new Error("Nenhuma OAB cadastrada.");
+  const antes = E.djen.length;
+  let dias = E.janelaDias;
+  if (E.buscadoEm){
+    const passou = Math.ceil((Date.now() - new Date(E.buscadoEm + (E.buscadoEm.length === 10 ? "T00:00:00" : "")).getTime()) / 864e5);
+    dias = Math.min(E.janelaDias, Math.max(3, passou + 3));
+  }
+  const guardado = E.janelaDias;
+  E.janelaDias = dias;
+  try {
+    for (let i = 0; i < E.oabs.length; i++){
+      const o = E.oabs[i];
+      if (aviso) aviso(i + 1, E.oabs.length, o.nome);
+      await buscarOab(o.uf, o.numero, o.nome, null);
+      if (i < E.oabs.length - 1) await new Promise(r => setTimeout(r, 1500));
+    }
+  } finally { E.janelaDias = guardado; }
+  E.buscadoEm = agoraISO();
+  salvar();
+  return { novas: E.djen.length - antes, janela: dias };
+}
+async function buscaAutomatica(){
+  if (!precisaBuscar() || !podeBuscar) return;
+  try {
+    const r = await buscarNovas(null);
+    if (r.novas){ await sincronizarTime(true); render(); }
+    else salvar();
+  } catch(e){ /* silenciosa: o botão manual mostra o erro de verdade */ }
+}
+
 async function testarBusca(){
   if (podeBuscar !== null) return podeBuscar;
   try {
@@ -964,9 +1027,13 @@ async function salvarArquivo(nome, texto, mime){
 
 const FS = "https://firestore.googleapis.com/v1";
 const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo"];
-const INTERVALO_SINAL = 20000;   // 20s: uma leitura por rodada, por pessoa
+/* Ritmo adaptativo: rápido enquanto há gente mexendo, lento quando está parado,
+   e PARADO quando a aba está escondida. Isso é o que deixa a conversa entre duas
+   pessoas parecer imediata sem estourar a cota gratuita — uma aba escondida não
+   gasta leitura nenhuma, e ao voltar ela sincroniza na hora. */
+const SINAL_RAPIDO = 7000, SINAL_LENTO = 30000, JANELA_ATIVA = 120000;
 let sincronizando = false, ultimoErroSync = null, timerSync = null;
-let timerSinal = null, sinalVisto = null, aoVivo = false;
+let timerSinal = null, sinalVisto = null, aoVivo = false, ultimaAtividade = 0, ritmoAtual = 0;
 
 const agoraISO = () => new Date().toISOString();
 function b64url(s){ return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
@@ -1101,14 +1168,28 @@ async function espiarSinal(){
   try {
     const v = await lerSinal();
     if (sinalVisto === null) { sinalVisto = v; return; }
-    if (v !== sinalVisto) { sinalVisto = v; await sincronizarTime(true); }
+    if (v !== sinalVisto) { sinalVisto = v; houveAtividade(); await sincronizarTime(true); }
+    else reagendaSinal();
   } catch(e) { /* silencioso: erro real aparece na sincronização */ }
 }
+function ritmo(){
+  return (Date.now() - ultimaAtividade < JANELA_ATIVA) ? SINAL_RAPIDO : SINAL_LENTO;
+}
+function reagendaSinal(){
+  const alvo = ritmo();
+  if (alvo === ritmoAtual && timerSinal) return;
+  ritmoAtual = alvo;
+  clearInterval(timerSinal);
+  timerSinal = setInterval(() => {
+    if (typeof document !== "undefined" && document.hidden) return;  // aba escondida não gasta cota
+    espiarSinal();
+  }, alvo);
+}
+function houveAtividade(){ ultimaAtividade = Date.now(); reagendaSinal(); }
 function ligarAoVivo(){
   if (aoVivo) return;
   aoVivo = true;
-  clearInterval(timerSinal);
-  timerSinal = setInterval(espiarSinal, INTERVALO_SINAL);
+  houveAtividade();
   addEventListener("focus", () => { if (E.time && !sincronizando) sincronizarTime(true); });
   addEventListener("visibilitychange", () => { if (!document.hidden && E.time && !sincronizando) sincronizarTime(true); });
 }
@@ -1193,6 +1274,7 @@ async function sincronizarTime(silencioso){
 function tocou(obj){
   if (obj) obj.atualizadoEm = agoraISO();
   if (!E.time) return;
+  houveAtividade();
   clearTimeout(timerSync);
   timerSync = setTimeout(() => sincronizarTime(true), 2500);
 }
@@ -1301,6 +1383,20 @@ function modal(titulo, sub, campos, aoSalvar, rotSalvar){
   const p = m.querySelector("input,select,textarea"); if (p) p.focus();
 }
 function fechar(){ $("fundo").classList.remove("on"); }
+
+/* Confirmação curta e que some sozinha: em fila de triagem, abrir um diálogo a
+   cada item cansa mais do que ajuda. */
+let timerAviso = null;
+function avisar(texto){
+  const velho = document.getElementById("aviso-flut");
+  if (velho) velho.remove();
+  const a = el("div","aviso-flut"); a.id = "aviso-flut";
+  a.appendChild(ico(I.check));
+  a.appendChild(el("span", null, texto));
+  document.body.appendChild(a);
+  clearTimeout(timerAviso);
+  timerAviso = setTimeout(() => { const x = document.getElementById("aviso-flut"); if (x) x.remove(); }, 4200);
+}
 $("fundo").addEventListener("click", e => { if (e.target === $("fundo")) fechar(); });
 addEventListener("keydown", e => { if (e.key === "Escape") fechar(); });
 
@@ -1449,6 +1545,7 @@ function render(){
   if (aba === "painel")  app.appendChild(telaPainel());
   if (aba === "agenda")  app.appendChild(telaAgenda());
   if (aba === "todo")    app.appendChild(telaTodo());
+  if (aba === "notif")    app.appendChild(telaNotificacoes());
   if (aba === "paralelo") app.appendChild(telaParalelo());
   if (aba === "equipe")  app.appendChild(telaEquipe());
   if (aba === "config")  app.appendChild(telaConfig());
@@ -1461,7 +1558,9 @@ function renderAbas(){
   if (!configurado()) return;
   const pl = placar();
   const naoVistos = E.paralelo.filter(i => !i.visto && !i.removido).length;
-  const defs = [["painel","Painel","alvo",null],["agenda","Agenda","calend",null],
+  const semProvidencia = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length).length;
+  const defs = [["painel","Painel","alvo",null],["notif","Notificações","busca",semProvidencia],
+    ["agenda","Agenda","calend",null],
     ["todo","Tarefas","lista",pl.abertas],["paralelo","Paralelo","busca",naoVistos],
     ["equipe","Equipe","pessoa",pessoasVivas().length],["config","Ajustes","engr",null]];
   defs.forEach(([k,rot,ic,n]) => {
@@ -1840,11 +1939,26 @@ function telaAgenda(){
   const d = el("div"); d.appendChild(el("h2",null,"Agenda quinzenal"));
   d.appendChild(el("p",null,"Prazos, sessões e tarefas com data, agrupados por quinzena do calendário."));
   cab.appendChild(d);
-  cab.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
+  const dirC = el("div"); dirC.style.cssText = "display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end";
+  if (pessoasVivas().length){
+    const sel = el("select");
+    sel.appendChild(new Option("Agenda de todo o time", "todos"));
+    sel.appendChild(new Option("— só o que está comigo —", "eu"));
+    pessoasVivas().forEach(x => sel.appendChild(new Option("Agenda de " + x.nome, x.id)));
+    sel.value = filtroAgenda;
+    sel.style.minWidth = "210px";
+    sel.addEventListener("change", e => { filtroAgenda = e.target.value; render(); });
+    dirC.appendChild(campo("De quem", sel));
+  }
+  dirC.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
+  cab.appendChild(dirC);
   f.appendChild(cab);
   f.appendChild(barraFiltros());
 
-  const itens = vis().filter(p => p.data).sort((a,b) => a.data.localeCompare(b.data));
+  const dePessoa = p => filtroAgenda === "todos" ? true
+    : filtroAgenda === "eu" ? souEu(p.quem)
+    : p.quem === filtroAgenda;
+  const itens = vis().filter(p => p.data && dePessoa(p)).sort((a,b) => a.data.localeCompare(b.data));
   if (!itens.length){ f.appendChild(vazioBox("calend","Nada nesta seleção","Sem prazo, sessão ou tarefa com data para este filtro.", "Nova tarefa", () => dlgTarefa())); return f; }
 
   const gr = new Map();
@@ -2063,6 +2177,269 @@ function telaTodo(){
 }
 
 /* ---------- equipe ---------- */
+/* ---------- aba Notificações: a intimação de um lado, o que fazer do outro ----------
+   Só entram publicações das OABs cadastradas — é o radar do próprio escritório.
+   O Acompanhamento Paralelo tem aba própria porque ali o escritório não é parte. */
+async function rodarBuscaNovas(){
+  if (buscandoNovas) return;
+  buscandoNovas = true;
+  const m = $("modal"); m.innerHTML = "";
+  m.appendChild(el("h3", null, "Buscando publicações novas"));
+  const st = el("p","sb","Conectando ao DJEN…"); m.appendChild(st);
+  const ba = el("div","barra"); const bi = el("i"); bi.style.width = "3%"; ba.appendChild(bi); m.appendChild(ba);
+  $("fundo").classList.add("on");
+  try {
+    const r = await buscarNovas((i, total, nome) => {
+      st.textContent = nome + " (" + i + " de " + total + ")";
+      bi.style.width = Math.round(i / total * 100) + "%";
+    });
+    await sincronizarTime(true);
+    buscandoNovas = false; fechar(); aba = "notif"; notifSel = null; render();
+    if (r.novas) festa();
+  } catch(e){
+    buscandoNovas = false;
+    m.innerHTML = "";
+    m.appendChild(el("h3", null, "Não deu para buscar"));
+    m.appendChild(el("p","sb", e.message));
+    const ac = el("div","acoes"); ac.appendChild(botao("Entendi","check","pri", () => { fechar(); render(); })); m.appendChild(ac);
+  }
+}
+
+function telaNotificacoes(){
+  const f = document.createDocumentFragment();
+
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Notificações"));
+  d.appendChild(el("p", null, "As publicações que saíram nas OABs cadastradas. Escolha uma à esquerda e diga o que fazer à direita — ou dê baixa sem fazer nada."));
+  cab.appendChild(d);
+  const bts = el("div"); bts.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
+  if (E.oabs.length) bts.appendChild(botao(buscandoNovas ? "Buscando…" : "Buscar novas","troca","pri", () => rodarBuscaNovas()));
+  else bts.appendChild(botao("Cadastrar OAB","mais","pri", () => dlgOab()));
+  cab.appendChild(bts);
+  f.appendChild(cab);
+
+  if (!E.oabs.length && !E.djen.length){
+    f.appendChild(vazioBox("busca","Nenhuma OAB cadastrada",
+      "Cadastre a sua inscrição e o painel lê sozinho o que sair no Diário de Justiça Eletrônico Nacional.",
+      "Cadastrar OAB", () => dlgOab()));
+    return f;
+  }
+
+  const todas = provDjen().filter(casa);
+  const pend = todas.filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length);
+  const tratadas = todas.filter(p => p.feita || p.dispensada || desdobramentos(p.bruto.id).length);
+
+  const info = el("div","aviso az");
+  info.appendChild(el("span","k","Situação"));
+  info.appendChild(el("div", null, todas.length + " publicações · " + pend.length + " ainda sem providência definida"
+    + (E.buscadoEm ? " · última busca " + br(dataLocal(new Date(E.buscadoEm.length === 10 ? E.buscadoEm + "T12:00:00" : E.buscadoEm))) : "")));
+  f.appendChild(info);
+
+  const bu = entrada("search", busca, "Buscar processo, parte, tribunal ou advogado…");
+  bu.style.cssText = "max-width:430px;margin-bottom:14px";
+  bu.addEventListener("input", e => { busca = e.target.value.trim(); render();
+    const nn = document.querySelector("input[type=search]"); if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
+  f.appendChild(bu);
+
+  const cs = el("div","chips");
+  [["pend","Sem providência",pend.length,""],["trat","Já tratadas",tratadas.length,"ok"],["todas","Todas",todas.length,""]]
+    .forEach(([k,rot,q,cls]) => {
+      const c = el("button","chip" + (cls ? " " + cls : "")); c.type = "button";
+      c.setAttribute("aria-pressed", String(filtroNotif === k));
+      c.appendChild(el("span", null, rot)); c.appendChild(el("b", null, String(q)));
+      c.addEventListener("click", () => { filtroNotif = k; notifSel = null; render(); });
+      cs.appendChild(c);
+    });
+  f.appendChild(cs);
+
+  const lista = filtroNotif === "pend" ? pend : filtroNotif === "trat" ? tratadas : todas;
+  lista.sort((a,b) => (b.bruto.disp || "").localeCompare(a.bruto.disp || ""));
+
+  if (!lista.length){
+    f.appendChild(vazioBox("check","Nada aqui",
+      filtroNotif === "pend" ? "Toda publicação já tem providência definida ou foi dispensada." : "Nenhuma publicação bate com a busca.", null));
+    return f;
+  }
+
+  if (!notifSel || !lista.some(p => String(p.bruto.id) === String(notifSel))) notifSel = String(lista[0].bruto.id);
+  const sel = lista.find(p => String(p.bruto.id) === String(notifSel));
+
+  const painel = el("div","dois");
+  const esq = el("div","coluna");
+  lista.slice(0, 60).forEach(p => {
+    const b = p.bruto;
+    const ds = desdobramentos(b.id);
+    const it = el("button","notif" + (String(b.id) === String(notifSel) ? " sel" : "")); it.type = "button";
+    const l1 = el("div","n1");
+    l1.appendChild(el("span","nd", br(b.disp)));
+    l1.appendChild(el("span","tag " + (b.tipo === "Pauta de julgamento" ? "t-violeta" : "t-azul"), b.tipo || "Intimação"));
+    if (p.dispensada) l1.appendChild(el("span","tag","dispensada"));
+    else if (ds.length) l1.appendChild(el("span","tag t-verde", ds.length + (ds.length > 1 ? " providências" : " providência")));
+    else l1.appendChild(el("span","tag t-ambar","o que fazer?"));
+    it.appendChild(l1);
+    it.appendChild(el("div","n2", b.sigiloso ? "Processo em segredo de justiça" : ((b.partes || []).slice(0,2).join(" × ") || "Partes não informadas")));
+    it.appendChild(el("div","n3", b.proc + " · " + b.trib));
+    it.addEventListener("click", () => { notifSel = String(b.id); render(); });
+    esq.appendChild(it);
+  });
+  if (lista.length > 60) esq.appendChild(el("div","n3","mostrando as 60 mais recentes de " + lista.length));
+  painel.appendChild(esq);
+
+  painel.appendChild(painelOQueFazer(sel));
+  f.appendChild(painel);
+  return f;
+}
+
+/* Painel da direita: o inteiro teor resumido e os botões de ação. */
+/* Guarda quem vem depois na fila, para o painel não pular para o começo quando
+   o item tratado sai do filtro "sem providência". */
+function proximaNotificacao(idAtual){
+  const fila = provDjen().filter(casa)
+    .filter(x => !x.feita && !x.dispensada && !desdobramentos(x.bruto.id).length)
+    .sort((a,b) => (b.bruto.disp || "").localeCompare(a.bruto.disp || ""));
+  const i = fila.findIndex(x => String(x.bruto.id) === String(idAtual));
+  const prox = i >= 0 ? (fila[i + 1] || fila[i - 1]) : fila[0];
+  notifSel = prox ? String(prox.bruto.id) : null;
+}
+
+function painelOQueFazer(p){
+  const lado = el("div","coluna dir2");
+  if (!p) return lado;
+  const b = p.bruto;
+  const ds = desdobramentos(b.id);
+
+  const topo = el("div","bloco");
+  const h = el("div","ch");
+  h.appendChild(el("span","tag t-azul", b.tipo || "Intimação"));
+  if (b.classe) h.appendChild(el("span","tag", b.classe.length > 34 ? b.classe.slice(0,32) + "…" : b.classe));
+  topo.appendChild(h);
+  topo.appendChild(el("div","ct", b.sigiloso ? "Processo em segredo de justiça" : ((b.partes || []).slice(0,3).join(" × ") || "Partes não informadas")));
+  const m = el("div","cm");
+  m.appendChild(el("span","pr", b.proc));
+  m.appendChild(el("span", null, b.trib + (b.orgao ? " · " + b.orgao : "")));
+  m.appendChild(el("span", null, "para " + (b.advs || []).join(", ")));
+  topo.appendChild(m);
+
+  const cadeia = el("div","cw");
+  cadeia.appendChild(document.createTextNode("Disponibilizado "));
+  cadeia.appendChild(el("b", null, br(b.disp)));
+  cadeia.appendChild(document.createTextNode(" → publicado "));
+  cadeia.appendChild(el("b", null, br(b.pub)));
+  cadeia.appendChild(document.createTextNode(" → prazos contam a partir de "));
+  cadeia.appendChild(el("b", null, br(b.inicio)));
+  topo.appendChild(cadeia);
+
+  const links = el("div","cr");
+  const a1 = el("a", null, "Certidão (PDF)");
+  a1.href = "https://comunicaapi.pje.jus.br/api/v1/comunicacao/" + b.hash + "/certidao";
+  a1.target = "_blank"; a1.rel = "noopener"; links.appendChild(a1);
+  if (b.link){ const a2 = el("a", null, "Inteiro teor no tribunal"); a2.href = b.link; a2.target = "_blank"; a2.rel = "noopener"; links.appendChild(a2); }
+  topo.appendChild(links);
+  lado.appendChild(topo);
+
+  if (ds.length){
+    const feito = el("div","bloco");
+    feito.appendChild(el("div","bt2","Já gerou"));
+    ds.forEach(t => {
+      const l = el("div","lin " + (t.feita ? "" : ""));
+      const cb = el("input"); cb.type = "checkbox"; cb.checked = !!t.feita;
+      cb.addEventListener("change", () => alternar("t" + t.id));
+      l.appendChild(cb);
+      l.appendChild(el("div","qd", t.prazo ? br(t.prazo) : "sem data"));
+      const mm = el("div");
+      mm.appendChild(el("div","tt2", t.titulo));
+      mm.appendChild(el("div","sb2", t.pessoaId ? "com " + (pessoaDe(t.pessoaId) || {}).nome : "sem responsável"));
+      l.appendChild(mm);
+      const dd = el("div");
+      if (t.prazo){
+        const pv = provManual().find(x => x.bruto.id === t.id);
+        if (pv){ const a = el("a", null, "agenda"); a.href = linkGoogle(pv); a.target = "_blank"; a.rel = "noopener";
+          a.style.cssText = "font:600 12px/1 'Source Sans 3';color:var(--azul);text-decoration:none"; dd.appendChild(a); }
+      }
+      l.appendChild(dd);
+      feito.appendChild(l);
+    });
+    lado.appendChild(feito);
+  }
+
+  if (p.dispensada){
+    const dz = el("div","bloco");
+    dz.appendChild(el("div","bt2","Dispensada"));
+    dz.appendChild(el("p","ps", (p.motivo || "sem motivo informado") + (b.dispensadaPor ? " · por " + b.dispensadaPor : "")));
+    dz.appendChild(botao("Reativar","troca","", () => reativar(p)));
+    lado.appendChild(dz);
+    return lado;
+  }
+
+  /* grade de atos, direto no painel — sem abrir diálogo */
+  const acao = el("div","bloco");
+  acao.appendChild(el("div","bt2", ds.length ? "Criar mais uma providência" : "O que essa intimação exige?"));
+  const escolhidos = new Map();
+  const st = el("p","ps","Marque quantas quiser. O prazo conta da publicação desta intimação.");
+  st.style.marginTop = "0";
+  const grade = el("div","atos");
+  ATOS.forEach(a => {
+    const bt = el("button","ato"); bt.type = "button";
+    bt.appendChild(el("b", null, a.rot));
+    bt.appendChild(el("span", null, a.dias ? a.dias + " dias úteis · " + a.base : a.base));
+    const venc = prazoDoAto(b, a.dias);
+    if (venc) bt.appendChild(el("i", null, "vence " + br(venc)));
+    bt.addEventListener("click", () => {
+      if (escolhidos.has(a.id)){ escolhidos.delete(a.id); bt.classList.remove("on"); }
+      else { escolhidos.set(a.id, a); bt.classList.add("on"); }
+      st.textContent = escolhidos.size ? escolhidos.size + (escolhidos.size === 1 ? " providência será criada" : " providências serão criadas")
+        : "Marque quantas quiser. O prazo conta da publicação desta intimação.";
+    });
+    grade.appendChild(bt);
+  });
+  acao.appendChild(grade);
+  acao.appendChild(st);
+
+  const outro = entrada("text", "", "Outra providência…");
+  const outroDias = entrada("number", "", "dias úteis");
+  outroDias.min = "0"; outroDias.max = "180";
+  const quem = selPessoa("");
+  const tri = el("div","tripla");
+  tri.appendChild(campo("Outra", outro));
+  tri.appendChild(campo("Dias úteis", outroDias));
+  tri.appendChild(campo("Delegar para", quem));
+  acao.appendChild(tri);
+
+  const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap;margin-top:14px";
+  ac.appendChild(botao("Criar providências","check","pri", () => {
+    const criar = [...escolhidos.values()].map(a => ({ rot: a.rot, dias: a.dias }));
+    const livre = outro.value.trim();
+    if (livre) criar.push({ rot: livre, dias: parseInt(outroDias.value, 10) || 0 });
+    if (!criar.length){ st.style.color = "var(--rosa)"; st.textContent = "Marque ao menos uma, ou escreva uma."; return; }
+    const parte = b.sigiloso ? "processo em segredo de justiça" : ((b.partes || [])[0] || "");
+    criar.forEach(c => {
+      const t = { id: uid(), titulo: c.rot + (parte ? " — " + parte : ""), prazo: prazoDoAto(b, c.dias),
+        processo: b.proc, pessoaId: quem.value || null,
+        nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + c.dias + " dias úteis" : " · sem prazo"),
+        feita: false, criada: HOJE, daIntimacao: String(b.id) };
+      if (quem.value){
+        t.delegadaPor = (E.time && E.time.pessoaId) || null;
+        t.delegadaPorNome = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+        t.delegadaEm = agoraISO(); t.vistaPor = [];
+      }
+      tocou(t); E.tarefas.push(t);
+    });
+    const it = E.djen.find(x => String(x.id) === String(b.id));
+    if (it){ it.desdobrada = true; tocou(it); }
+    const parteCurta = parte ? parte.split(" ").slice(0,3).join(" ") : b.proc;
+    proximaNotificacao(b.id);
+    salvar(); render();
+    avisar(criar.length === 1
+      ? "Criada: " + criar[0].rot + (criar[0].dias ? " · vence " + br(prazoDoAto(b, criar[0].dias)) : "") + " — " + parteCurta
+      : criar.length + " providências criadas em " + parteCurta);
+  }));
+  ac.appendChild(botao("Dar baixa sem fazer nada","lixo","", () => dlgDispensar(p)));
+  acao.appendChild(ac);
+  lado.appendChild(acao);
+  return lado;
+}
+
 /* ---------- Acompanhamento Paralelo ---------- */
 function dlgImportarProcessos(){
   const ta = el("textarea"); ta.rows = 9;
@@ -2335,6 +2712,164 @@ function mandarEmail(pessoa, lista){
   try { window.open(url, "_blank"); } catch(e){ location.href = url; }
 }
 
+function dlgCriarTime(){
+  const nome = entrada("text", "", "Ex.: RNA Law");
+  const proj = entrada("text", "", "ID do projeto (ex.: painel-prazos-rna)");
+  const chave = entrada("text", "", "Chave da Web API (começa com AIza...)");
+  const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
+  const passos = el("div","aviso az");
+  passos.appendChild(el("span","k","Antes"));
+  const d = el("div");
+  d.appendChild(el("div",null,"No console do Firebase (console.firebase.google.com), uma vez só:"));
+  const ol = el("ol"); ol.style.cssText = "margin:9px 0 0;padding-left:20px;line-height:1.65";
+  ["Criar projeto — plano Spark, sem cartão.",
+   "Firestore Database → Criar banco de dados → região southamerica-east1 (São Paulo) → modo de produção.",
+   "Authentication → Sign-in method → Anônimo → Ativar.",
+   "Regras: copiar as que estão em Ajustes e publicar.",
+   "Configurações do projeto → ID do projeto e Chave de API da Web."].forEach(t => ol.appendChild(el("li",null,t)));
+  d.appendChild(ol);
+  passos.appendChild(d);
+  modal("Criar o time", "O time vive num projeto Firebase seu. Os colegas entram com um código — não precisam mexer no console.",
+    [passos, campo("Nome do time", nome), campo("ID do projeto", proj), campo("Chave da Web API", chave), campo("Seu nome", (window.__meuNome = entrada("text","","Como você aparece para o time"))), st],
+    () => {
+      if (!nome.value.trim() || !proj.value.trim() || !chave.value.trim()){ st.textContent = "Preencha nome, projeto e chave."; return false; }
+      if (!window.__meuNome.value.trim()){ st.textContent = "Diga como você aparece para o time."; return false; }
+      const c = { projectId: proj.value.trim(), apiKey: chave.value.trim(), timeId: uid(), nome: nome.value.trim() };
+      st.style.color = "var(--azul)"; st.textContent = "Conectando…";
+      entrarNoTime(codificaCodigo(c), window.__meuNome.value.trim())
+        .then(() => { fechar(); render(); festa(); })
+        .catch(e => { st.style.color = "var(--rosa)"; st.textContent = e.message; });
+      return false;
+    }, "Criar e conectar");
+}
+
+function dlgQuemSouEu(){
+  if (!E.time) return;
+  const sel = el("select");
+  sel.appendChild(new Option("— criar meu cadastro como \"" + E.time.meuNome + "\" —", "novo"));
+  pessoasVivas().forEach(p => sel.appendChild(new Option(p.nome + " · " + p.papel, p.id)));
+  const igual = pessoasVivas().find(p => p.nome.trim().toLowerCase() === String(E.time.meuNome).trim().toLowerCase());
+  if (igual) sel.value = igual.id;
+  modal("Quem é você na equipe?",
+    "O painel precisa saber qual cadastro é o seu para mostrar as tarefas que passaram para você. Se o seu nome já está na lista, escolha; se não, ele cria.",
+    [campo("Sou", sel)],
+    () => {
+      if (sel.value === "novo"){
+        const nova = { id: uid(), nome: E.time.meuNome, papel: "Advogado", cor: CORES[pessoasVivas().length % CORES.length], email: null };
+        tocou(nova); E.pessoas.push(nova); E.time.pessoaId = nova.id;
+      } else E.time.pessoaId = sel.value;
+      salvar(); sincronizarTime(true); render(); return true;
+    }, "Sou eu");
+}
+
+function dlgEntrarTime(){
+  const cod = el("textarea"); cod.rows = 3; cod.placeholder = "Cole aqui o código que você recebeu";
+  const meu = entrada("text", "", "Como você aparece para o time");
+  const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
+  modal("Entrar num time", "Peça o código a quem criou o time. Ele já traz projeto, chave e identificação do time.",
+    [campo("Código do time", cod), campo("Seu nome", meu), st],
+    () => {
+      if (!cod.value.trim()){ st.textContent = "Cole o código."; return false; }
+      if (!meu.value.trim()){ st.textContent = "Diga como você aparece para o time."; return false; }
+      st.style.color = "var(--azul)"; st.textContent = "Conectando…";
+      entrarNoTime(cod.value.trim(), meu.value.trim())
+        .then(() => { fechar(); render(); festa(); setTimeout(dlgQuemSouEu, 700); })
+        .catch(e => { st.style.color = "var(--rosa)"; st.textContent = e.message; });
+      return false;
+    }, "Entrar");
+}
+
+const REGRAS = [
+  "rules_version = '2';",
+  "service cloud.firestore {",
+  "  match /databases/{database}/documents {",
+  "    match /times/{timeId}/membros/{uid} {",
+  "      allow read: if request.auth != null;",
+  "      allow write: if request.auth != null && request.auth.uid == uid;",
+  "    }",
+  "    match /times/{timeId}/{colecao}/{doc} {",
+  "      allow read, write: if request.auth != null",
+  "        && exists(/databases/$(database)/documents/times/$(timeId)/membros/$(request.auth.uid));",
+  "    }",
+  "  }",
+  "}",
+].join("\n");
+
+function dlgRegras(){
+  const ta = el("textarea"); ta.rows = 14; ta.value = REGRAS;
+  ta.style.cssText = "font:500 12.5px/1.5 'IBM Plex Mono',monospace";
+  ta.readOnly = true;
+  modal("Regras de segurança", "Cole no console do Firebase em Firestore Database → Regras → Publicar. Sem isso, o Firestore recusa a leitura e a gravação.",
+    [campo("Regras", ta)], () => true, "Fechar");
+}
+
+function secaoTime(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab"); const d = el("div");
+  d.appendChild(el("h2",null,"Time"));
+  d.appendChild(el("p",null,"Uma lista só para o escritório inteiro, guardada no Firestore do seu projeto Firebase. Grátis no plano Spark, sem cartão."));
+  cab.appendChild(d); f.appendChild(cab);
+
+  if (!E.time){
+    const box = el("div","aviso az");
+    box.appendChild(el("span","k","Sozinha"));
+    box.appendChild(el("div",null,"Hoje os seus dados ficam só neste navegador. Conectar a um time faz tarefas, pessoas e marcações aparecerem para todo mundo."));
+    f.appendChild(box);
+    const ac = el("div"); ac.style.cssText = "display:flex;gap:10px;flex-wrap:wrap";
+    ac.appendChild(botao("Entrar num time","pessoa","pri", () => dlgEntrarTime()));
+    ac.appendChild(botao("Criar um time","mais","", () => dlgCriarTime()));
+    ac.appendChild(botao("Ver as regras de segurança","escudo","", () => dlgRegras()));
+    f.appendChild(ac);
+    return f;
+  }
+
+  const t = E.time;
+  const cx = el("div"); cx.style.cssText = "background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 20px;display:flex;flex-direction:column;gap:14px";
+  const top = el("div"); top.style.cssText = "display:flex;align-items:center;gap:13px;flex-wrap:wrap";
+  const av = el("div","av g"); av.style.background = "var(--azul)"; av.textContent = iniciais(t.nome);
+  top.appendChild(av);
+  const inf = el("div");
+  inf.appendChild(el("div","nm", t.nome)).style.cssText = "font:600 17px/1.25 'Source Sans 3',sans-serif";
+  inf.appendChild(el("div","pp", "você aparece como " + t.meuNome
+    + (t.sincronizadoEm ? " · sincronizado " + br(dataLocal(new Date(t.sincronizadoEm))) + " às " + horaLocal(t.sincronizadoEm) : " · ainda não sincronizado")))
+    .style.cssText = "font:500 12.5px/1.4 'IBM Plex Mono',monospace;color:var(--muted);margin-top:3px";
+  top.appendChild(inf);
+  cx.appendChild(top);
+
+  if (ultimoErroSync){
+    const e = el("div","aviso amb"); e.style.margin = "0";
+    e.appendChild(el("span","k","Erro"));
+    e.appendChild(el("div",null, ultimoErroSync));
+    cx.appendChild(e);
+  }
+
+  const eu = euSou();
+  const idl = el("div"); idl.style.cssText = "display:flex;align-items:center;gap:11px;flex-wrap:wrap";
+  if (eu){ idl.appendChild(avatar(eu)); idl.appendChild(el("span","ps","você é " + eu.nome + " · " + eu.papel + (eu.email ? " · " + eu.email : " · sem e-mail cadastrado"))); }
+  else { const av = el("div","av"); av.style.background = "var(--rosa)"; av.textContent = "?"; idl.appendChild(av);
+    idl.appendChild(el("span","ps","você ainda não disse quem é na equipe — sem isso, tarefas passadas para você não aparecem")); }
+  idl.appendChild(botao(eu ? "Trocar" : "Dizer quem sou","pessoa", eu ? "pq" : "pri pq", () => dlgQuemSouEu()));
+  cx.appendChild(idl);
+
+  const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
+  ac.appendChild(botao(sincronizando ? "Sincronizando…" : "Sincronizar agora","troca","pri", () => sincronizarTime()));
+  ac.appendChild(botao("Copiar código do time","seta","", async () => {
+    const cod = codificaCodigo(t);
+    try { await navigator.clipboard.writeText(cod); alert("Código copiado. Mande para quem vai entrar no time."); }
+    catch(e){ prompt("Copie o código do time:", cod); }
+  }));
+  ac.appendChild(botao("Regras de segurança","escudo","", () => dlgRegras()));
+  ac.appendChild(botao("Sair do time","lixo","", () => {
+    if (confirm("Sair do time? Os dados que já estão neste navegador continuam aqui.")) sairDoTime();
+  }));
+  cx.appendChild(ac);
+  f.appendChild(cx);
+
+  const nota = el("p","ps","Quem tem o código entra no time. Trate o código como senha do escritório: mande por canal interno, não por grupo aberto.");
+  nota.style.marginTop = "12px"; f.appendChild(nota);
+  return f;
+}
+
 /* ---------- ajustes ---------- */
 function telaConfig(){
   const f = document.createDocumentFragment();
@@ -2505,6 +3040,7 @@ if (location.protocol === "http:" || location.protocol === "https:"){
 /* ===================== início ===================== */
 render();
 if (E.time){ sincronizarTime(true); ligarAoVivo(); }
+setTimeout(() => { testarBusca().then(ok => { if (ok) buscaAutomatica(); }); }, 4000);
 testarBusca().then(ok => {
   $("sublinha").textContent = ok ? "DJEN · busca por OAB disponível" : "DJEN · modo local (sem busca automática)";
   if (aba === "config") render();
