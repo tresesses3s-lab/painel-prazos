@@ -198,6 +198,45 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .cr .dir{margin-left:auto; display:flex; gap:8px}
 
 
+/* semana */
+.semana{display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:14px}
+.dia{background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:11px 10px 12px; min-height:112px; display:flex; flex-direction:column; gap:7px; transition:.15s}
+.dia.hoje{border-color:var(--azul); border-width:2px; box-shadow:0 0 0 3px var(--azul-s)}
+.dia.fds{background:var(--surf-2); opacity:.72}
+.dia.cheio{cursor:pointer}
+.dia.cheio:hover{border-color:var(--azul); transform:translateY(-2px)}
+.dia .dn{font:700 10px/1 "IBM Plex Mono",monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.dia.hoje .dn{color:var(--azul)}
+.dia .dd{font:700 24px/1 "IBM Plex Mono",monospace; letter-spacing:-.04em; color:var(--ink-2)}
+.dia.hoje .dd{color:var(--azul)}
+.dia .pts2{display:flex; flex-wrap:wrap; gap:4px; margin-top:auto}
+.pt2{width:100%; font:600 10.5px/1.3 "IBM Plex Mono",monospace; padding:4px 6px; border-radius:5px; background:var(--azul-s); color:var(--azul); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.pt2.u{background:var(--ambar-s); color:var(--ambar)}
+.pt2.x{background:var(--rosa-s); color:var(--rosa)}
+.pt2.s{background:var(--violeta-s); color:var(--violeta)}
+.pt2.ok{background:var(--verde-s); color:var(--verde); text-decoration:line-through}
+.semnav{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap}
+.semnav .rot{font:700 17px/1.2 "Bricolage Grotesque",sans-serif}
+/* lista curta de providencias */
+.curta{display:flex; flex-direction:column; gap:7px}
+.lin{display:grid; grid-template-columns:auto 62px 1fr auto; gap:13px; align-items:center; background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:11px; padding:11px 14px; transition:.15s}
+.lin:hover{box-shadow:var(--sh-m)}
+.lin.u{border-left-color:var(--ambar)} .lin.x{border-left-color:var(--rosa)} .lin.s{border-left-color:var(--violeta)}
+.lin input{width:18px;height:18px;accent-color:var(--verde);cursor:pointer}
+.lin .qd{font:700 12.5px/1.2 "IBM Plex Mono",monospace; text-align:center}
+.lin.u .qd{color:var(--ambar)} .lin.x .qd{color:var(--rosa)} .lin.s .qd{color:var(--violeta)} .lin .qd{color:var(--azul)}
+.lin .tt2{font-size:15px; font-weight:600; line-height:1.3}
+.lin .sb2{font:400 12px/1.4 "IBM Plex Mono",monospace; color:var(--muted); margin-top:3px}
+@media (max-width:760px){ .semana{grid-template-columns:repeat(4,1fr)} .lin{grid-template-columns:auto 1fr; gap:9px} .lin .qd{text-align:left} }
+.atos{display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:8px}
+.ato{text-align:left; border:1.5px solid var(--line-2); background:var(--surface); border-radius:11px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; gap:3px; transition:.15s}
+.ato:hover{border-color:var(--azul)}
+.ato b{font:600 14px/1.25 "Source Sans 3",sans-serif; color:var(--ink)}
+.ato span{font:400 11px/1.35 "IBM Plex Mono",monospace; color:var(--muted)}
+.ato i{font:600 11.5px/1 "IBM Plex Mono",monospace; font-style:normal; color:var(--azul); margin-top:2px}
+.ato.on{border-color:var(--azul); background:var(--azul-s)}
+.ato.on b{color:var(--azul)}
+.ato:focus-visible{outline:2px solid var(--azul); outline-offset:2px}
 .card.dispensada{opacity:.6}
 .card.dispensada .ct{text-decoration:line-through; text-decoration-color:var(--muted)}
 .caixa{background:linear-gradient(135deg,var(--violeta),var(--azul)); color:var(--on-cor); border-radius:16px; padding:20px 22px; margin-bottom:22px; box-shadow:var(--sh-l); display:flex; gap:18px; align-items:center; flex-wrap:wrap}
@@ -402,7 +441,8 @@ function uteisEntre(a,b){ let n=0; const d=new Date(a+"T00:00:00Z"), f=new Date(
 
 /* ===================== estado ===================== */
 const CHAVE = "painel-prazos-v2";
-const vazio = () => ({ versao:4, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null });
+const vazio = () => ({ versao:5, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null,
+  processos:[], paralelo:[], paraleloEm:null, paraleloDias:30 });
 let E = vazio();
 try { const s = localStorage.getItem(CHAVE); if (s) E = Object.assign(vazio(), JSON.parse(s)); } catch(e){}
 /* Migração v3 -> v4: a lista "feitos" vira um campo em cada item, para a
@@ -414,9 +454,15 @@ if (Array.isArray(E.feitos)){
   delete E.feitos;
 }
 function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch(e){} }
-const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time;
+const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length;
 
-let aba = "painel", filtro = "tudo", busca = "", medalhasAntes = new Set(), primeira = true;
+let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
+function casaParalelo(i){
+  if (!buscaPar) return true;
+  const q = buscaPar.toLowerCase();
+  return [i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo, (i.partes||[]).join(" ")]
+    .filter(Boolean).join(" ").toLowerCase().includes(q);
+}
 let podeBuscar = null; // null = ainda não testado
 
 /* ===================== providências (DJEN + manuais) ===================== */
@@ -534,6 +580,105 @@ function reativar(p){
   salvar(); render();
 }
 
+/* ---------- desdobrar a intimação em providências ----------
+   Uma intimação não é uma tarefa: dela podem sair várias (ED e pagamento, por
+   exemplo). Os prazos abaixo são o PADRÃO da lei para o ato, contados a partir
+   da publicação daquela intimação. São sugestão editável — o juiz pode fixar
+   outro, o tribunal pode suspender, e a conferência nos autos continua sendo
+   de quem assina. */
+const ATOS = [
+  { id:"ed",        rot:"Embargos de declaração",   dias:5,  base:"CPC art. 1.023" },
+  { id:"apelacao",  rot:"Apelação",                 dias:15, base:"CPC art. 1.003, §5º" },
+  { id:"contra",    rot:"Contrarrazões",            dias:15, base:"CPC art. 1.010, §1º" },
+  { id:"agravo",    rot:"Agravo de instrumento",    dias:15, base:"CPC art. 1.003, §5º" },
+  { id:"ai",        rot:"Agravo interno",           dias:15, base:"CPC art. 1.021, §2º" },
+  { id:"ro",        rot:"Recurso ordinário",        dias:8,  base:"CLT art. 895 c/c 775" },
+  { id:"ri",        rot:"Recurso inominado",        dias:10, base:"Lei 9.099/95, art. 42" },
+  { id:"resp",      rot:"REsp / RE",                dias:15, base:"CPC art. 1.003, §5º" },
+  { id:"manif",     rot:"Manifestação",             dias:15, base:"CPC art. 218, §3º" },
+  { id:"impug",     rot:"Impugnação",               dias:15, base:"CPC art. 525" },
+  { id:"pagar",     rot:"Pagamento",                dias:15, base:"CPC art. 523" },
+  { id:"custas",    rot:"Custas / preparo",         dias:5,  base:"conferir no ato" },
+  { id:"provas",    rot:"Especificar provas",       dias:15, base:"CPC art. 357" },
+  { id:"ciencia",   rot:"Só ciência",               dias:0,  base:"sem prazo a cumprir" },
+];
+
+/* Prazo do ato contado a partir da publicação DAQUELA intimação. */
+function prazoDoAto(item, dias){
+  if (!dias) return null;
+  const ini = item.inicio ? new Date(item.inicio + "T00:00:00Z") : proxUtil(proxUtil(new Date(item.disp + "T00:00:00Z")));
+  return isoDe(somaUteis(ini, dias - 1));
+}
+
+function dlgDesdobrar(p){
+  const b = p.bruto;
+  const escolhidos = new Map();
+  const st = el("p","sb",""); st.style.cssText = "margin:0;font-weight:600;color:var(--azul)";
+
+  const grade = el("div","atos");
+  function pinta(){
+    const total = escolhidos.size;
+    st.textContent = total ? total + (total === 1 ? " providência será criada" : " providências serão criadas") : "Escolha o que essa intimação exige.";
+  }
+  ATOS.forEach(a => {
+    const bt = el("button","ato"); bt.type = "button";
+    bt.appendChild(el("b", null, a.rot));
+    bt.appendChild(el("span", null, a.dias ? a.dias + " dias úteis · " + a.base : a.base));
+    const venc = prazoDoAto(b, a.dias);
+    if (venc) bt.appendChild(el("i", null, "vence " + br(venc)));
+    bt.addEventListener("click", () => {
+      if (escolhidos.has(a.id)) { escolhidos.delete(a.id); bt.classList.remove("on"); }
+      else { escolhidos.set(a.id, a); bt.classList.add("on"); }
+      pinta();
+    });
+    grade.appendChild(bt);
+  });
+
+  const outro = entrada("text", "", "Ex.: cumprir diligência, juntar procuração…");
+  const outroDias = entrada("number", "", "dias úteis");
+  outroDias.min = "0"; outroDias.max = "180";
+  const dupla = el("div","dupla");
+  dupla.appendChild(campo("Outra providência", outro));
+  dupla.appendChild(campo("Prazo (dias úteis)", outroDias));
+
+  const quem = selPessoa("");
+  pinta();
+
+  modal("O que essa intimação exige?",
+    "Marque quantas quiser — uma intimação pode gerar mais de uma providência. O prazo é contado a partir da publicação desta intimação (" + br(b.pub) + ") e você pode editar depois.",
+    [grade, st, dupla, campo("Delegar para (opcional)", quem)],
+    () => {
+      const criar = [...escolhidos.values()].map(a => ({ rot: a.rot, dias: a.dias }));
+      const livre = outro.value.trim();
+      if (livre) criar.push({ rot: livre, dias: parseInt(outroDias.value, 10) || 0 });
+      if (!criar.length){ st.style.color = "var(--rosa)"; st.textContent = "Marque ao menos uma providência, ou escreva uma."; return false; }
+      const parte = b.sigiloso ? "processo em segredo de justiça" : ((b.partes || [])[0] || "");
+      criar.forEach(c => {
+        const t = {
+          id: uid(),
+          titulo: c.rot + (parte ? " — " + parte : ""),
+          prazo: prazoDoAto(b, c.dias),
+          processo: b.proc,
+          pessoaId: quem.value || null,
+          nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + c.dias + " dias úteis" : " · sem prazo"),
+          feita: false, criada: HOJE,
+          daIntimacao: String(b.id),
+        };
+        if (quem.value){
+          t.delegadaPor = (E.time && E.time.pessoaId) || null;
+          t.delegadaPorNome = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+          t.delegadaEm = agoraISO(); t.vistaPor = [];
+        }
+        tocou(t); E.tarefas.push(t);
+      });
+      const it = E.djen.find(x => String(x.id) === String(b.id));
+      if (it){ it.desdobrada = true; tocou(it); }
+      salvar(); render(); return true;
+    }, "Criar providências");
+}
+
+const desdobramentos = idIntim => E.tarefas.filter(t => !t.removido && t.daIntimacao === String(idIntim));
+
 function alternar(key){
   const obj = key[0] === "d" ? E.djen.find(x => "d" + x.id === key) : E.tarefas.find(x => "t" + x.id === key);
   if (!obj) return;
@@ -567,6 +712,82 @@ function converte(c, rotulo){
     advs:[rotulo], partes: sig?[]:partes.slice(0,4), sigiloso:sig,
     acoes: ACOES.filter(([,rx]) => rx.test(t)).map(([n]) => n), link:c.link||null,
     feita:false, pessoaId:null, atualizadoEm: new Date().toISOString() };
+}
+
+/* ---------- Acompanhamento Paralelo ----------
+   Diferença essencial em relação ao radar de OAB: nesses processos o escritório
+   NÃO é parte nem procurador — são casos de terceiro que a equipe acompanha.
+   Logo a busca é por NÚMERO DO PROCESSO, e o que sai daqui é INFORMAÇÃO, nunca
+   prazo do escritório. Por isso vive em coleção separada e não entra na agenda,
+   no placar nem no alarme de PERDEU. */
+const soDigitos = t => String(t || "").replace(/\D/g, "");
+const mascaraCNJ = d => d.length === 20
+  ? d.slice(0,7) + "-" + d.slice(7,9) + "." + d.slice(9,13) + "." + d.slice(13,14) + "." + d.slice(14,16) + "." + d.slice(16)
+  : d;
+
+function lerListaProcessos(texto){
+  const achados = new Map();
+  String(texto || "").split(/\r?\n/).forEach(linha => {
+    const m = linha.match(/(\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4})/);
+    if (!m) return;
+    const num = soDigitos(m[1]);
+    if (num.length !== 20) return;
+    /* rótulo = o que sobra da linha sem o número, sem vírgulas de CSV nas pontas */
+    /* O rótulo é o que sobra da linha, limpo o bastante para ser lido por gente.
+       O CSV do Escavador repete o número em duas colunas e emenda tribunal,
+       tags e datas — corta tudo isso e fica só o "quem contra quem". */
+    let rot = linha.replace(/\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4}/g, " ");
+    rot = rot.replace(/^\s*"?\d{4,}"?\s*[;,\t]/, " ");
+    rot = rot.replace(/\b(PROCESSO|TERMO|ORGAO|PESSOA|NAO|SIM)\b/g, " ");
+    rot = rot.split(/\d{4}-\d{2}-\d{2}/)[0];
+    rot = rot.replace(/[;,\t]+/g, " ").replace(/\s+/g, " ").trim();
+    rot = rot.replace(/\s+(TJ|TRF|TRT|TRE|STJ|STF|STM|TST)[A-Z0-9-]*\s*$/i, "");
+    rot = rot.replace(/^["'\-\s]+|["'\-\s|]+$/g, "").slice(0, 90);
+    if (!achados.has(num)) achados.set(num, { id: num, numero: num, rotulo: rot || null });
+  });
+  return [...achados.values()];
+}
+
+async function varrerParalelo(aviso){
+  const lista = E.processos.filter(p => !p.removido);
+  if (!lista.length) throw new Error("Nenhum processo na lista. Importe a lista do Acompanhamento Paralelo primeiro.");
+  const fim = HOJE, ini = dataLocal(new Date(Date.now() - (E.paraleloDias || 30) * 864e5));
+  let novos = 0, comMovimento = 0, lidos = 0;
+  for (const p of lista){
+    lidos++;
+    if (aviso) aviso(lidos, lista.length, p.rotulo || mascaraCNJ(p.numero));
+    const url = "https://comunicaapi.pje.jus.br/api/v1/comunicacao?numeroProcesso=" + p.numero
+      + "&dataDisponibilizacaoInicio=" + ini + "&dataDisponibilizacaoFim=" + fim + "&itensPorPagina=100";
+    let d;
+    try {
+      const r = await fetch(url);
+      if (r.status === 429){ await new Promise(x => setTimeout(x, 9000)); continue; }
+      if (!r.ok) continue;
+      d = await r.json();
+    } catch(e){ continue; }
+    const itens = d.items || [];
+    if (itens.length) comMovimento++;
+    itens.forEach(c => {
+      if (E.paralelo.some(x => String(x.id) === String(c.id))) return;
+      const t = limpa(c.texto);
+      const partes = (c.destinatarios || []).map(x => x.nome).filter(Boolean);
+      const sig = partes.some(x => /^sigilo/i.test(x)) || !partes.length;
+      E.paralelo.push({
+        id: c.id, hash: c.hash, numero: p.numero, rotulo: p.rotulo || null,
+        proc: c.numeroprocessocommascara || c.numero_processo, trib: c.siglaTribunal,
+        orgao: c.nomeOrgao, classe: c.nomeClasse || null, tipo: c.tipoComunicacao,
+        disp: c.data_disponibilizacao, link: c.link || null,
+        partes: sig ? [] : partes.slice(0,4), sigiloso: sig,
+        resumo: t.slice(0, 400), tamanho: t.length,
+        atualizadoEm: new Date().toISOString(),
+      });
+      novos++;
+    });
+    await new Promise(x => setTimeout(x, 3500));
+  }
+  E.paraleloEm = new Date().toISOString();
+  salvar();
+  return { lidos, comMovimento, novos };
 }
 
 async function testarBusca(){
@@ -641,8 +862,7 @@ function descreve(p){
 }
 function evento(p){
   const b = p.bruto, resp = pessoaDe(p.quem);
-  const tit = (p.tipo === "sessao" ? "Sessão: " : "PRAZO: ") + p.titulo
-    + ((b.proc || b.processo) ? " — " + (b.proc || b.processo) : "");
+  const tit = tituloEvento(p);
   const L = ["BEGIN:VEVENT",
     "UID:" + p.key + "-" + (b.id || b.criada || "x") + "@painel-prazos",
     "DTSTAMP:" + carimbo(),
@@ -665,10 +885,30 @@ function evento(p){
   L.push("END:VEVENT");
   return L;
 }
+/* Além do evento do prazo fatal, um evento no dia de COMEÇAR. Ver os dois no
+   calendário é o que torna a antecedência visível de verdade. */
+function eventoPreparo(p){
+  const b = p.bruto, int = internoDe(p.data);
+  if (!int || int >= p.data) return [];
+  return ["BEGIN:VEVENT",
+    "UID:prep-" + p.key + "-" + (b.id || b.criada || "x") + "@painel-prazos",
+    "DTSTAMP:" + carimbo(),
+    "DTSTART;VALUE=DATE:" + compacta(int),
+    "DTEND;VALUE=DATE:" + maisUmDia(int),
+    "SUMMARY:" + icsEsc("COMEÇAR: " + p.titulo + " (fatal " + br(p.data) + ")"),
+    "DESCRIPTION:" + icsEsc(descreve(p)),
+    "STATUS:CONFIRMED","TRANSP:TRANSPARENT",
+    "BEGIN:VALARM","TRIGGER:-PT1H","ACTION:DISPLAY",
+    "DESCRIPTION:" + icsEsc("Hoje é o dia de começar: " + p.titulo),"END:VALARM",
+    "END:VEVENT"];
+}
 function montaIcs(lista){
   const L = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Painel de Prazos//DJEN//PT-BR",
     "CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Prazos (DJEN)"];
-  lista.filter(p => p.data).forEach(p => evento(p).forEach(l => L.push(l)));
+  lista.filter(p => p.data).forEach(p => {
+    if (p.tipo !== "sessao") eventoPreparo(p).forEach(l => L.push(l));
+    evento(p).forEach(l => L.push(l));
+  });
   L.push("END:VCALENDAR");
   return L.map(dobra).join("\r\n") + "\r\n";
 }
@@ -686,9 +926,16 @@ function convidados(p, todos){
   if (todos) pessoasVivas().forEach(x => { if (x.email && !emails.includes(x.email)) emails.push(x.email); });
   return emails;
 }
+function tituloEvento(p){
+  const proc = p.bruto.proc || p.bruto.processo || "";
+  const parte = (p.bruto.partes || [])[0];
+  const alvo = parte || proc || "";
+  if (p.tipo === "sessao") return "SESSÃO DE JULGAMENTO — " + p.titulo + (alvo ? " · " + alvo : "");
+  return "PRAZO FATAL: " + p.titulo + (alvo ? " · " + alvo : "");
+}
 function linkGoogle(p, todos){
   const campos = { action:"TEMPLATE",
-    text:(p.tipo === "sessao" ? "Sessão: " : "PRAZO: ") + p.titulo,
+    text: tituloEvento(p),
     dates: compacta(p.data) + "/" + maisUmDia(p.data),
     details: descreve(p) };
   const gente = convidados(p, todos);
@@ -716,7 +963,7 @@ async function salvarArquivo(nome, texto, mime){
    comparando o campo atualizadoEm. */
 
 const FS = "https://firestore.googleapis.com/v1";
-const COLECOES = ["pessoas", "tarefas", "djen"];
+const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo"];
 const INTERVALO_SINAL = 20000;   // 20s: uma leitura por rodada, por pessoa
 let sincronizando = false, ultimoErroSync = null, timerSync = null;
 let timerSinal = null, sinalVisto = null, aoVivo = false;
@@ -884,11 +1131,15 @@ function sairDoTime(){ E.time = null; sinalVisto = null; clearInterval(timerSina
 function localDe(col){
   if (col === "pessoas") return E.pessoas;
   if (col === "tarefas") return E.tarefas;
+  if (col === "processos") return E.processos;
+  if (col === "paralelo") return E.paralelo.map(i => Object.assign({}, i, { id: String(i.id) }));
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
 }
 function aplicaLocal(col, lista){
   if (col === "pessoas") E.pessoas = lista;
   else if (col === "tarefas") E.tarefas = lista;
+  else if (col === "processos") E.processos = lista;
+  else if (col === "paralelo") E.paralelo = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
   else E.djen = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
 }
 const chaveDe = o => String(o.id);
@@ -1198,6 +1449,7 @@ function render(){
   if (aba === "painel")  app.appendChild(telaPainel());
   if (aba === "agenda")  app.appendChild(telaAgenda());
   if (aba === "todo")    app.appendChild(telaTodo());
+  if (aba === "paralelo") app.appendChild(telaParalelo());
   if (aba === "equipe")  app.appendChild(telaEquipe());
   if (aba === "config")  app.appendChild(telaConfig());
   app.appendChild(rodape());
@@ -1208,8 +1460,10 @@ function renderAbas(){
   const box = $("abas"); box.innerHTML = "";
   if (!configurado()) return;
   const pl = placar();
+  const naoVistos = E.paralelo.filter(i => !i.visto && !i.removido).length;
   const defs = [["painel","Painel","alvo",null],["agenda","Agenda","calend",null],
-    ["todo","Tarefas","lista",pl.abertas],["equipe","Equipe","pessoa",pessoasVivas().length],["config","Ajustes","engr",null]];
+    ["todo","Tarefas","lista",pl.abertas],["paralelo","Paralelo","busca",naoVistos],
+    ["equipe","Equipe","pessoa",pessoasVivas().length],["config","Ajustes","engr",null]];
   defs.forEach(([k,rot,ic,n]) => {
     const b = el("button","aba"); b.type = "button"; b.setAttribute("role","tab");
     b.setAttribute("aria-selected", String(aba === k));
@@ -1248,6 +1502,7 @@ function boasVindas(){
     ["1","var(--azul)","Cadastre uma OAB","O painel busca no DJEN do CNJ — de graça, sem login e sem token. Vale para qualquer advogado, esteja ou não em lista nenhuma.", () => dlgOab(), "Adicionar OAB","mais"],
     ["2","var(--verde)","Monte a equipe","Cadastre quem pode receber tarefas: advogados, estagiários, secretaria — qualquer pessoa.", () => dlgPessoa(), "Cadastrar pessoa","pessoa"],
     ["3","var(--violeta)","Crie tarefas","Além do que vem do diário, escreva as suas providências e delegue para quem for fazer.", () => dlgTarefa(), "Nova tarefa","lista"],
+    ["4","var(--teal)","Acompanhe terceiros","Cole a lista de processos do Acompanhamento Paralelo. O painel busca por número, porque nesses casos o escritório não é parte.", () => dlgImportarProcessos(), "Importar lista","busca"],
   ];
   dados.forEach(([n,cor,tit,txt,fn,rot,ic]) => {
     const p = el("div","passo");
@@ -1298,10 +1553,134 @@ function caixaDeEntrada(){
   return c;
 }
 
+const DIAS3 = ["dom","seg","ter","qua","qui","sex","sáb"];
+let semanaOffset = 0;
+
+function classeDe(p){
+  const e = estadoDe(p);
+  if (p.feita) return "ok";
+  if (p.tipo === "sessao") return "s";
+  if (e === "perdeu" || e === "fatalhoje" || e === "atrasado") return "x";
+  if (e === "atencao" || e === "comecarhoje") return "u";
+  return "";
+}
+
+function telaSemana(){
+  const f = document.createDocumentFragment();
+  const hoje = new Date(HOJE + "T00:00:00Z");
+  const seg = new Date(hoje); seg.setUTCDate(seg.getUTCDate() - ((seg.getUTCDay() + 6) % 7) + semanaOffset * 7);
+  const dias = Array.from({length:7}, (_,k) => { const d = new Date(seg); d.setUTCDate(d.getUTCDate() + k); return isoDe(d); });
+
+  const nav = el("div","semnav");
+  const rot = el("div","rot", semanaOffset === 0 ? "Esta semana"
+    : semanaOffset === 1 ? "Próxima semana"
+    : semanaOffset === -1 ? "Semana passada"
+    : br(dias[0]) + " a " + br(dias[6]));
+  nav.appendChild(rot);
+  const bts = el("div"); bts.style.cssText = "display:flex;gap:7px;flex-wrap:wrap";
+  bts.appendChild(botao("‹ anterior", null, "pq", () => { semanaOffset--; render(); }));
+  if (semanaOffset !== 0) bts.appendChild(botao("hoje", null, "pq", () => { semanaOffset = 0; render(); }));
+  bts.appendChild(botao("próxima ›", null, "pq", () => { semanaOffset++; render(); }));
+  nav.appendChild(bts);
+  f.appendChild(nav);
+
+  const itens = base().filter(p => p.data && !p.dispensada);
+  const grade = el("div","semana");
+  dias.forEach(iso => {
+    const doDia = itens.filter(p => p.data === iso).sort((a,b) => (a.feita?1:0) - (b.feita?1:0));
+    const wd = new Date(iso + "T00:00:00Z").getUTCDay();
+    const d = el("div","dia" + (iso === HOJE ? " hoje" : "") + ((wd === 0 || wd === 6) ? " fds" : "") + (doDia.length ? " cheio" : ""));
+    d.appendChild(el("div","dn", DIAS3[wd] + (FER.has(iso) ? " · feriado" : "")));
+    d.appendChild(el("div","dd", iso.slice(8,10)));
+    const box = el("div","pts2");
+    doDia.slice(0,3).forEach(p => {
+      const t = el("div","pt2 " + classeDe(p), p.titulo.length > 22 ? p.titulo.slice(0,20) + "…" : p.titulo);
+      t.title = p.titulo + (p.bruto.proc ? " · " + p.bruto.proc : "");
+      box.appendChild(t);
+    });
+    if (doDia.length > 3) box.appendChild(el("div","pt2", "+ " + (doDia.length - 3)));
+    d.appendChild(box);
+    if (doDia.length) d.addEventListener("click", () => { aba = "agenda"; busca = ""; render(); });
+    grade.appendChild(d);
+  });
+  f.appendChild(grade);
+  return f;
+}
+
+function listaCurta(){
+  const f = document.createDocumentFragment();
+  const abertas = base().filter(p => !p.feita && !p.dispensada)
+    .sort((a,b) => {
+      const pa = perdida(a) ? 0 : a.data ? 1 : 2, pb = perdida(b) ? 0 : b.data ? 1 : 2;
+      if (pa !== pb) return pa - pb;
+      return (a.data || "9").localeCompare(b.data || "9");
+    });
+  if (!abertas.length){
+    const v = el("div","vazio");
+    v.appendChild(el("b", null, "Nada em aberto"));
+    v.appendChild(el("p", null, "Toda providência conhecida está tratada."));
+    f.appendChild(v);
+    return f;
+  }
+  const box = el("div","curta");
+  abertas.slice(0,8).forEach(p => {
+    const cl = classeDe(p);
+    const l = el("div","lin " + cl);
+    const cb = el("input"); cb.type = "checkbox";
+    cb.addEventListener("change", () => { if (novaParaMim(p)) marcarVista(p); alternar(p.key); });
+    l.appendChild(cb);
+    const faltam = p.data && p.data >= HOJE ? uteisEntre(HOJE, p.data) : null;
+    l.appendChild(el("div","qd", !p.data ? "sem data"
+      : perdida(p) ? "venceu" : faltam === 0 ? "HOJE" : faltam + (faltam === 1 ? " dia" : " dias")));
+    const m = el("div");
+    m.appendChild(el("div","tt2", p.titulo));
+    const sub = [];
+    if (p.data) sub.push(br(p.data));
+    if (p.bruto.proc || p.bruto.processo) sub.push(p.bruto.proc || p.bruto.processo);
+    if (p.quem) sub.push("com " + (pessoaDe(p.quem) || {}).nome);
+    m.appendChild(el("div","sb2", sub.join(" · ")));
+    l.appendChild(m);
+    const dir = el("div"); dir.style.cssText = "display:flex;gap:7px;flex-wrap:wrap";
+    if (p.data){ const a = el("a", null, "agenda"); a.href = linkGoogle(p); a.target = "_blank"; a.rel = "noopener";
+      a.style.cssText = "font:600 12px/1 'Source Sans 3';color:var(--azul);text-decoration:none;border-bottom:1px solid var(--line-2)"; dir.appendChild(a); }
+    l.appendChild(dir);
+    box.appendChild(l);
+  });
+  f.appendChild(box);
+  if (abertas.length > 8) f.appendChild(botao("Ver as " + abertas.length + " providências","lista","", () => { aba = "todo"; filtro = "aberto"; render(); }));
+  return f;
+}
+
 function telaPainel(){
   const f = document.createDocumentFragment();
   const pl = placar(), nv = nivelDe(pl.pontos);
   const cx = caixaDeEntrada(); if (cx) f.appendChild(cx);
+
+  /* A semana e o que falta fazer vêm ANTES do placar: é o que se olha todo dia. */
+  const cabS = el("div","cab");
+  const dS = el("div");
+  dS.appendChild(el("h2", null, "Sua semana"));
+  dS.appendChild(el("p", null, "Prazos, sessões e tarefas com data. Clique num dia para abrir a agenda."));
+  cabS.appendChild(dS);
+  cabS.style.marginTop = "8px";
+  f.appendChild(cabS);
+  f.appendChild(telaSemana());
+
+  const cabL = el("div","cab");
+  const dL = el("div");
+  dL.appendChild(el("h2", null, "O que falta fazer"));
+  dL.appendChild(el("p", null, "As mais urgentes primeiro. Marque aqui mesmo quando terminar."));
+  cabL.appendChild(dL);
+  cabL.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
+  f.appendChild(cabL);
+  f.appendChild(listaCurta());
+
+  const cabP = el("div","cab");
+  const dP = el("div");
+  dP.appendChild(el("h2", null, "Como você está"));
+  dP.appendChild(el("p", null, "Progresso, pontos e o próximo compromisso."));
+  cabP.appendChild(dP);
+  f.appendChild(cabP);
 
   const g = el("div","placar");
 
@@ -1511,6 +1890,8 @@ function cartao(p){
   else if (est === "atrasado") txt = "Atrasado · fatal em " + faltam + (faltam === 1 ? " dia útil" : " dias úteis");
   ch.appendChild(el("span","tag "+R.tag, txt));
   if (novaParaMim(p)) ch.appendChild(el("span","tag novo-pill","Nova para você"));
+  if (p.fonte === "djen" && !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length)
+    ch.appendChild(el("span","tag t-ambar","sem providência definida"));
   if (p.fonte === "manual") ch.appendChild(el("span","tag t-teal","Tarefa sua"));
   if (b.classe) ch.appendChild(el("span","tag", b.classe.length > 30 ? b.classe.slice(0,28)+"…" : b.classe));
   ch.appendChild(el("span","pts","+"+PESO[p.tipo]));
@@ -1568,6 +1949,10 @@ function cartao(p){
   const cr = el("div","cr");
   if (p.quem){ const q = el("span","quem"); q.appendChild(avatar(pessoaDe(p.quem))); q.appendChild(el("span",null,(pessoaDe(p.quem)||{}).nome)); cr.appendChild(q); }
   if (p.feita && p.quemFez) cr.appendChild(el("span","tag t-verde","concluída por " + p.quemFez));
+  if (p.fonte === "djen"){
+    const ds = desdobramentos(p.bruto.id);
+    if (ds.length) cr.appendChild(el("span","tag t-teal", "gerou: " + ds.map(t => t.titulo.split(" — ")[0]).join(", ")));
+  }
   if (p.dispensada) cr.appendChild(el("span","tag","dispensada: " + (p.motivo || "sem motivo")));
   if (!p.feita && !p.dispensada && p.dePor && !souEu(p.bruto.delegadaPor))
     cr.appendChild(el("span","tag t-violeta","de " + p.dePor));
@@ -1590,6 +1975,10 @@ function cartao(p){
   if (p.data) dir.appendChild(botao(".ics","calend","pq", () => baixarIcs([p], "prazo")));
   dir.appendChild(botao(p.quem ? "Trocar" : "Delegar", "pessoa", "pq", () => dlgDelegar(p)));
   if (p.fonte === "manual") dir.appendChild(botao("Editar","lapis","pq", () => dlgTarefa(p.bruto)));
+  if (p.fonte === "djen" && !p.feita && !p.dispensada){
+    const ds = desdobramentos(p.bruto.id).length;
+    dir.appendChild(botao(ds ? ds + " providência" + (ds > 1 ? "s" : "") : "O que fazer?", "lista", ds ? "pq" : "ok pq", () => dlgDesdobrar(p)));
+  }
   if (p.dispensada) dir.appendChild(botao("Reativar","troca","pq", () => reativar(p)));
   else if (!p.feita) dir.appendChild(botao("Não precisa","lixo","pq", () => dlgDispensar(p)));
   dir.appendChild(botao(p.feita ? "Concluída" : "Concluir", "check", p.feita ? "ok pq" : "pq", () => { if (novaParaMim(p)) marcarVista(p); alternar(p.key); }));
@@ -1674,6 +2063,158 @@ function telaTodo(){
 }
 
 /* ---------- equipe ---------- */
+/* ---------- Acompanhamento Paralelo ---------- */
+function dlgImportarProcessos(){
+  const ta = el("textarea"); ta.rows = 9;
+  ta.placeholder = "Cole aqui uma linha por processo. Pode ser o CSV do Escavador inteiro — ele acha o número e usa o resto da linha como rótulo.\n\nEx.:\nEmpresa Alfa x INPI, 1234567-89.2024.4.02.5101\nBeta Farma x Gama Ltda (infração), 9876543-21.2025.8.26.0100";
+  ta.style.cssText = "font:400 13px/1.5 'IBM Plex Mono',monospace";
+  const st = el("p","sb",""); st.style.cssText = "margin:0;color:var(--azul);font-weight:600";
+  ta.addEventListener("input", () => {
+    const achou = lerListaProcessos(ta.value).length;
+    st.textContent = achou ? achou + " processo(s) reconhecido(s)" : "";
+  });
+  modal("Importar a lista do Paralelo",
+    "São os processos de terceiro que a equipe acompanha. O painel vai perguntar ao DJEN o que saiu em cada um — por número, porque nesses casos o escritório não é parte.",
+    [campo("Lista", ta), st],
+    () => {
+      const novos = lerListaProcessos(ta.value);
+      if (!novos.length){ st.style.color = "var(--rosa)"; st.textContent = "Não encontrei nenhum número de processo válido."; return false; }
+      novos.forEach(p => {
+        const ja = E.processos.find(x => x.numero === p.numero);
+        if (ja){ if (p.rotulo && !ja.rotulo){ ja.rotulo = p.rotulo; tocou(ja); } }
+        else { tocou(p); E.processos.push(p); }
+      });
+      salvar(); sincronizarTime(true); render(); return true;
+    }, "Importar");
+}
+
+async function rodarParalelo(){
+  const m = $("modal"); m.innerHTML = "";
+  m.appendChild(el("h3", null, "Varrendo o Acompanhamento Paralelo"));
+  const st = el("p","sb","Começando…"); m.appendChild(st);
+  const ba = el("div","barra"); const bi = el("i"); bi.style.width = "1%"; ba.appendChild(bi); m.appendChild(ba);
+  const obs = el("p","ps","São ~3,5 segundos por processo, de propósito: o CNJ limita 20 consultas por janela. Pode deixar aberto em outra aba.");
+  obs.style.marginTop = "12px"; m.appendChild(obs);
+  $("fundo").classList.add("on");
+  try {
+    const r = await varrerParalelo((i, total, rot) => {
+      st.textContent = i + " de " + total + " · " + rot;
+      bi.style.width = Math.round(i / total * 100) + "%";
+    });
+    await sincronizarTime(true);
+    fechar(); aba = "paralelo"; render();
+    if (r.novos) festa();
+  } catch(e){
+    m.innerHTML = "";
+    m.appendChild(el("h3", null, "Não deu para varrer"));
+    m.appendChild(el("p","sb", e.message));
+    const ac = el("div","acoes"); ac.appendChild(botao("Entendi","check","pri", () => { fechar(); render(); })); m.appendChild(ac);
+  }
+}
+
+function telaParalelo(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Acompanhamento Paralelo"));
+  d.appendChild(el("p", null, "Casos de terceiro que a equipe acompanha. O escritório não é parte — então isto é informação, não prazo: nada daqui entra na agenda, no placar nem no alarme de vencido."));
+  cab.appendChild(d);
+  const bt = el("div"); bt.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
+  bt.appendChild(botao("Importar lista","mais", E.processos.length ? "" : "pri", () => dlgImportarProcessos()));
+  if (E.processos.filter(p => !p.removido).length) bt.appendChild(botao("Varrer agora","busca","pri", () => rodarParalelo()));
+  cab.appendChild(bt);
+  f.appendChild(cab);
+
+  const listaProc = E.processos.filter(p => !p.removido);
+  if (!listaProc.length){
+    f.appendChild(vazioBox("busca","Nenhum processo na lista",
+      "Cole a lista dos processos acompanhados — pode ser o CSV do Escavador inteiro. O painel acha os números sozinho.",
+      "Importar lista", () => dlgImportarProcessos()));
+    return f;
+  }
+
+  const itens = E.paralelo.filter(i => !i.removido && casaParalelo(i));
+  const resumo = el("div","aviso az");
+  resumo.appendChild(el("span","k","Situação"));
+  resumo.appendChild(el("div", null, listaProc.length + " processos acompanhados · " + itens.length + " publicações encontradas"
+    + (E.paraleloEm ? " · última varredura em " + br(dataLocal(new Date(E.paraleloEm))) + " às " + horaLocal(E.paraleloEm) : " · nunca varrido")));
+  f.appendChild(resumo);
+
+  const bu = entrada("search", buscaPar, "Buscar por parte, processo, tribunal ou rótulo…");
+  bu.style.cssText = "max-width:430px;margin-bottom:16px";
+  bu.addEventListener("input", e => { buscaPar = e.target.value.trim(); render();
+    const nn = document.querySelector("input[type=search]"); if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
+  f.appendChild(bu);
+
+  if (!itens.length){
+    f.appendChild(vazioBox("busca", E.paraleloEm ? "Nada nesta busca" : "Ainda não varrido",
+      E.paraleloEm ? "Nenhuma publicação bate com o que você digitou." : "Clique em Varrer agora. São ~3,5s por processo — com " + listaProc.length + " processos dá uns " + Math.round(listaProc.length * 3.5 / 60) + " minutos.",
+      E.paraleloEm ? null : "Varrer agora", () => rodarParalelo()));
+    return f;
+  }
+
+  const porProc = new Map();
+  itens.slice().sort((a,b) => b.disp.localeCompare(a.disp)).forEach(i => {
+    if (!porProc.has(i.numero)) porProc.set(i.numero, []);
+    porProc.get(i.numero).push(i);
+  });
+  const ordenados = [...porProc.entries()].sort((a,b) => b[1][0].disp.localeCompare(a[1][0].disp));
+
+  ordenados.forEach(([num, pubs]) => {
+    const bloco = el("div","mesbloco");
+    const h = el("h3");
+    const nm = el("span","mn", pubs[0].rotulo || pubs[0].proc);
+    h.appendChild(nm);
+    const mp = el("div","mp");
+    mp.appendChild(el("span", null, pubs.length + (pubs.length === 1 ? " publicação" : " publicações")));
+    h.appendChild(mp);
+    bloco.appendChild(h);
+    pubs.forEach(i => {
+      const c = el("div","card c-teal");
+      const fl = el("div","fl");
+      fl.appendChild(el("div","m", MES3[+i.disp.slice(5,7) - 1]));
+      fl.appendChild(el("div","d", i.disp.slice(8,10)));
+      c.appendChild(fl);
+      const corpo = el("div");
+      const ch = el("div","ch");
+      ch.appendChild(el("span","tag t-teal", i.tipo));
+      if (i.classe) ch.appendChild(el("span","tag", i.classe.length > 30 ? i.classe.slice(0,28) + "…" : i.classe));
+      if (!i.visto) ch.appendChild(el("span","tag novo-pill","Novo"));
+      corpo.appendChild(ch);
+      corpo.appendChild(el("div","ct", i.sigiloso ? "Processo em segredo de justiça" : (i.partes.slice(0,2).join(" × ") || "Partes não informadas")));
+      const cm = el("div","cm");
+      cm.appendChild(el("span","pr", i.proc));
+      cm.appendChild(el("span", null, i.trib + (i.orgao ? " · " + i.orgao : "")));
+      corpo.appendChild(cm);
+      if (i.resumo){
+        const cw = el("div","cw");
+        cw.appendChild(document.createTextNode(i.resumo.slice(0,300) + (i.tamanho > 300 ? "…" : "")));
+        corpo.appendChild(cw);
+      }
+      const cr = el("div","cr");
+      const a1 = el("a", null, "Certidão (PDF)");
+      a1.href = "https://comunicaapi.pje.jus.br/api/v1/comunicacao/" + i.hash + "/certidao";
+      a1.target = "_blank"; a1.rel = "noopener"; cr.appendChild(a1);
+      if (i.link){ const a2 = el("a", null, "Inteiro teor"); a2.href = i.link; a2.target = "_blank"; a2.rel = "noopener"; cr.appendChild(a2); }
+      const dir = el("div","dir");
+      dir.appendChild(botao("Virar tarefa","mais","pq", () => {
+        const t = { id: uid(), titulo: "Analisar: " + (i.rotulo || i.proc), prazo: null,
+          processo: i.proc, pessoaId: null, nota: i.tipo + " de " + br(i.disp) + " · " + i.trib,
+          feita: false, criada: HOJE };
+        tocou(t); E.tarefas.push(t); i.visto = true; tocou(i); salvar(); aba = "todo"; render();
+      }));
+      dir.appendChild(botao(i.visto ? "Visto" : "Marcar visto","check", i.visto ? "ok pq" : "pq",
+        () => { i.visto = !i.visto; tocou(i); salvar(); render(); }));
+      cr.appendChild(dir);
+      corpo.appendChild(cr);
+      c.appendChild(corpo);
+      bloco.appendChild(c);
+    });
+    f.appendChild(bloco);
+  });
+  return f;
+}
+
 function telaEquipe(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
@@ -1733,189 +2274,65 @@ function telaEquipe(){
 }
 
 function mandarEmail(pessoa, lista){
-  const abertas = lista.filter(x => !x.feita);
+  const abertas = lista.filter(x => !x.feita && !x.dispensada);
   const NL = String.fromCharCode(10);
-  const linhas = abertas.slice().sort((a,b) => (a.data||"9").localeCompare(b.data||"9")).map(x => {
-    const est = estadoDe(x);
-    const marca = est === "perdeu" ? "[PERDEU] " : est === "atrasado" ? "[ATRASADO] " : "";
-    const dt = x.data ? "  fatal " + br(x.data) + " - preparar ate " + br(internoDe(x.data)) : "  sem data definida";
-    const proc = x.bruto.proc || x.bruto.processo;
-    return ["- " + marca + x.titulo, dt].concat(proc ? ["  processo " + proc] : []).join(NL);
-  }).join(NL + NL);
+  const reg = "=".repeat(52);
+  const ordem = { perdeu:0, fatalhoje:1, atrasado:2, comecarhoje:3, atencao:4, emdia:5, sessao:6, semdata:7 };
+  const ord = abertas.slice().sort((a,b) => {
+    const da = ordem[estadoDe(a)] ?? 9, db = ordem[estadoDe(b)] ?? 9;
+    return da !== db ? da - db : (a.data || "9").localeCompare(b.data || "9");
+  });
+  const bloco = (rot, filtro) => {
+    const its = ord.filter(filtro);
+    if (!its.length) return [];
+    const L = ["", rot, "-".repeat(rot.length)];
+    its.forEach(x => {
+      const proc = x.bruto.proc || x.bruto.processo;
+      L.push("");
+      L.push("  " + x.titulo);
+      if (x.data){
+        const f = x.data >= HOJE ? uteisEntre(HOJE, x.data) : null;
+        L.push("    PRAZO FATAL: " + br(x.data)
+          + (f === null ? "  (JA VENCEU)" : f === 0 ? "  (E HOJE)" : "  (faltam " + f + " dias uteis)"));
+        if (x.tipo !== "sessao") L.push("    comecar ate: " + br(internoDe(x.data)));
+      } else L.push("    sem data definida - precisa definir");
+      if (proc) L.push("    processo " + proc + (x.bruto.trib ? "  " + x.bruto.trib : ""));
+      if (x.bruto.nota) L.push("    " + x.bruto.nota);
+    });
+    return L;
+  };
+  const perdidas = ord.filter(x => estadoDe(x) === "perdeu").length;
+  const urgentes = ord.filter(x => ["fatalhoje","atrasado","comecarhoje"].includes(estadoDe(x))).length;
   const corpo = [
+    reg,
+    "  SUAS TAREFAS - " + abertas.length + " em aberto",
+    reg,
+    "",
     "Oi, " + pessoa.nome.split(" ")[0] + "!",
+  ]
+  .concat(perdidas ? ["", ">>> ATENCAO: " + perdidas + " com prazo fatal JA VENCIDO <<<"] : [])
+  .concat(urgentes ? ["", ">>> " + urgentes + " precisam de acao HOJE ou ja estao atrasadas <<<"] : [])
+  .concat(bloco("VENCIDAS - conferir nos autos com urgencia", x => estadoDe(x) === "perdeu"))
+  .concat(bloco("PARA HOJE / ATRASADAS", x => ["fatalhoje","atrasado","comecarhoje"].includes(estadoDe(x))))
+  .concat(bloco("PROXIMAS", x => ["atencao","emdia"].includes(estadoDe(x))))
+  .concat(bloco("SESSOES DE JULGAMENTO", x => x.tipo === "sessao"))
+  .concat(bloco("SEM DATA - precisa definir", x => !x.data))
+  .concat([
+    "", reg,
+    "Datas sugeridas a partir do Diario de Justica Eletronico Nacional,",
+    "contadas em dias uteis com feriados nacionais apenas.",
+    "NAO substitui o controle de prazos do escritorio - confira nos autos.",
     "",
-    "Seguem as tarefas sob sua responsabilidade:",
-    "",
-    linhas || "(nada em aberto)",
-    "",
-    "---",
-    "Datas sugeridas a partir do Diario de Justica Eletronico Nacional.",
-    "Confira nos autos antes de considerar prazo.",
-    "Para colocar na agenda, peca o arquivo .ics (botao Calendario dela, no painel).",
-  ].join(NL);
+    "Para por na agenda, peca o arquivo .ics (botao Calendario dela, no painel).",
+    reg,
+  ]).join(NL);
+  const assunto = (perdidas ? "[VENCIDO] " : urgentes ? "[URGENTE] " : "")
+    + "Suas tarefas - " + abertas.length + " em aberto"
+    + (perdidas ? ", " + perdidas + " vencida(s)" : "");
   const url = "mailto:" + encodeURIComponent(pessoa.email)
-    + "?subject=" + encodeURIComponent("Suas tarefas - " + abertas.length + " em aberto")
+    + "?subject=" + encodeURIComponent(assunto)
     + "&body=" + encodeURIComponent(corpo);
   try { window.open(url, "_blank"); } catch(e){ location.href = url; }
-}
-
-function dlgCriarTime(){
-  const nome = entrada("text", "", "Ex.: RNA Law");
-  const proj = entrada("text", "", "ID do projeto (ex.: painel-prazos-rna)");
-  const chave = entrada("text", "", "Chave da Web API (começa com AIza...)");
-  const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
-  const passos = el("div","aviso az");
-  passos.appendChild(el("span","k","Antes"));
-  const d = el("div");
-  d.appendChild(el("div",null,"No console do Firebase (console.firebase.google.com), uma vez só:"));
-  const ol = el("ol"); ol.style.cssText = "margin:9px 0 0;padding-left:20px;line-height:1.65";
-  ["Criar projeto — plano Spark, sem cartão.",
-   "Firestore Database → Criar banco de dados → região southamerica-east1 (São Paulo) → modo de produção.",
-   "Authentication → Sign-in method → Anônimo → Ativar.",
-   "Regras: copiar as que estão em Ajustes e publicar.",
-   "Configurações do projeto → ID do projeto e Chave de API da Web."].forEach(t => ol.appendChild(el("li",null,t)));
-  d.appendChild(ol);
-  passos.appendChild(d);
-  modal("Criar o time", "O time vive num projeto Firebase seu. Os colegas entram com um código — não precisam mexer no console.",
-    [passos, campo("Nome do time", nome), campo("ID do projeto", proj), campo("Chave da Web API", chave), campo("Seu nome", (window.__meuNome = entrada("text","","Como você aparece para o time"))), st],
-    () => {
-      if (!nome.value.trim() || !proj.value.trim() || !chave.value.trim()){ st.textContent = "Preencha nome, projeto e chave."; return false; }
-      if (!window.__meuNome.value.trim()){ st.textContent = "Diga como você aparece para o time."; return false; }
-      const c = { projectId: proj.value.trim(), apiKey: chave.value.trim(), timeId: uid(), nome: nome.value.trim() };
-      st.style.color = "var(--azul)"; st.textContent = "Conectando…";
-      entrarNoTime(codificaCodigo(c), window.__meuNome.value.trim())
-        .then(() => { fechar(); render(); festa(); })
-        .catch(e => { st.style.color = "var(--rosa)"; st.textContent = e.message; });
-      return false;
-    }, "Criar e conectar");
-}
-
-function dlgQuemSouEu(){
-  if (!E.time) return;
-  const sel = el("select");
-  sel.appendChild(new Option("— criar meu cadastro como \"" + E.time.meuNome + "\" —", "novo"));
-  pessoasVivas().forEach(p => sel.appendChild(new Option(p.nome + " · " + p.papel, p.id)));
-  const igual = pessoasVivas().find(p => p.nome.trim().toLowerCase() === String(E.time.meuNome).trim().toLowerCase());
-  if (igual) sel.value = igual.id;
-  modal("Quem é você na equipe?",
-    "O painel precisa saber qual cadastro é o seu para mostrar as tarefas que passaram para você. Se o seu nome já está na lista, escolha; se não, ele cria.",
-    [campo("Sou", sel)],
-    () => {
-      if (sel.value === "novo"){
-        const nova = { id: uid(), nome: E.time.meuNome, papel: "Advogado", cor: CORES[pessoasVivas().length % CORES.length], email: null };
-        tocou(nova); E.pessoas.push(nova); E.time.pessoaId = nova.id;
-      } else E.time.pessoaId = sel.value;
-      salvar(); sincronizarTime(true); render(); return true;
-    }, "Sou eu");
-}
-
-function dlgEntrarTime(){
-  const cod = el("textarea"); cod.rows = 3; cod.placeholder = "Cole aqui o código que você recebeu";
-  const meu = entrada("text", "", "Como você aparece para o time");
-  const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
-  modal("Entrar num time", "Peça o código a quem criou o time. Ele já traz projeto, chave e identificação do time.",
-    [campo("Código do time", cod), campo("Seu nome", meu), st],
-    () => {
-      if (!cod.value.trim()){ st.textContent = "Cole o código."; return false; }
-      if (!meu.value.trim()){ st.textContent = "Diga como você aparece para o time."; return false; }
-      st.style.color = "var(--azul)"; st.textContent = "Conectando…";
-      entrarNoTime(cod.value.trim(), meu.value.trim())
-        .then(() => { fechar(); render(); festa(); setTimeout(dlgQuemSouEu, 700); })
-        .catch(e => { st.style.color = "var(--rosa)"; st.textContent = e.message; });
-      return false;
-    }, "Entrar");
-}
-
-const REGRAS = [
-  "rules_version = '2';",
-  "service cloud.firestore {",
-  "  match /databases/{database}/documents {",
-  "    match /times/{timeId}/membros/{uid} {",
-  "      allow read: if request.auth != null;",
-  "      allow write: if request.auth != null && request.auth.uid == uid;",
-  "    }",
-  "    match /times/{timeId}/{colecao}/{doc} {",
-  "      allow read, write: if request.auth != null",
-  "        && exists(/databases/$(database)/documents/times/$(timeId)/membros/$(request.auth.uid));",
-  "    }",
-  "  }",
-  "}",
-].join("\n");
-
-function dlgRegras(){
-  const ta = el("textarea"); ta.rows = 14; ta.value = REGRAS;
-  ta.style.cssText = "font:500 12.5px/1.5 'IBM Plex Mono',monospace";
-  ta.readOnly = true;
-  modal("Regras de segurança", "Cole no console do Firebase em Firestore Database → Regras → Publicar. Sem isso, o Firestore recusa a leitura e a gravação.",
-    [campo("Regras", ta)], () => true, "Fechar");
-}
-
-function secaoTime(){
-  const f = document.createDocumentFragment();
-  const cab = el("div","cab"); const d = el("div");
-  d.appendChild(el("h2",null,"Time"));
-  d.appendChild(el("p",null,"Uma lista só para o escritório inteiro, guardada no Firestore do seu projeto Firebase. Grátis no plano Spark, sem cartão."));
-  cab.appendChild(d); f.appendChild(cab);
-
-  if (!E.time){
-    const box = el("div","aviso az");
-    box.appendChild(el("span","k","Sozinha"));
-    box.appendChild(el("div",null,"Hoje os seus dados ficam só neste navegador. Conectar a um time faz tarefas, pessoas e marcações aparecerem para todo mundo."));
-    f.appendChild(box);
-    const ac = el("div"); ac.style.cssText = "display:flex;gap:10px;flex-wrap:wrap";
-    ac.appendChild(botao("Entrar num time","pessoa","pri", () => dlgEntrarTime()));
-    ac.appendChild(botao("Criar um time","mais","", () => dlgCriarTime()));
-    ac.appendChild(botao("Ver as regras de segurança","escudo","", () => dlgRegras()));
-    f.appendChild(ac);
-    return f;
-  }
-
-  const t = E.time;
-  const cx = el("div"); cx.style.cssText = "background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:18px 20px;display:flex;flex-direction:column;gap:14px";
-  const top = el("div"); top.style.cssText = "display:flex;align-items:center;gap:13px;flex-wrap:wrap";
-  const av = el("div","av g"); av.style.background = "var(--azul)"; av.textContent = iniciais(t.nome);
-  top.appendChild(av);
-  const inf = el("div");
-  inf.appendChild(el("div","nm", t.nome)).style.cssText = "font:600 17px/1.25 'Source Sans 3',sans-serif";
-  inf.appendChild(el("div","pp", "você aparece como " + t.meuNome
-    + (t.sincronizadoEm ? " · sincronizado " + br(dataLocal(new Date(t.sincronizadoEm))) + " às " + horaLocal(t.sincronizadoEm) : " · ainda não sincronizado")))
-    .style.cssText = "font:500 12.5px/1.4 'IBM Plex Mono',monospace;color:var(--muted);margin-top:3px";
-  top.appendChild(inf);
-  cx.appendChild(top);
-
-  if (ultimoErroSync){
-    const e = el("div","aviso amb"); e.style.margin = "0";
-    e.appendChild(el("span","k","Erro"));
-    e.appendChild(el("div",null, ultimoErroSync));
-    cx.appendChild(e);
-  }
-
-  const eu = euSou();
-  const idl = el("div"); idl.style.cssText = "display:flex;align-items:center;gap:11px;flex-wrap:wrap";
-  if (eu){ idl.appendChild(avatar(eu)); idl.appendChild(el("span","ps","você é " + eu.nome + " · " + eu.papel + (eu.email ? " · " + eu.email : " · sem e-mail cadastrado"))); }
-  else { const av = el("div","av"); av.style.background = "var(--rosa)"; av.textContent = "?"; idl.appendChild(av);
-    idl.appendChild(el("span","ps","você ainda não disse quem é na equipe — sem isso, tarefas passadas para você não aparecem")); }
-  idl.appendChild(botao(eu ? "Trocar" : "Dizer quem sou","pessoa", eu ? "pq" : "pri pq", () => dlgQuemSouEu()));
-  cx.appendChild(idl);
-
-  const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
-  ac.appendChild(botao(sincronizando ? "Sincronizando…" : "Sincronizar agora","troca","pri", () => sincronizarTime()));
-  ac.appendChild(botao("Copiar código do time","seta","", async () => {
-    const cod = codificaCodigo(t);
-    try { await navigator.clipboard.writeText(cod); alert("Código copiado. Mande para quem vai entrar no time."); }
-    catch(e){ prompt("Copie o código do time:", cod); }
-  }));
-  ac.appendChild(botao("Regras de segurança","escudo","", () => dlgRegras()));
-  ac.appendChild(botao("Sair do time","lixo","", () => {
-    if (confirm("Sair do time? Os dados que já estão neste navegador continuam aqui.")) sairDoTime();
-  }));
-  cx.appendChild(ac);
-  f.appendChild(cx);
-
-  const nota = el("p","ps","Quem tem o código entra no time. Trate o código como senha do escritório: mande por canal interno, não por grupo aberto.");
-  nota.style.marginTop = "12px"; f.appendChild(nota);
-  return f;
 }
 
 /* ---------- ajustes ---------- */
