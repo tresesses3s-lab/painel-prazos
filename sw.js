@@ -1,7 +1,7 @@
 /* Service worker do Painel de Prazos.
    Guarda o app para abrir offline. NUNCA intercepta chamada a outro domínio —
    a consulta ao DJEN e os links do Google Agenda passam direto pela rede. */
-const CACHE = "painel-prazos-v9";
+const CACHE = "painel-prazos-v12";
 const ARQUIVOS = ["./", "./index.html", "./manifest.webmanifest", "./icone.svg", "./icone-192.png", "./icone-512.png"];
 
 self.addEventListener("install", e => {

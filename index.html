@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Prazos">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <title>Painel de Prazos</title>
+<meta name="mobile-web-app-capable" content="yes">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -231,6 +232,63 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .aviso-flut{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:150; background:var(--verde); color:var(--on-cor); padding:13px 20px; border-radius:12px; box-shadow:var(--sh-l); font:600 14.5px/1.35 "Source Sans 3",sans-serif; display:flex; align-items:center; gap:11px; max-width:min(92vw,540px); animation:sobe .3s ease-out}
 @keyframes sobe{from{opacity:0; transform:translate(-50%,14px)}to{opacity:1; transform:translate(-50%,0)}}
 .aviso-flut svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* decisões */
+.decs{display:flex; flex-direction:column; gap:11px}
+.dec{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:14px; padding:15px 18px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--sh-s)}
+.dec.d-violeta{border-left-color:var(--violeta)} .dec.d-ambar{border-left-color:var(--ambar)} .dec.d-teal{border-left-color:var(--teal)}
+.dtopo{display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap}
+/* botões que precisam saltar */
+.bt.grita{background:var(--verde); border-color:var(--verde); color:var(--on-cor); font-weight:700; box-shadow:0 2px 0 color-mix(in srgb,var(--verde) 65%,black)}
+.bt.grita:hover{color:var(--on-cor); filter:brightness(1.08)}
+.bt.agenda{background:var(--azul); border-color:var(--azul); color:var(--on-cor); font-weight:700; box-shadow:0 2px 0 color-mix(in srgb,var(--azul) 65%,black)}
+.bt.agenda:hover{color:var(--on-cor); filter:brightness(1.08)}
+.bt.email{background:var(--violeta); border-color:var(--violeta); color:var(--on-cor); font-weight:700; box-shadow:0 2px 0 color-mix(in srgb,var(--violeta) 65%,black)}
+.bt.email:hover{color:var(--on-cor); filter:brightness(1.08)}
+.bt.badge{position:relative}
+.bt.badge b{position:absolute; top:-7px; right:-7px; min-width:18px; height:18px; border-radius:99px; background:var(--rosa); color:var(--on-cor); font:700 10.5px/18px "IBM Plex Mono",monospace; text-align:center; padding:0 4px}
+/* conversa */
+.fio{display:flex; flex-direction:column; gap:9px; max-height:290px; overflow-y:auto; padding:4px 2px}
+.rec{background:var(--surf-2); border-radius:12px; padding:10px 13px; max-width:88%}
+.rec.meu{background:var(--azul-s); align-self:flex-end}
+.rcab{display:flex; align-items:center; gap:8px; margin-bottom:5px}
+.rq{font:600 12.5px/1 "Source Sans 3",sans-serif; color:var(--ink-2)}
+.rh{font:400 11px/1 "IBM Plex Mono",monospace; color:var(--muted); margin-left:auto}
+.rtx{font-size:14.5px; line-height:1.45; white-space:pre-wrap}
+/* desafio */
+.desafio{background:linear-gradient(135deg,var(--ouro),var(--ambar)); color:var(--on-cor); border-radius:16px; padding:19px 22px; margin-bottom:22px; box-shadow:var(--sh-l); display:flex; gap:18px; align-items:center; flex-wrap:wrap}
+.desafio .ico2{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;flex:none}
+.desafio .ico2 svg{width:24px;height:24px;stroke:var(--on-cor);fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.desafio .tx{flex:1;min-width:230px}
+.desafio .tx b{display:block;font:700 18px/1.3 "Bricolage Grotesque",sans-serif;margin-bottom:4px}
+.desafio .tx span{font-size:14px;opacity:.92;line-height:1.5}
+.desafio .barra{background:rgba(255,255,255,.25);margin-top:10px}
+.desafio .barra i{background:var(--on-cor)}
+.desafio .premio{font:700 12px/1 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.22);padding:8px 12px;border-radius:8px;white-space:nowrap}
+/* pergunta */
+.pergunta{background:var(--surface);border:2px solid var(--ambar);border-radius:16px;padding:19px 22px;margin-bottom:22px;box-shadow:var(--sh-m)}
+.pergunta b{display:block;font:700 19px/1.35 "Bricolage Grotesque",sans-serif;margin-bottom:7px;color:var(--ink)}
+.pergunta p{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+.pergunta .ac2{display:flex;gap:9px;flex-wrap:wrap}
+.procs{display:flex; flex-direction:column; gap:11px}
+.proc{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:14px; padding:16px 18px; display:flex; flex-direction:column; gap:12px; box-shadow:var(--sh-s); transition:.15s}
+.proc:hover{box-shadow:var(--sh-m)}
+.proc.u{border-left-color:var(--ambar)} .proc.x{border-left-color:var(--rosa)} .proc.ok{border-left-color:var(--verde)}
+.ptopo{display:flex; justify-content:space-between; gap:14px; align-items:flex-start; flex-wrap:wrap}
+.pnome{font:700 17px/1.3 "Bricolage Grotesque",sans-serif; letter-spacing:-.015em}
+.pmeta{font:400 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--muted); display:flex; flex-wrap:wrap; gap:2px 13px; margin-top:4px}
+.pmeta .pr{color:var(--ink-2); font-weight:500}
+.psit{font:700 11px/1 "IBM Plex Mono",monospace; letter-spacing:.05em; text-transform:uppercase; padding:7px 11px; border-radius:7px; background:var(--azul-s); color:var(--azul); white-space:nowrap}
+.psit.u{background:var(--ambar-s); color:var(--ambar)}
+.psit.x{background:var(--rosa-s); color:var(--rosa)}
+.psit.ok{background:var(--verde-s); color:var(--verde)}
+.pnums{display:flex; gap:24px; flex-wrap:wrap; padding:2px 0}
+.pnums b{display:block; font:700 19px/1 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; letter-spacing:-.03em}
+.pnums span{display:block; font:500 10.5px/1 "IBM Plex Mono",monospace; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:4px}
+.plista{display:flex; flex-direction:column; gap:5px; border-top:1px dashed var(--line); padding-top:11px}
+.pitem{display:flex; align-items:center; gap:11px; flex-wrap:wrap}
+.pitem input{width:17px;height:17px;accent-color:var(--verde);cursor:pointer;flex:none}
+.pq2{font:600 12px/1 "IBM Plex Mono",monospace; color:var(--ink-2); min-width:74px}
+.pt3{font-size:14.5px; flex:1; min-width:150px}
 .dois{display:grid; grid-template-columns:minmax(280px,360px) 1fr; gap:16px; align-items:start}
 .coluna{display:flex; flex-direction:column; gap:8px; max-height:74vh; overflow-y:auto; padding-right:4px}
 .coluna.dir2{max-height:none; overflow:visible}
@@ -431,6 +489,28 @@ const dataLocal = (d = new Date()) =>
 const horaLocal = iso => { const d = new Date(iso); return isNaN(d) ? "" : String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); };
 const HOJE = dataLocal();
 const uid = () => "x" + Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+/* Busca tolerante. Medido no acervo real: 19% dos nomes de parte têm acento
+   (ninguém digita "ÓPTICOS" com acento) e ordem trocada não achava nada
+   ("ltda alfa" dava zero, "alfa ltda" dava 4). A correção é normalizar os
+   dois lados e exigir que TODAS as palavras apareçam, em qualquer ordem. */
+const normaliza = t => String(t || "")
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "")   // tira acento e cedilha
+  .toLowerCase()
+  .replace(/[.,;:/()\[\]{}'"\-]+/g, " ")             // pontuação vira espaço
+  .replace(/\s+/g, " ").trim();
+function combina(consulta, ...campos){
+  const q = normaliza(consulta);
+  if (!q) return true;
+  const alvo = normaliza(campos.filter(Boolean).join(" "));
+  /* número de processo: compara só os dígitos, para achar com ou sem máscara */
+  const digQ = String(consulta).replace(/\D/g, "");
+  if (digQ.length >= 6){
+    const digA = campos.filter(Boolean).join(" ").replace(/\D/g, "");
+    if (digA.includes(digQ)) return true;
+  }
+  return q.split(" ").every(p => alvo.includes(p));
+}
+
 const iniciais = n => n.trim().split(/\s+/).filter(p => p.length > 2 || /^[A-ZÀ-Ú]/.test(p)).slice(0,2).map(p => p[0]).join("").toUpperCase() || "?";
 
 /* ---- dias úteis: feriados nacionais calculados (Páscoa → Carnaval, Sexta Santa, Corpus Christi) ---- */
@@ -459,8 +539,8 @@ function uteisEntre(a,b){ let n=0; const d=new Date(a+"T00:00:00Z"), f=new Date(
 
 /* ===================== estado ===================== */
 const CHAVE = "painel-prazos-v2";
-const vazio = () => ({ versao:5, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null,
-  processos:[], paralelo:[], paraleloEm:null, paraleloDias:30 });
+const vazio = () => ({ versao:6, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null,
+  processos:[], paralelo:[], paraleloEm:null, paraleloDias:30, recados:[], emailFinanceiro:null, desafioEm:null });
 let E = vazio();
 try { const s = localStorage.getItem(CHAVE); if (s) E = Object.assign(vazio(), JSON.parse(s)); } catch(e){}
 /* Migração v3 -> v4: a lista "feitos" vira um campo em cada item, para a
@@ -476,11 +556,10 @@ const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || 
 
 let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
 let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas = false;
+let buscaProc = "", filtroProc = "todos", buscaDec = "", filtroDec = "todas";
 function casaParalelo(i){
-  if (!buscaPar) return true;
-  const q = buscaPar.toLowerCase();
-  return [i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo, (i.partes||[]).join(" ")]
-    .filter(Boolean).join(" ").toLowerCase().includes(q);
+  return combina(buscaPar, i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo,
+    (i.partes || []).join(" "), i.resumo);
 }
 let podeBuscar = null; // null = ainda não testado
 
@@ -543,11 +622,10 @@ function provManual(){
 const TODAS = () => provDjen().concat(provManual());
 
 function casa(p){
-  if (!busca) return true;
-  const q = busca.toLowerCase(), b = p.bruto;
-  const campos = [p.titulo, b.proc, b.trib, b.orgao, b.processo, (b.partes||[]).join(" "), (b.advs||[]).join(" "),
-    (pessoaDe(p.quem)||{}).nome, b.nota].filter(Boolean).join(" ").toLowerCase();
-  return campos.includes(q);
+  const b = p.bruto;
+  return combina(busca, p.titulo, b.proc, b.trib, b.orgao, b.processo,
+    (b.partes || []).join(" "), (b.advs || []).join(" "),
+    (pessoaDe(p.quem) || {}).nome, b.nota, b.classe);
 }
 const atrasada = p => ["atrasado","fatalhoje"].includes(estadoDe(p));
 const perdida = p => estadoDe(p) === "perdeu";
@@ -712,6 +790,26 @@ function alternar(key){
 /* ===================== busca no DJEN ===================== */
 const RX_PRAZO = /prazo\s+(?:comum\s+|sucessivo\s+|legal\s+|improrrog[áa]vel\s+)?(?:de\s+)?(\d{1,3})\s*\(?[a-zç\s]{0,12}?\)?\s*dias?/i;
 const RX_SESSAO = /(?:realizar-se|realizada|julgamento do dia|do dia|sess[ãa]o)[^.]{0,90}?(\d{2}\/\d{2}\/\d{4})/i;
+/* Decisões que valem histórico. A ordem importa: acórdão antes de sentença,
+   porque um acórdão frequentemente cita a sentença que reformou. */
+const TIPOS_DECISAO = [
+  { id:"acordao",  rot:"Acórdão",              rx:/\bac[óo]rd[ãa]o\b|ac[óo]rd[ãa]o\s+(?:da|do)|EMENTA\s*:/i },
+  { id:"sentenca", rot:"Sentença",             rx:/\bsenten[çc]a\b|julgo\s+(?:procedente|improcedente|extinto)|dispositivo\s+da\s+senten/i },
+  { id:"mono",     rot:"Decisão monocrática",  rx:/decis[ãa]o\s+monocr[áa]tica|monocraticamente/i },
+  { id:"liminar",  rot:"Liminar / tutela",     rx:/\bliminar\b|tutela\s+(?:de\s+urg[êe]ncia|antecipada|provis[óo]ria)/i },
+];
+/* Guarda o trecho em volta da palavra encontrada: é o que a pessoa lê para
+   confirmar se aquilo é mesmo a decisão, sem abrir o inteiro teor. */
+function achaDecisao(texto){
+  for (const t of TIPOS_DECISAO){
+    const m = texto.match(t.rx);
+    if (m){
+      const i = Math.max(0, m.index - 130);
+      return { tipo: t.id, rotulo: t.rot, trecho: texto.slice(i, m.index + 320).trim() };
+    }
+  }
+  return null;
+}
 const ACOES = [["Manifestar-se",/manifest[ae]-?se|para manifesta/i],["Contrarrazões",/contrarraz/i],["Impugnar",/impugna[çc]/i],
   ["Embargos de declaração",/embargos de declara/i],["Custas / preparo",/\bcustas\b|preparo recursal/i],
   ["Ciência",/\bci[êe]ncia\b/i],["Cumprir determinação",/cumpra-se|dever[áa] cumprir/i]];
@@ -733,6 +831,7 @@ function converte(c, rotulo){
     sessao: ms ? ms[1].split("/").reverse().join("-") : null,
     advs:[rotulo], partes: sig?[]:partes.slice(0,4), sigiloso:sig,
     acoes: ACOES.filter(([,rx]) => rx.test(t)).map(([n]) => n), link:c.link||null,
+    decisao: achaDecisao(t),
     feita:false, pessoaId:null, atualizadoEm: new Date().toISOString() };
 }
 
@@ -1026,7 +1125,7 @@ async function salvarArquivo(nome, texto, mime){
    comparando o campo atualizadoEm. */
 
 const FS = "https://firestore.googleapis.com/v1";
-const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo"];
+const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados"];
 /* Ritmo adaptativo: rápido enquanto há gente mexendo, lento quando está parado,
    e PARADO quando a aba está escondida. Isso é o que deixa a conversa entre duas
    pessoas parecer imediata sem estourar a cota gratuita — uma aba escondida não
@@ -1213,6 +1312,7 @@ function localDe(col){
   if (col === "pessoas") return E.pessoas;
   if (col === "tarefas") return E.tarefas;
   if (col === "processos") return E.processos;
+  if (col === "recados") return E.recados;
   if (col === "paralelo") return E.paralelo.map(i => Object.assign({}, i, { id: String(i.id) }));
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
 }
@@ -1220,6 +1320,7 @@ function aplicaLocal(col, lista){
   if (col === "pessoas") E.pessoas = lista;
   else if (col === "tarefas") E.tarefas = lista;
   else if (col === "processos") E.processos = lista;
+  else if (col === "recados") E.recados = lista;
   else if (col === "paralelo") E.paralelo = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
   else E.djen = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
 }
@@ -1319,6 +1420,8 @@ function medalhas(){
     { on: msZerados > 0, t:"Mês zerado", s: msZerados+" de "+ms.size, ic:"calend" },
     { on: del.length >= 3, t:"Time em campo", s: del.length+" tarefas delegadas", ic:"pessoa" },
     { on: pl.pontos >= 250, t:"Maratonista", s: pl.pontos+" pontos", ic:"raio" },
+    { on: E.recados.filter(r => !r.removido).length >= 5, t:"Time que conversa", s: E.recados.filter(r => !r.removido).length + " recados", ic:"pessoa" },
+    { on: decisoes().length >= 3, t:"Histórico em pé", s: decisoes().length + " decisões registradas", ic:"martelo" },
     { on: b.length > 0 && pl.feitas === b.length, t:"Tudo em dia", s: pl.feitas+" de "+b.length, ic:"estrela" },
   ];
 }
@@ -1480,9 +1583,28 @@ function dlgTarefa(existente){
     () => {
       const t = tit.value.trim();
       if (!t){ st.textContent = "Escreva o que precisa ser feito."; return false; }
-      if (existente){ Object.assign(existente, { titulo:t, prazo:prazo.value||null, processo:proc.value.trim()||null, pessoaId:quem.value||null, nota:nota.value.trim()||null }); tocou(existente); }
-      else { const nova = { id:uid(), titulo:t, prazo:prazo.value||null, processo:proc.value.trim()||null,
-        pessoaId:quem.value||null, nota:nota.value.trim()||null, feita:false, criada:HOJE }; tocou(nova); E.tarefas.push(nova); }
+      if (existente){
+        const mudouDono = existente.pessoaId !== (quem.value || null);
+        Object.assign(existente, { titulo:t, prazo:prazo.value||null, processo:proc.value.trim()||null, pessoaId:quem.value||null, nota:nota.value.trim()||null });
+        if (mudouDono && existente.pessoaId && !souEu(existente.pessoaId)){
+          existente.delegadaPor = (E.time && E.time.pessoaId) || null;
+          existente.delegadaPorNome = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+          existente.delegadaEm = agoraISO(); existente.vistaPor = [];
+        }
+        tocou(existente);
+      }
+      else {
+        const nova = { id:uid(), titulo:t, prazo:prazo.value||null, processo:proc.value.trim()||null,
+          pessoaId:quem.value||null, nota:nota.value.trim()||null, feita:false, criada:HOJE };
+        /* Atribuir na criacao conta como delegar: sem isso a pessoa nunca recebe
+           o aviso "passaram uma tarefa para voce", que e o caminho mais usado. */
+        if (nova.pessoaId && !souEu(nova.pessoaId)){
+          nova.delegadaPor = (E.time && E.time.pessoaId) || null;
+          nova.delegadaPorNome = (euSou() || {}).nome || (E.time && E.time.meuNome) || null;
+          nova.delegadaEm = agoraISO(); nova.vistaPor = [];
+        }
+        tocou(nova); E.tarefas.push(nova);
+      }
       salvar(); render(); return true;
     });
 }
@@ -1546,6 +1668,8 @@ function render(){
   if (aba === "agenda")  app.appendChild(telaAgenda());
   if (aba === "todo")    app.appendChild(telaTodo());
   if (aba === "notif")    app.appendChild(telaNotificacoes());
+  if (aba === "proc")     app.appendChild(telaProcessos());
+  if (aba === "dec")      app.appendChild(telaDecisoes());
   if (aba === "paralelo") app.appendChild(telaParalelo());
   if (aba === "equipe")  app.appendChild(telaEquipe());
   if (aba === "config")  app.appendChild(telaConfig());
@@ -1559,7 +1683,11 @@ function renderAbas(){
   const pl = placar();
   const naoVistos = E.paralelo.filter(i => !i.visto && !i.removido).length;
   const semProvidencia = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length).length;
+  const qProc = agrupaProcessos().filter(g => g.vencidas).length;
+  const qRec = E.tarefas.filter(t => !t.removido && naoLidos(t.id)).length;
   const defs = [["painel","Painel","alvo",null],["notif","Notificações","busca",semProvidencia],
+    ["proc","Processos","lista",qProc || null],
+    ["dec","Decisões","martelo",null],
     ["agenda","Agenda","calend",null],
     ["todo","Tarefas","lista",pl.abertas],["paralelo","Paralelo","busca",naoVistos],
     ["equipe","Equipe","pessoa",pessoasVivas().length],["config","Ajustes","engr",null]];
@@ -1595,6 +1723,9 @@ function boasVindas(){
   fd.appendChild(fb);
   faixa.appendChild(fd);
   f.appendChild(faixa);
+
+  const ajudaI = ajudaIPhone();
+  if (ajudaI){ ajudaI.style.margin = "0 0 22px"; f.appendChild(ajudaI); }
 
   const ps = el("div","passos");
   const dados = [
@@ -1632,6 +1763,140 @@ function boasVindas(){
 }
 
 /* ---------- painel ---------- */
+/* ---------- desafio do dia ----------
+   O desafio nasce do estado real: se há vencido, o desafio é zerar o vencido.
+   Nunca inventa meta artificial nem premia por marcar coisa que não fez —
+   num painel de prazo, jogo que estimula marcar por marcar é perigoso. */
+function desafioDeHoje(){
+  const b = base();
+  const perdidas = b.filter(perdida);
+  const semProv = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length);
+  const urgentes = b.filter(p => !p.feita && !p.dispensada && p.data && p.data >= HOJE && uteisEntre(HOJE, p.data) <= 5);
+  const semDono = b.filter(p => !p.feita && !p.dispensada && !p.quem);
+  const semData = b.filter(p => !p.feita && !p.dispensada && !p.data);
+
+  if (perdidas.length) return {
+    ico:"escudo", tit:"Resolver o que já venceu",
+    txt: perdidas.length === 1 ? "Uma providência com prazo fatal vencido esperando decisão sua." : perdidas.length + " providências com prazo fatal vencido.",
+    feito: 0, meta: perdidas.length, premio:"+" + (perdidas.length * 10) + " pts",
+    acao:["Ver as vencidas", () => { aba = "todo"; filtro = "perdeu"; render(); }],
+  };
+  if (semProv.length) return {
+    ico:"lista", tit:"Triar as notificações",
+    txt: semProv.length + (semProv.length === 1 ? " intimação sem providência definida." : " intimações sem providência definida.") + " Dá para resolver em fila.",
+    feito: provDjen().length - semProv.length, meta: provDjen().length, premio:"+" + (semProv.length * 5) + " pts",
+    acao:["Abrir a fila", () => { aba = "notif"; filtroNotif = "pend"; notifSel = null; render(); }],
+  };
+  if (urgentes.length) return {
+    ico:"raio", tit:"Adiantar o que vence esta semana",
+    txt: urgentes.length + (urgentes.length === 1 ? " providência vence" : " providências vencem") + " em 5 dias úteis ou menos.",
+    feito: 0, meta: urgentes.length, premio:"+" + (urgentes.length * 10) + " pts",
+    acao:["Ver as urgentes", () => { aba = "todo"; filtro = "urgente"; render(); }],
+  };
+  if (semDono.length >= 3 && pessoasVivas().length) return {
+    ico:"pessoa", tit:"Dar dono ao que está solto",
+    txt: semDono.length + " providências sem responsável. Delegar é o que faz o time trabalhar junto.",
+    feito: base().filter(p => p.quem).length, meta: base().length, premio:"medalha Time em campo",
+    acao:["Ver as sem dono", () => { aba = "todo"; filtro = "minhas"; render(); }],
+  };
+  if (semData.length) return {
+    ico:"calend", tit:"Definir as datas que faltam",
+    txt: semData.length + (semData.length === 1 ? " providência sem prazo definido." : " providências sem prazo definido."),
+    feito: base().filter(p => p.data).length, meta: base().length, premio:"+" + (semData.length * 5) + " pts",
+    acao:["Ver sem data", () => { aba = "todo"; filtro = "aberto"; render(); }],
+  };
+  const pl = placar();
+  if (pl.total && pl.feitas === pl.total) return {
+    ico:"estrela", tit:"Mesa limpa",
+    txt:"Nenhuma pendência conhecida. Aproveite — e quando a próxima publicação chegar, o painel avisa.",
+    feito: pl.total, meta: pl.total, premio:"tudo em dia",
+    acao:null,
+  };
+  return {
+    ico:"alvo", tit:"Seguir em frente",
+    txt: pl.abertas + (pl.abertas === 1 ? " providência em aberto, nenhuma urgente." : " providências em aberto, nenhuma urgente."),
+    feito: pl.feitas, meta: pl.total || 1, premio:"+" + (pl.abertas * 5) + " pts",
+    acao:["Ver a lista", () => { aba = "todo"; filtro = "aberto"; render(); }],
+  };
+}
+
+function cartaoDesafio(){
+  const d = desafioDeHoje();
+  const c = el("div","desafio");
+  const i = el("div","ico2"); i.appendChild(ico(I[d.ico] || I.alvo)); c.appendChild(i);
+  const tx = el("div","tx");
+  tx.appendChild(el("b", null, d.tit));
+  tx.appendChild(el("span", null, d.txt));
+  if (d.meta){
+    const ba = el("div","barra"); const bi = el("i");
+    bi.style.width = Math.min(100, Math.round(d.feito / d.meta * 100)) + "%";
+    ba.appendChild(bi); tx.appendChild(ba);
+  }
+  c.appendChild(tx);
+  c.appendChild(el("div","premio", d.premio));
+  if (d.acao) c.appendChild(botao(d.acao[0], "seta", "", d.acao[1]));
+  return c;
+}
+
+/* ---------- pergunta do dia ----------
+   Uma pergunta só, e só quando há motivo: prazo vencido sem registro é a
+   situação em que perguntar vale mais do que avisar. */
+function perguntaDoDia(){
+  const perdidas = base().filter(perdida);
+  if (!perdidas.length) return null;
+  const c = el("div","pergunta");
+  c.appendChild(el("b", null, perdidas.length === 1
+    ? "Esta providência venceu. Você já fez e não marcou?"
+    : "Estas " + perdidas.length + " venceram. Alguma você já fez e não marcou?"));
+  c.appendChild(el("p", null, "Prazo vencido sem registro é o pior estado do painel: ou falta marcar, ou falta agir. As duas respostas resolvem — a dúvida não."));
+  const lista = el("div","curta");
+  perdidas.slice(0, 3).forEach(p => {
+    const l = el("div","lin x");
+    const cb = el("input"); cb.type = "checkbox";
+    cb.addEventListener("change", () => { if (novaParaMim(p)) marcarVista(p); alternar(p.key); avisar("Marcada como feita"); });
+    l.appendChild(cb);
+    l.appendChild(el("div","qd", "venceu " + br(p.data)));
+    const mm = el("div");
+    mm.appendChild(el("div","tt2", p.titulo));
+    mm.appendChild(el("div","sb2", (p.bruto.proc || p.bruto.processo || "") + (p.quem ? " · com " + (pessoaDe(p.quem) || {}).nome : "")));
+    l.appendChild(mm);
+    const dd = el("div"); dd.style.cssText = "display:flex;gap:7px;flex-wrap:wrap";
+    dd.appendChild(botao("Já fiz","check","grita pq", () => { alternar(p.key); avisar("Marcada como feita"); }));
+    dd.appendChild(botao("Não precisa","lixo","pq", () => dlgDispensar(p)));
+    l.appendChild(dd);
+    lista.appendChild(l);
+  });
+  c.appendChild(lista);
+  if (perdidas.length > 3){
+    const ac = el("div","ac2"); ac.style.marginTop = "12px";
+    ac.appendChild(botao("Ver todas as " + perdidas.length,"seta","", () => { aba = "todo"; filtro = "perdeu"; render(); }));
+    c.appendChild(ac);
+  }
+  return c;
+}
+
+function caixaDeRecados(){
+  const comRecado = E.tarefas.filter(t => !t.removido && naoLidos(t.id));
+  if (!comRecado.length) return null;
+  const total = comRecado.reduce((a,t) => a + naoLidos(t.id), 0);
+  const quem = [...new Set(comRecado.flatMap(t => recadosDe(t.id).map(r => r.autor)).filter(Boolean))];
+  const c = el("div","caixa");
+  c.appendChild(el("div","qt", String(total)));
+  const tx = el("div","tx");
+  tx.appendChild(el("b", null, quem.length === 1
+    ? quem[0] + (total === 1 ? " te mandou um recado" : " te mandou " + total + " recados")
+    : total + " recados novos de " + quem.length + " pessoas"));
+  tx.appendChild(el("span", null, comRecado.slice(0,3).map(t => t.titulo).join(" · ")));
+  c.appendChild(tx);
+  const ac = el("div"); ac.style.cssText = "display:flex;gap:9px;flex-wrap:wrap";
+  ac.appendChild(botao("Ler agora","seta","", () => {
+    const p = provManual().find(x => x.bruto.id === comRecado[0].id);
+    if (p) dlgRecados(p);
+  }));
+  c.appendChild(ac);
+  return c;
+}
+
 function caixaDeEntrada(){
   const novas = base().filter(novaParaMim);
   if (!novas.length) return null;
@@ -1754,6 +2019,9 @@ function telaPainel(){
   const f = document.createDocumentFragment();
   const pl = placar(), nv = nivelDe(pl.pontos);
   const cx = caixaDeEntrada(); if (cx) f.appendChild(cx);
+  const cr2 = caixaDeRecados(); if (cr2) f.appendChild(cr2);
+  const pg = perguntaDoDia(); if (pg) f.appendChild(pg);
+  f.appendChild(cartaoDesafio());
 
   /* A semana e o que falta fazer vêm ANTES do placar: é o que se olha todo dia. */
   const cabS = el("div","cab");
@@ -1908,10 +2176,10 @@ function barraFiltros(){
   const cs = el("div","chips");
   [["tudo","Tudo",b.length,""],["aberto","Em aberto",b.filter(p=>!p.feita).length,""],
    ["urgente","Vence em 5 dias",b.filter(p=>!p.feita&&p.data&&p.data>=HOJE&&uteisEntre(HOJE,p.data)<=5).length,""],
-   ["paramim","Para mim",b.filter(x => minha(x) && !x.feita && !x.dispensada).length,""],
+   ["paramim","Atribuídas a mim",b.filter(x => minha(x) && !x.feita && !x.dispensada).length,""],
    ["perdeu","PERDEU",b.filter(perdida).length,"perigo"],
    ["atraso","Atrasadas",b.filter(atrasada).length,"perigo"],
-   ["minhas","Comigo",b.filter(p=>!p.feita&&!p.quem).length,""],
+   ["minhas","Sem responsável",b.filter(p=>!p.feita&&!p.quem&&!p.dispensada).length,""],
    ["delegadas","Delegadas",b.filter(p=>!p.feita&&p.quem).length,""],
    ["feito","Concluídas",b.filter(p=>p.feita).length,"ok"],
    ["dispensada","Dispensadas",b.filter(p=>p.dispensada).length,""]].forEach(([k,rot,n,cls]) => {
@@ -2076,20 +2344,31 @@ function cartao(p){
     if (b.link){ const a2 = el("a",null,"Inteiro teor"); a2.href = b.link; a2.target = "_blank"; a2.rel = "noopener"; cr.appendChild(a2); }
   }
   if (p.data){
-    const ga = el("a",null, convidados(p).length ? "Google Agenda (convida " + (pessoaDe(p.quem)||{}).nome + ")" : "Google Agenda");
-    ga.href = linkGoogle(p); ga.target = "_blank"; ga.rel = "noopener";
+    /* botão de verdade, não link discreto: entrar na agenda é a ação que
+       transforma o painel em lembrete, e precisa saltar. */
+    const ga = botao(convidados(p).length ? "Pôr na agenda e convidar " + ((pessoaDe(p.quem)||{}).nome||"").split(" ")[0] : "Pôr na agenda", "calend", "agenda pq", () => {
+      try { window.open(linkGoogle(p), "_blank"); } catch(e){ location.href = linkGoogle(p); }
+      avisar("Agenda aberta — confirme para salvar");
+    });
     cr.appendChild(ga);
-    if (pessoasVivas().some(x => x.email)){
-      const gt = el("a",null,"…com a equipe toda");
-      gt.href = linkGoogle(p, true); gt.target = "_blank"; gt.rel = "noopener";
-      cr.appendChild(gt);
+    if (pessoasVivas().filter(x => x.email).length > 1){
+      cr.appendChild(botao("…e a equipe toda","pessoa","pq", () => {
+        try { window.open(linkGoogle(p, true), "_blank"); } catch(e){}
+      }));
     }
   }
   const dir = el("div","dir");
   if (p.data) dir.appendChild(botao(".ics","calend","pq", () => baixarIcs([p], "prazo")));
   dir.appendChild(botao(p.quem ? "Trocar" : "Delegar", "pessoa", "pq", () => dlgDelegar(p)));
   if (p.fonte === "manual") dir.appendChild(botao("Editar","lapis","pq", () => dlgTarefa(p.bruto)));
+  if (p.fonte === "manual"){
+    const nl = naoLidos(p.bruto.id);
+    const b2 = botao(nl ? "Conversa" : (recadosDe(p.bruto.id).length ? "Conversa (" + recadosDe(p.bruto.id).length + ")" : "Conversar"), "pessoa", nl ? "email badge pq" : "pq", () => dlgRecados(p));
+    if (nl) b2.appendChild(el("b", null, String(nl)));
+    dir.appendChild(b2);
+  }
   if (p.fonte === "djen" && !p.feita && !p.dispensada){
+    dir.appendChild(botao((p.bruto.decisaoManual || p.bruto.decisao) ? "É decisão" : "Marcar decisão", "martelo", (p.bruto.decisaoManual || p.bruto.decisao) ? "ok pq" : "pq", () => dlgMarcarDecisao(p)));
     const ds = desdobramentos(p.bruto.id).length;
     dir.appendChild(botao(ds ? ds + " providência" + (ds > 1 ? "s" : "") : "O que fazer?", "lista", ds ? "pq" : "ok pq", () => dlgDesdobrar(p)));
   }
@@ -2156,6 +2435,12 @@ function telaTodo(){
       mid.appendChild(ts);
       lin.appendChild(mid);
       const dir = el("div","dir"); dir.style.display = "flex"; dir.style.gap = "7px"; dir.style.flexWrap = "wrap";
+      if (p.fonte === "manual"){
+        const nl = naoLidos(p.bruto.id), qt = recadosDe(p.bruto.id).length;
+        const b2 = botao(qt ? "Conversa (" + qt + ")" : "Conversar", "pessoa", nl ? "email badge pq" : "pq", () => dlgRecados(p));
+        if (nl) b2.appendChild(el("b", null, String(nl)));
+        dir.appendChild(b2);
+      }
       dir.appendChild(botao(p.quem ? "Trocar" : "Delegar","pessoa","pq", () => dlgDelegar(p)));
       if (p.dispensada) dir.appendChild(botao("Reativar","troca","pq", () => reativar(p)));
       else if (!p.feita) dir.appendChild(botao("Não precisa","lixo","pq", () => dlgDispensar(p)));
@@ -2180,6 +2465,512 @@ function telaTodo(){
 /* ---------- aba Notificações: a intimação de um lado, o que fazer do outro ----------
    Só entram publicações das OABs cadastradas — é o radar do próprio escritório.
    O Acompanhamento Paralelo tem aba própria porque ali o escritório não é parte. */
+/* ---------- aba Meus processos ----------
+   Vira a chave: em vez de olhar publicação por publicação, olha PROCESSO por
+   processo — juntando o que saiu no diário, as providências que nasceram dele
+   e quem está com cada uma. É a visão que serve para responder "e o caso X,
+   a quantas anda?" sem abrir cinco telas. */
+/* Alguns tribunais preenchem o campo de parte com rótulo do próprio sistema.
+   Isso não é nome de ninguém e polui a síntese que a pessoa vai compartilhar. */
+const RX_LIXO = /^(usu[áa]rio do sistema|sistema|autor n[ãa]o informado|parte n[ãa]o informada|n[ãa]o informad|desconhecid|a apurar|em branco)/i;
+const parteBoa = p => p && p.trim().length > 2 && !RX_LIXO.test(p.trim());
+
+function agrupaProcessos(){
+  const m = new Map();
+  const põe = (num, f) => {
+    if (!num) return;
+    if (!m.has(num)) m.set(num, { proc:num, pubs:[], tarefas:[], partes:[], trib:null, classe:null, orgao:null, sigiloso:false });
+    f(m.get(num));
+  };
+  E.djen.filter(i => !i.removido).forEach(i => põe(i.proc, g => {
+    g.pubs.push(i);
+    if (!g.trib) g.trib = i.trib;
+    if (!g.classe) g.classe = i.classe;
+    if (!g.orgao) g.orgao = i.orgao;
+    if (i.sigiloso) g.sigiloso = true;
+    (i.partes || []).filter(parteBoa).forEach(p => { if (!g.partes.includes(p)) g.partes.push(p); });
+  }));
+  E.tarefas.filter(t => !t.removido && t.processo).forEach(t => põe(t.processo, g => g.tarefas.push(t)));
+  return [...m.values()].map(g => {
+    const abertas = g.tarefas.filter(t => !t.feita && !t.dispensada);
+    const comData = abertas.filter(t => t.prazo).sort((a,b) => a.prazo.localeCompare(b.prazo));
+    const ultima = g.pubs.map(p => p.disp).sort().pop() || null;
+    const donos = [...new Set(abertas.map(t => t.pessoaId).filter(Boolean))];
+    const vencidas = abertas.filter(t => t.prazo && t.prazo < HOJE).length;
+    return Object.assign(g, {
+      abertas, proximo: comData[0] || null, ultima, donos, vencidas,
+      feitas: g.tarefas.filter(t => t.feita).length,
+      semProvidencia: g.pubs.filter(p => !desdobramentos(p.id).length && !p.dispensada && !p.feita).length,
+    });
+  }).sort((a,b) => {
+    if (a.vencidas !== b.vencidas) return b.vencidas - a.vencidas;
+    const pa = a.proximo ? a.proximo.prazo : "9", pb = b.proximo ? b.proximo.prazo : "9";
+    if (pa !== pb) return pa.localeCompare(pb);
+    return (b.ultima || "").localeCompare(a.ultima || "");
+  });
+}
+
+function comoAnda(g){
+  if (g.vencidas) return { txt: g.vencidas + (g.vencidas === 1 ? " providência vencida" : " providências vencidas"), cor: "x" };
+  if (g.proximo){
+    const f = uteisEntre(HOJE, g.proximo.prazo);
+    if (g.proximo.prazo < HOJE) return { txt: "prazo vencido", cor: "x" };
+    if (f === 0) return { txt: "vence hoje", cor: "x" };
+    if (f <= 5) return { txt: "vence em " + f + (f === 1 ? " dia útil" : " dias úteis"), cor: "u" };
+    return { txt: "próximo prazo em " + f + " dias úteis", cor: "" };
+  }
+  if (g.semProvidencia) return { txt: g.semProvidencia + (g.semProvidencia === 1 ? " publicação sem providência" : " publicações sem providência"), cor: "u" };
+  if (g.abertas.length) return { txt: g.abertas.length + " em aberto, sem data", cor: "" };
+  if (g.tarefas.length) return { txt: "tudo tratado", cor: "ok" };
+  return { txt: "só acompanhamento", cor: "" };
+}
+
+/* Síntese em texto puro: serve para colar no WhatsApp, no e-mail ou no relatório. */
+function sinteseTexto(g){
+  const NL = String.fromCharCode(10);
+  const L = [];
+  L.push(g.sigiloso ? "PROCESSO EM SEGREDO DE JUSTIÇA" : (g.partes.slice(0,2).join(" x ") || "Partes não informadas"));
+  L.push("Processo " + g.proc + (g.trib ? "  ·  " + g.trib : ""));
+  if (g.orgao) L.push(g.orgao);
+  if (g.classe) L.push("Classe: " + g.classe);
+  L.push("");
+  L.push("SITUACAO: " + comoAnda(g).txt);
+  if (g.ultima) L.push("Ultima publicacao: " + br(g.ultima));
+  L.push("Publicacoes no periodo: " + g.pubs.length);
+  if (g.abertas.length){
+    L.push("");
+    L.push("EM ABERTO:");
+    g.abertas.slice().sort((a,b) => (a.prazo || "9").localeCompare(b.prazo || "9")).forEach(t => {
+      const q = t.pessoaId ? (pessoaDe(t.pessoaId) || {}).nome : null;
+      L.push("  - " + t.titulo
+        + (t.prazo ? "  (ate " + br(t.prazo) + (t.prazo < HOJE ? " - VENCIDO" : "") + ")" : "  (sem data)")
+        + (q ? "  [" + q + "]" : ""));
+    });
+  }
+  if (g.feitas) L.push(NL + "Ja concluidas: " + g.feitas);
+  L.push("");
+  L.push("---");
+  L.push("Gerado pelo Painel de Prazos a partir do DJEN em " + br(HOJE) + ".");
+  L.push("Datas sugeridas, sujeitas a conferencia nos autos.");
+  return L.join(NL);
+}
+
+async function compartilhar(g){
+  const txt = sinteseTexto(g);
+  const titulo = (g.partes[0] || g.proc);
+  try {
+    if (navigator.share){ await navigator.share({ title: "Situação — " + titulo, text: txt }); return; }
+  } catch(e){ if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(txt); avisar("Síntese copiada — cole onde quiser"); return; } catch(e){}
+  const m = $("modal"); m.innerHTML = "";
+  m.appendChild(el("h3", null, "Síntese do processo"));
+  m.appendChild(el("p","sb","Selecione e copie."));
+  const ta = el("textarea"); ta.rows = 16; ta.value = txt;
+  ta.style.cssText = "font:400 12.5px/1.5 'IBM Plex Mono',monospace";
+  m.appendChild(campo("Texto", ta));
+  const ac = el("div","acoes"); ac.appendChild(botao("Fechar","check","pri", fechar)); m.appendChild(ac);
+  $("fundo").classList.add("on");
+  ta.select();
+}
+
+/* ---------- enviar ao financeiro ----------
+   Nenhum valor entra no painel nem no Firestore. O que sai daqui é o dado
+   PÚBLICO do processo, num formulário em texto para quem cuida do financeiro
+   preencher no próprio e-mail. O valor de honorário nunca passa pela nuvem. */
+function formularioFinanceiro(g, dec){
+  const NL = String.fromCharCode(10);
+  const reg = "=".repeat(54);
+  const L = [
+    reg,
+    "  LANCAMENTO DE HONORARIOS",
+    reg,
+    "",
+    "DADOS DO PROCESSO (preenchidos pelo painel)",
+    "  Partes .............: " + (g.sigiloso ? "PROCESSO EM SEGREDO DE JUSTICA" : (g.partes.slice(0,3).join(" x ") || "nao informadas")),
+    "  Processo ...........: " + g.proc,
+    "  Tribunal ...........: " + (g.trib || "-"),
+    "  Orgao ..............: " + (g.orgao || "-"),
+    "  Classe .............: " + (g.classe || "-"),
+  ];
+  if (dec){
+    L.push("  Decisao ............: " + dec.rotulo + " publicada em " + br(dec.disp));
+    if (dec.hash) L.push("  Certidao ...........: https://comunicaapi.pje.jus.br/api/v1/comunicacao/" + dec.hash + "/certidao");
+    if (dec.link) L.push("  Inteiro teor .......: " + dec.link);
+  } else if (g.ultima){
+    L.push("  Ultima publicacao ..: " + br(g.ultima));
+  }
+  L.push("");
+  L.push("A PREENCHER PELO FINANCEIRO");
+  L.push("  Honorario contratual .....: R$ ______________");
+  L.push("  Honorario de sucumbencia .: R$ ______________");
+  L.push("  Valor da condenacao ......: R$ ______________");
+  L.push("  Data do recebimento ......: ____/____/________");
+  L.push("  Forma ....................: ( ) a vista  ( ) parcelado em ____x");
+  L.push("  Nota fiscal ..............: n. ______________");
+  L.push("  Observacoes ..............: ________________________________");
+  L.push("");
+  L.push(reg);
+  L.push("Enviado pelo Painel de Prazos em " + br(HOJE) + " a partir de dado publico do DJEN.");
+  L.push("NENHUM valor financeiro e guardado no painel - so este e-mail os tem.");
+  L.push(reg);
+  return L.join(NL);
+}
+
+function dlgFinanceiro(g, dec){
+  const dest = entrada("email", E.emailFinanceiro || "", "financeiro@escritorio.com.br");
+  const obs = el("textarea"); obs.rows = 3; obs.placeholder = "Algo que o financeiro precisa saber (opcional)";
+  const previa = el("textarea"); previa.rows = 12; previa.readOnly = true;
+  previa.style.cssText = "font:400 12px/1.5 'IBM Plex Mono',monospace";
+  const montar = () => {
+    let t = formularioFinanceiro(g, dec);
+    if (obs.value.trim()) t = t.replace("  Observacoes ..............: ________________________________",
+      "  Observacoes ..............: " + obs.value.trim());
+    previa.value = t;
+    return t;
+  };
+  obs.addEventListener("input", montar);
+  montar();
+  modal("Enviar dados ao financeiro",
+    "Vai só o dado público do processo, em formato de formulário. Os valores são preenchidos por quem recebe, no próprio e-mail — nada de honorário é guardado no painel.",
+    [campo("Para", dest), campo("Observação", obs), campo("Prévia do que será enviado", previa)],
+    () => {
+      const para = dest.value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(para)) return false;
+      E.emailFinanceiro = para; salvar();
+      const assunto = "Honorarios - " + (g.partes[0] || g.proc) + " - " + g.proc;
+      const url = "mailto:" + encodeURIComponent(para)
+        + "?subject=" + encodeURIComponent(assunto)
+        + "&body=" + encodeURIComponent(montar());
+      try { window.open(url, "_blank"); } catch(e){ location.href = url; }
+      avisar("Formulário aberto no seu e-mail");
+      return true;
+    }, "Abrir e-mail");
+}
+
+/* ---------- Decisões ----------
+   Histórico do que foi DECIDIDO, separado por tipo. Não é prazo nem tarefa:
+   é memória do caso. O botão do financeiro sai daqui porque é na decisão que
+   nasce o honorário — mas nenhum valor fica guardado no painel. */
+function decisoes(){
+  const das = E.djen.filter(i => !i.removido && (i.decisao || i.decisaoManual)).map(i => ({
+    id: String(i.id), fonte: "djen", proc: i.proc, trib: i.trib, orgao: i.orgao,
+    partes: i.partes || [], sigiloso: i.sigiloso, disp: i.disp, hash: i.hash, link: i.link,
+    tipo: (i.decisaoManual || (i.decisao && i.decisao.tipo)),
+    rotulo: i.decisaoManual ? (TIPOS_DECISAO.find(t => t.id === i.decisaoManual) || {}).rot : (i.decisao && i.decisao.rotulo),
+    trecho: (i.decisao && i.decisao.trecho) || null,
+    manual: !!i.decisaoManual,
+  }));
+  const doPar = E.paralelo.filter(i => !i.removido && achaDecisao(i.resumo || "")).map(i => {
+    const dd = achaDecisao(i.resumo || "");
+    return { id: "p" + i.id, fonte: "paralelo", proc: i.proc, trib: i.trib, orgao: i.orgao,
+      partes: i.partes || [], sigiloso: i.sigiloso, disp: i.disp, hash: i.hash, link: i.link,
+      tipo: dd.tipo, rotulo: dd.rotulo, trecho: dd.trecho, manual: false };
+  });
+  return das.concat(doPar).sort((a, b) => (b.disp || "").localeCompare(a.disp || ""));
+}
+
+function grupoDoProcesso(proc){
+  return agrupaProcessos().find(g => g.proc === proc)
+    || { proc, partes: [], trib: null, orgao: null, classe: null, sigiloso: false, ultima: null, abertas: [], feitas: 0, donos: [], pubs: [] };
+}
+
+function telaDecisoes(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Decisões"));
+  d.appendChild(el("p", null, "Sentenças, acórdãos, decisões monocráticas e liminares que saíram nos seus processos. Daqui sai o formulário de honorários para o financeiro."));
+  cab.appendChild(d);
+  f.appendChild(cab);
+
+  const todas = decisoes().filter(x => combina(buscaDec, x.proc, x.trib, x.orgao, x.rotulo, x.partes.join(" "), x.trecho));
+  const porTipo = {};
+  TIPOS_DECISAO.forEach(t => porTipo[t.id] = todas.filter(x => x.tipo === t.id));
+
+  if (!decisoes().length){
+    f.appendChild(vazioBox("martelo","Nenhuma decisão registrada ainda",
+      "O painel reconhece sentença, acórdão, decisão monocrática e liminar no texto das publicações novas. Você também pode marcar qualquer publicação como decisão, na aba Notificações.",
+      null));
+    return f;
+  }
+
+  const bu = entrada("search", buscaDec, "Buscar processo, parte, tribunal…");
+  bu.style.cssText = "max-width:420px;margin-bottom:14px";
+  bu.addEventListener("input", e => { buscaDec = e.target.value.trim(); render();
+    const nn = document.querySelector("input[type=search]"); if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
+  f.appendChild(bu);
+
+  const cs = el("div","chips");
+  const mk = (k, rot, q) => {
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String(filtroDec === k));
+    c.appendChild(el("span", null, rot)); c.appendChild(el("b", null, String(q)));
+    c.addEventListener("click", () => { filtroDec = k; render(); });
+    cs.appendChild(c);
+  };
+  mk("todas", "Todas", todas.length);
+  TIPOS_DECISAO.forEach(t => { if (porTipo[t.id].length) mk(t.id, t.rot, porTipo[t.id].length); });
+  f.appendChild(cs);
+
+  const lista = filtroDec === "todas" ? todas : (porTipo[filtroDec] || []);
+  if (!lista.length){
+    f.appendChild(vazioBox("martelo","Nada nesta seleção","Nenhuma decisão bate com o filtro.", null));
+    return f;
+  }
+
+  const box = el("div","decs");
+  lista.slice(0, 100).forEach(x => {
+    const cor = x.tipo === "acordao" ? "violeta" : x.tipo === "sentenca" ? "azul" : x.tipo === "liminar" ? "ambar" : "teal";
+    const c = el("div","dec d-" + cor);
+    const top = el("div","dtopo");
+    const esq = el("div");
+    const h = el("div","ch");
+    h.appendChild(el("span","tag t-" + cor, x.rotulo || "Decisão"));
+    if (x.manual) h.appendChild(el("span","tag","marcada à mão"));
+    if (x.fonte === "paralelo") h.appendChild(el("span","tag t-teal","Paralelo"));
+    h.appendChild(el("span","nd", br(x.disp)));
+    esq.appendChild(h);
+    esq.appendChild(el("div","pnome", x.sigiloso ? "Processo em segredo de justiça" : (x.partes.slice(0,2).join(" × ") || "Partes não informadas")));
+    const mt = el("div","pmeta");
+    mt.appendChild(el("span","pr", x.proc));
+    if (x.trib) mt.appendChild(el("span", null, x.trib + (x.orgao ? " · " + x.orgao : "")));
+    esq.appendChild(mt);
+    top.appendChild(esq);
+    c.appendChild(top);
+
+    if (x.trecho){
+      const tr = el("div","cw");
+      tr.appendChild(el("b", null, "No texto: "));
+      tr.appendChild(document.createTextNode("…" + x.trecho.slice(0, 260).replace(/\s+/g, " ") + "…"));
+      c.appendChild(tr);
+    }
+
+    const rod = el("div","cr");
+    if (x.hash){
+      const a1 = el("a", null, "Certidão (PDF)");
+      a1.href = "https://comunicaapi.pje.jus.br/api/v1/comunicacao/" + x.hash + "/certidao";
+      a1.target = "_blank"; a1.rel = "noopener"; rod.appendChild(a1);
+    }
+    if (x.link){ const a2 = el("a", null, "Inteiro teor"); a2.href = x.link; a2.target = "_blank"; a2.rel = "noopener"; rod.appendChild(a2); }
+    const dir = el("div","dir");
+    dir.appendChild(botao("Enviar ao financeiro","seta","grita", () => dlgFinanceiro(grupoDoProcesso(x.proc), x)));
+    dir.appendChild(botao("Ver processo","lista","pq", () => { aba = "proc"; buscaProc = x.proc; filtroProc = "todos"; render(); }));
+    rod.appendChild(dir);
+    c.appendChild(rod);
+    box.appendChild(c);
+  });
+  f.appendChild(box);
+  if (lista.length > 100) f.appendChild(el("p","ps","mostrando as 100 mais recentes de " + lista.length));
+  return f;
+}
+
+/* marcar/desmarcar uma publicação como decisão, à mão */
+function dlgMarcarDecisao(p){
+  const b = p.bruto;
+  const sel = el("select");
+  sel.appendChild(new Option("— não é decisão —", ""));
+  TIPOS_DECISAO.forEach(t => sel.appendChild(new Option(t.rot, t.id)));
+  sel.value = b.decisaoManual || (b.decisao && b.decisao.tipo) || "";
+  modal("Isto é uma decisão?",
+    "O painel reconhece sozinho nas publicações novas. Marcar à mão serve para o que já estava aqui antes, ou quando ele erra.",
+    [campo("Tipo", sel)],
+    () => {
+      const it = E.djen.find(x => String(x.id) === String(b.id));
+      if (it){ it.decisaoManual = sel.value || null; tocou(it); }
+      salvar(); render();
+      avisar(sel.value ? "Registrada no histórico de decisões" : "Removida do histórico");
+      return true;
+    });
+}
+
+/* ---------- recados dentro da tarefa ----------
+   Coleção própria, um documento por mensagem. Não é array dentro da tarefa de
+   propósito: com "último a escrever vence" por documento, duas pessoas
+   respondendo ao mesmo tempo perderiam uma das mensagens. */
+function recadosDe(tarefaId){
+  return E.recados.filter(r => !r.removido && r.tarefaId === String(tarefaId))
+    .sort((a, b) => (a.em || "").localeCompare(b.em || ""));
+}
+function naoLidos(tarefaId){
+  const eu = E.time && E.time.pessoaId;
+  if (!eu) return 0;
+  return recadosDe(tarefaId).filter(r => r.autorId !== eu && !(r.lidoPor || []).includes(eu)).length;
+}
+function marcarRecadosLidos(tarefaId){
+  const eu = E.time && E.time.pessoaId;
+  if (!eu) return;
+  let mexeu = false;
+  recadosDe(tarefaId).forEach(r => {
+    if (r.autorId !== eu && !(r.lidoPor || []).includes(eu)){
+      r.lidoPor = [...new Set([...(r.lidoPor || []), eu])]; tocou(r); mexeu = true;
+    }
+  });
+  if (mexeu) salvar();
+}
+function dlgRecados(p){
+  const tid = String(p.bruto.id);
+  marcarRecadosLidos(tid);
+  const m = $("modal"); m.innerHTML = "";
+  m.appendChild(el("h3", null, "Conversa sobre a tarefa"));
+  m.appendChild(el("p","sb", p.titulo + (p.data ? " · até " + br(p.data) : "")));
+
+  const fio = el("div","fio");
+  const rec = recadosDe(tid);
+  if (!rec.length) fio.appendChild(el("p","ps","Nenhum recado ainda. Escreva o primeiro."));
+  rec.forEach(r => {
+    const eu = souEu(r.autorId);
+    const l = el("div","rec" + (eu ? " meu" : ""));
+    const cab2 = el("div","rcab");
+    const pe = pessoaDe(r.autorId);
+    if (pe) cab2.appendChild(avatar(pe));
+    cab2.appendChild(el("span","rq", r.autor || "alguém"));
+    cab2.appendChild(el("span","rh", br(dataLocal(new Date(r.em))) + " " + horaLocal(r.em)));
+    l.appendChild(cab2);
+    l.appendChild(el("div","rtx", r.texto));
+    fio.appendChild(l);
+  });
+  m.appendChild(fio);
+
+  const ta = el("textarea"); ta.rows = 3; ta.placeholder = "Escrever um recado…";
+  m.appendChild(campo("Novo recado", ta));
+  const ac = el("div","acoes");
+  ac.appendChild(botao("Fechar", null, "", () => { fechar(); render(); }));
+  ac.appendChild(botao("Enviar","seta","pri", () => {
+    const t = ta.value.trim();
+    if (!t) return;
+    const r = { id: uid(), tarefaId: tid, texto: t,
+      autorId: (E.time && E.time.pessoaId) || null,
+      autor: (euSou() || {}).nome || (E.time && E.time.meuNome) || "eu",
+      em: agoraISO(), lidoPor: [] };
+    tocou(r); E.recados.push(r); salvar();
+    avisar("Recado enviado");
+    dlgRecados(p);
+  }));
+  m.appendChild(ac);
+  $("fundo").classList.add("on");
+  ta.focus();
+}
+
+function telaProcessos(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Meus processos"));
+  d.appendChild(el("p", null, "Cada processo com o que saiu no diário, o que falta fazer e a quantas anda. A síntese sai pronta para colar."));
+  cab.appendChild(d);
+  f.appendChild(cab);
+
+  const todos = agrupaProcessos();
+  if (!todos.length){
+    f.appendChild(vazioBox("lista","Nenhum processo ainda",
+      "Assim que o painel buscar publicações nas OABs cadastradas, os processos aparecem aqui agrupados.",
+      E.oabs.length ? null : "Cadastrar OAB", () => dlgOab()));
+    return f;
+  }
+
+  const bu = entrada("search", buscaProc, "Buscar processo, parte, tribunal…");
+  bu.style.cssText = "max-width:420px;margin-bottom:14px";
+  bu.addEventListener("input", e => { buscaProc = e.target.value.trim(); render();
+    const nn = document.querySelector("input[type=search]"); if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
+  f.appendChild(bu);
+
+  /* filtro por pessoa do time — "por nome", como você pediu */
+  if (pessoasVivas().length){
+    const cs = el("div","chips");
+    const mk = (k, rot, q) => {
+      const c = el("button","chip"); c.type = "button";
+      c.setAttribute("aria-pressed", String(filtroProc === k));
+      c.appendChild(el("span", null, rot)); c.appendChild(el("b", null, String(q)));
+      c.addEventListener("click", () => { filtroProc = k; render(); });
+      cs.appendChild(c);
+    };
+    const doDono = (g, id) => g.donos.includes(id);
+    mk("todos", "Todo o time", todos.length);
+    mk("sem", "Sem responsável", todos.filter(g => g.abertas.length && !g.donos.length).length);
+    pessoasVivas().forEach(p => mk(p.id, p.nome.split(" ")[0], todos.filter(g => doDono(g, p.id)).length));
+    f.appendChild(cs);
+  }
+
+  const filtra = g => {
+    if (!combina(buscaProc, g.proc, g.trib, g.orgao, g.classe, g.partes.join(" "))) return false;
+    if (filtroProc === "todos") return true;
+    if (filtroProc === "sem") return g.abertas.length && !g.donos.length;
+    return g.donos.includes(filtroProc);
+  };
+  const lista = todos.filter(filtra);
+
+  const res = el("div","aviso az");
+  res.appendChild(el("span","k","Situação"));
+  const comVencido = lista.filter(g => g.vencidas).length;
+  res.appendChild(el("div", null, lista.length + " processos · "
+    + lista.reduce((s,g) => s + g.abertas.length, 0) + " providências em aberto"
+    + (comVencido ? " · " + comVencido + " com prazo vencido" : "")));
+  f.appendChild(res);
+
+  if (!lista.length){
+    f.appendChild(vazioBox("lista","Nada nesta seleção","Nenhum processo bate com o filtro.", null));
+    return f;
+  }
+
+  const box = el("div","procs");
+  lista.slice(0, 80).forEach(g => {
+    const st = comoAnda(g);
+    const c = el("div","proc " + st.cor);
+    const top = el("div","ptopo");
+    const tit = el("div");
+    tit.appendChild(el("div","pnome", g.sigiloso ? "Processo em segredo de justiça" : (g.partes.slice(0,2).join(" × ") || "Partes não informadas")));
+    const meta = el("div","pmeta");
+    meta.appendChild(el("span","pr", g.proc));
+    if (g.trib) meta.appendChild(el("span", null, g.trib));
+    if (g.classe) meta.appendChild(el("span", null, g.classe.length > 34 ? g.classe.slice(0,32) + "…" : g.classe));
+    tit.appendChild(meta);
+    top.appendChild(tit);
+    top.appendChild(el("span","psit " + st.cor, st.txt));
+    c.appendChild(top);
+
+    const nums = el("div","pnums");
+    const num = (v, r) => { const x = el("div"); x.appendChild(el("b", null, String(v))); x.appendChild(el("span", null, r)); nums.appendChild(x); };
+    num(g.pubs.length, g.pubs.length === 1 ? "publicação" : "publicações");
+    num(g.abertas.length, "em aberto");
+    num(g.feitas, "concluídas");
+    if (g.ultima){ const x = el("div"); x.appendChild(el("b", null, br(g.ultima).slice(0,5))); x.appendChild(el("span", null, "última")); nums.appendChild(x); }
+    c.appendChild(nums);
+
+    if (g.abertas.length){
+      const ul = el("div","plista");
+      g.abertas.slice().sort((a,b) => (a.prazo || "9").localeCompare(b.prazo || "9")).slice(0,4).forEach(t => {
+        const l = el("div","pitem");
+        const cb = el("input"); cb.type = "checkbox";
+        cb.addEventListener("change", () => alternar("t" + t.id));
+        l.appendChild(cb);
+        l.appendChild(el("span","pq2", t.prazo ? br(t.prazo) : "sem data"));
+        l.appendChild(el("span","pt3", t.titulo));
+        if (t.pessoaId){ const q = el("span","quem"); q.appendChild(avatar(pessoaDe(t.pessoaId))); q.appendChild(el("span", null, (pessoaDe(t.pessoaId) || {}).nome.split(" ")[0])); l.appendChild(q); }
+        ul.appendChild(l);
+      });
+      if (g.abertas.length > 4) ul.appendChild(el("div","n3", "e mais " + (g.abertas.length - 4)));
+      c.appendChild(ul);
+    }
+
+    const rod = el("div","cr");
+    if (g.donos.length){
+      const eq = el("span","quem");
+      g.donos.slice(0,3).forEach(id => eq.appendChild(avatar(pessoaDe(id))));
+      eq.appendChild(el("span", null, g.donos.length === 1 ? (pessoaDe(g.donos[0]) || {}).nome : g.donos.length + " pessoas"));
+      rod.appendChild(eq);
+    }
+    const dir = el("div","dir");
+    dir.appendChild(botao("Copiar síntese","seta","pq", () => compartilhar(g)));
+    dir.appendChild(botao("Ver publicações","busca","pq", () => { aba = "notif"; filtroNotif = "todas"; busca = g.proc; notifSel = null; render(); }));
+    rod.appendChild(dir);
+    c.appendChild(rod);
+    box.appendChild(c);
+  });
+  f.appendChild(box);
+  if (lista.length > 80) f.appendChild(el("p","ps","mostrando os 80 primeiros de " + lista.length));
+  return f;
+}
+
 async function rodarBuscaNovas(){
   if (buscandoNovas) return;
   buscandoNovas = true;
@@ -2635,7 +3426,7 @@ function telaEquipe(){
     if (suas.filter(x => x.data && !x.feita).length){
       ac.appendChild(botao("Calendário dela","calend","pq", () => baixarIcs(suas.filter(x => !x.feita), (p.nome.split(" ")[0]||"pessoa").toLowerCase())));
     }
-    if (p.email) ac.appendChild(botao("Enviar por e-mail","seta","pq", () => mandarEmail(p, suas.filter(x => !x.feita))));
+    if (p.email) ac.appendChild(botao("Cobrar por e-mail","seta","email pq", () => mandarEmail(p, suas.filter(x => !x.feita))));
     ac.appendChild(botao("Remover","lixo","pq", () => {
       if (confirm("Remover " + p.nome + "? As tarefas dela voltam para você.")){
         E.tarefas.forEach(t => { if (t.pessoaId === p.id){ t.pessoaId = null; tocou(t); } });
@@ -2871,6 +3662,40 @@ function secaoTime(){
 }
 
 /* ---------- ajustes ---------- */
+/* No iOS, "Adicionar à Tela de Início" só existe no Safari de verdade — dentro
+   do navegador embutido do WhatsApp, Teams ou Gmail a opção simplesmente não
+   aparece, e é o motivo mais comum de "não consigo instalar". */
+function ehIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+function ehSafariDeVerdade(){
+  const ua = navigator.userAgent;
+  return /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|FBAN|FBAV|Instagram|Line|Twitter/.test(ua);
+}
+function jaInstalado(){
+  return (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+}
+function ajudaIPhone(){
+  if (!ehIOS() || jaInstalado()) return null;
+  const c = el("div","aviso az");
+  c.appendChild(el("span","k","iPhone"));
+  const d = el("div");
+  if (!ehSafariDeVerdade()){
+    d.appendChild(el("b", null, "Você não está no Safari."));
+    d.appendChild(el("div", null, "A opção “Adicionar à Tela de Início” só existe no Safari. Dentro do navegador embutido do WhatsApp, Teams ou Gmail ela nem aparece — é a causa mais comum. Toque no menu do canto e escolha “Abrir no Safari”, ou copie o endereço e cole no Safari."));
+  } else {
+    d.appendChild(el("b", null, "Para instalar como aplicativo:"));
+    const ol = el("ol"); ol.style.cssText = "margin:8px 0 0;padding-left:20px;line-height:1.7";
+    ["Toque no botão Compartilhar — o quadrado com a seta para cima, na barra de baixo.",
+     "Role a lista para baixo, passando da fileira de aplicativos.",
+     "Toque em “Adicionar à Tela de Início”."].forEach(t => ol.appendChild(el("li", null, t)));
+    d.appendChild(ol);
+  }
+  c.appendChild(d);
+  return c;
+}
+
 function telaConfig(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
@@ -2879,6 +3704,9 @@ function telaConfig(){
   cab.appendChild(d);
   cab.appendChild(botao("Adicionar OAB","mais","pri", () => dlgOab()));
   f.appendChild(cab);
+
+  const ajuda = ajudaIPhone();
+  if (ajuda) f.appendChild(ajuda);
 
   if (podeBuscar === false){
     const a = el("div","aviso amb");
