@@ -1,7 +1,7 @@
 /* Service worker do Painel de Prazos.
    Guarda o app para abrir offline. NUNCA intercepta chamada a outro domínio —
    a consulta ao DJEN e os links do Google Agenda passam direto pela rede. */
-const CACHE = "painel-prazos-v12";
+const CACHE = "painel-prazos-v13";
 const ARQUIVOS = ["./", "./index.html", "./manifest.webmanifest", "./icone.svg", "./icone-192.png", "./icone-512.png"];
 
 self.addEventListener("install", e => {
@@ -20,6 +20,18 @@ self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   if (url.origin !== self.location.origin) return;   // DJEN, Google Fonts, Google Agenda: direto
   if (e.request.method !== "GET") return;
+
+  /* As telas-widget são o mesmo index.html com ?w=agenda, ?w=todo, ?w=avisos.
+     Sem ignorar a query, cada atalho da tela inicial seria um endereço novo,
+     fora do cache — e abriria em branco sem internet. */
+  if (e.request.mode === "navigate") {
+    e.respondWith(
+      caches.match(e.request, { ignoreSearch: true })
+        .then(r => r || fetch(e.request).catch(() => caches.match("./index.html")))
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request).then(resp => {
       const copia = resp.clone();

@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Prazos">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="apple-touch-icon" href="./icone.svg">
 <title>Painel de Prazos</title>
 <meta name="mobile-web-app-capable" content="yes">
 
@@ -233,6 +233,54 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 @keyframes sobe{from{opacity:0; transform:translate(-50%,14px)}to{opacity:1; transform:translate(-50%,0)}}
 .aviso-flut svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 /* decisões */
+/* telas-widget: letra grande, alvo de toque grande, nada de aba */
+body.modo-widget .topo{display:none}
+body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
+.wcab{display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; padding:18px 0 14px}
+.wtit{display:flex; align-items:center; gap:12px}
+.wico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none}
+.wico svg{width:23px;height:23px;stroke:var(--on-cor);fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.wtit b{display:block;font:800 25px/1.1 "Bricolage Grotesque",sans-serif;letter-spacing:-.025em}
+.wtit span{display:block;font:500 12px/1.3 "IBM Plex Mono",monospace;color:var(--muted);margin-top:3px}
+.wac{display:flex;gap:8px;flex-wrap:wrap}
+.wnav{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.wmes{font:700 19px/1 "Bricolage Grotesque",sans-serif;flex:1;text-transform:capitalize}
+.wgrade{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:20px}
+.wsem{font:700 10px/1 "IBM Plex Mono",monospace;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.06em;padding-bottom:5px}
+.wvazio{aspect-ratio:1}
+.wdia{aspect-ratio:1;border:1px solid var(--line);background:var(--surface);border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:default;padding:0}
+.wdia .wn{font:600 17px/1 "IBM Plex Mono",monospace;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.wdia .wq{font:700 9.5px/1 "IBM Plex Mono",monospace;background:var(--muted);color:var(--on-cor);border-radius:99px;min-width:15px;padding:2px 4px}
+.wdia.tem{border-color:var(--azul);cursor:pointer}
+.wdia.tem .wq{background:var(--azul)}
+.wdia.tem .wn{color:var(--azul)}
+.wdia.crit{border-color:var(--rosa);background:var(--rosa-s);cursor:pointer}
+.wdia.crit .wq{background:var(--rosa)} .wdia.crit .wn{color:var(--rosa)}
+.wdia.pronto{border-color:var(--verde)} .wdia.pronto .wq{background:var(--verde)}
+.wdia.hoje{border-width:2.5px;border-color:var(--ink)}
+.wdia.aberto{box-shadow:0 0 0 3px var(--azul-s)}
+.wlista{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.wrot{font:700 11px/1 "IBM Plex Mono",monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.witem{display:flex;gap:13px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 15px;text-align:left;width:100%}
+.witem.g{padding:15px 17px}
+.witem.toque{cursor:pointer}
+.witem.toque:hover{border-color:var(--azul)}
+.witem input{width:24px;height:24px;margin:0;accent-color:var(--verde);cursor:pointer;flex:none}
+.witem .wt{font:600 16.5px/1.35 "Source Sans 3",sans-serif;color:var(--ink)}
+.witem .ws{font:500 12.5px/1.4 "IBM Plex Mono",monospace;color:var(--muted);margin-top:5px}
+.witem.feito .wt{text-decoration:line-through;color:var(--muted)}
+.witem.crit{border-color:var(--rosa);border-left:4px solid var(--rosa)}
+.witem.crit .ws{color:var(--rosa);font-weight:600}
+.witem.aten{border-left:4px solid var(--ambar)}
+.wnum{text-align:center;padding:14px 0 22px}
+.wnum b{display:block;font:800 68px/1 "IBM Plex Mono",monospace;letter-spacing:-.05em;color:var(--azul)}
+.wnum span{display:block;font:600 14px/1 "Source Sans 3",sans-serif;color:var(--muted);margin-top:8px}
+.wmal{display:inline-block;margin-top:12px;background:var(--rosa-s);color:var(--rosa);font:700 12.5px/1 "IBM Plex Mono",monospace;padding:9px 14px;border-radius:9px}
+.wlimpo{text-align:center;padding:46px 20px;background:var(--surface);border:1.5px dashed var(--line-2);border-radius:16px}
+.wlimpo svg{width:38px;height:38px;stroke:var(--verde);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.wlimpo b{display:block;font:700 21px/1.3 "Bricolage Grotesque",sans-serif;margin:12px 0 6px}
+.wlimpo span{color:var(--muted);font-size:14.5px}
+.wurl{font:400 11px/1.4 "IBM Plex Mono",monospace;color:var(--muted);background:var(--surf-2);padding:8px 10px;border-radius:8px;word-break:break-all}
 .decs{display:flex; flex-direction:column; gap:11px}
 .dec{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:14px; padding:15px 18px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--sh-s)}
 .dec.d-violeta{border-left-color:var(--violeta)} .dec.d-ambar{border-left-color:var(--ambar)} .dec.d-teal{border-left-color:var(--teal)}
@@ -489,10 +537,10 @@ const dataLocal = (d = new Date()) =>
 const horaLocal = iso => { const d = new Date(iso); return isNaN(d) ? "" : String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0"); };
 const HOJE = dataLocal();
 const uid = () => "x" + Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
-/* Busca tolerante. Medido no acervo real: 19% dos nomes de parte têm acento
-   (ninguém digita "ÓPTICOS" com acento) e ordem trocada não achava nada
-   ("ltda alfa" dava zero, "alfa ltda" dava 4). A correção é normalizar os
-   dois lados e exigir que TODAS as palavras apareçam, em qualquer ordem. */
+/* Busca tolerante. Medido no acervo real: 19% dos nomes de parte têm acento,
+   que ninguém digita, e a ordem trocada não achava nada (buscar o sobrenome
+   antes do nome dava zero; na ordem certa, quatro). A correção é normalizar
+   os dois lados e exigir que TODAS as palavras apareçam, em qualquer ordem. */
 const normaliza = t => String(t || "")
   .normalize("NFD").replace(/[\u0300-\u036f]/g, "")   // tira acento e cedilha
   .toLowerCase()
@@ -557,6 +605,7 @@ const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || 
 let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
 let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas = false;
 let buscaProc = "", filtroProc = "todos", buscaDec = "", filtroDec = "todas";
+let widgetMes = 0, widgetDia = null;
 function casaParalelo(i){
   return combina(buscaPar, i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo,
     (i.partes || []).join(" "), i.resumo);
@@ -941,10 +990,30 @@ async function buscarNovas(aviso){
   } finally { E.janelaDias = guardado; }
   E.buscadoEm = agoraISO();
   salvar();
+  anotaBusca();
   return { novas: E.djen.length - antes, janela: dias };
 }
+async function marcadorBusca(){
+  if (!E.time) return null;
+  try {
+    const d = await fsChama(caminho("meta", "busca"), { method: "GET" });
+    return d ? deDoc(d) : { em: null };
+  } catch(e){ return null; }
+}
+async function anotaBusca(){
+  if (!E.time) return;
+  try { await fsGrava("meta", "busca", { em: agoraISO(), por: (E.time && E.time.meuNome) || "" }); } catch(e){}
+}
+async function alguemBuscouAgora(){
+  const m = await marcadorBusca();
+  if (!m || !m.em) return false;
+  return (Date.now() - new Date(m.em).getTime()) < HORAS_ENTRE_BUSCAS * 3600e3;
+}
+
 async function buscaAutomatica(){
   if (!precisaBuscar() || !podeBuscar) return;
+  /* alguém do time já buscou nas últimas 12h? então não repete a chamada */
+  if (await alguemBuscouAgora()){ E.buscadoEm = agoraISO(); salvar(); return; }
   try {
     const r = await buscarNovas(null);
     if (r.novas){ await sincronizarTime(true); render(); }
@@ -1125,7 +1194,7 @@ async function salvarArquivo(nome, texto, mime){
    comparando o campo atualizadoEm. */
 
 const FS = "https://firestore.googleapis.com/v1";
-const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados"];
+const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados", "oabs"];
 /* Ritmo adaptativo: rápido enquanto há gente mexendo, lento quando está parado,
    e PARADO quando a aba está escondida. Isso é o que deixa a conversa entre duas
    pessoas parecer imediata sem estourar a cota gratuita — uma aba escondida não
@@ -1313,6 +1382,7 @@ function localDe(col){
   if (col === "tarefas") return E.tarefas;
   if (col === "processos") return E.processos;
   if (col === "recados") return E.recados;
+  if (col === "oabs") return E.oabs.map(o => Object.assign({}, o, { id: o.id || (o.uf + o.numero) }));
   if (col === "paralelo") return E.paralelo.map(i => Object.assign({}, i, { id: String(i.id) }));
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
 }
@@ -1321,6 +1391,7 @@ function aplicaLocal(col, lista){
   else if (col === "tarefas") E.tarefas = lista;
   else if (col === "processos") E.processos = lista;
   else if (col === "recados") E.recados = lista;
+  else if (col === "oabs") E.oabs = lista;
   else if (col === "paralelo") E.paralelo = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
   else E.djen = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
 }
@@ -1519,7 +1590,8 @@ function dlgOab(){
       if (!n){ st.textContent = "Informe o número da inscrição."; return false; }
       if (!nm){ st.textContent = "Informe o nome do advogado."; return false; }
       if (E.oabs.some(o => o.uf === uf.value && o.numero === n)){ st.textContent = "Essa inscrição já está cadastrada."; return false; }
-      E.oabs.push({ uf:uf.value, numero:n, nome:nm });
+      const nova = { id: uf.value + n, uf:uf.value, numero:n, nome:nm };
+      tocou(nova); E.oabs.push(nova);
       salvar();
       sincronizar([{uf:uf.value, numero:n, nome:nm}]);
       return true;
@@ -1661,6 +1733,16 @@ async function sincronizar(quais){
 
 /* ===================== render ===================== */
 function render(){
+  const wq = widgetPedido();
+  if (wq){
+    /* modo widget: uma tela só, sem abas, sem placar. */
+    renderAbas();
+    const app = $("app"); app.innerHTML = "";
+    app.appendChild(telaWidget(wq));
+    primeira = false;
+    return;
+  }
+  document.body.classList.remove("modo-widget");
   renderAbas();
   const app = $("app"); app.innerHTML = "";
   if (!configurado()){ app.appendChild(boasVindas()); primeira = false; return; }
@@ -1679,7 +1761,7 @@ function render(){
 
 function renderAbas(){
   const box = $("abas"); box.innerHTML = "";
-  if (!configurado()) return;
+  if (widgetPedido() || !configurado()) return;
   const pl = placar();
   const naoVistos = E.paralelo.filter(i => !i.visto && !i.removido).length;
   const semProvidencia = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length).length;
@@ -2851,6 +2933,277 @@ function dlgRecados(p){
   ta.focus();
 }
 
+/* ---------- telas-widget ----------
+   O iOS não deixa app web publicar widget de tela inicial — isso é WidgetKit,
+   app nativo. O que dá para fazer, e é o mais próximo: três endereços que abrem
+   direto numa tela única, de letra grande, sem abas. Cada um vira um ícone
+   próprio na tela inicial (Compartilhar > Adicionar à Tela de Início preserva
+   a query da URL), e o toque abre já no conteúdo. */
+const WIDGETS = {
+  agenda:  { rot:"Calendário",  ico:"calend", cor:"var(--azul)" },
+  todo:    { rot:"O que fazer", ico:"lista",  cor:"var(--verde)" },
+  avisos:  { rot:"Avisos",      ico:"busca",  cor:"var(--violeta)" },
+};
+function widgetPedido(){
+  try {
+    const w = new URLSearchParams(location.search).get("w");
+    return WIDGETS[w] ? w : null;
+  } catch(e){ return null; }
+}
+
+function molduraWidget(qual, corpo){
+  const f = document.createDocumentFragment();
+  const W = WIDGETS[qual];
+  const cab = el("div","wcab");
+  const t = el("div","wtit");
+  const i = el("div","wico"); i.style.background = W.cor; i.appendChild(ico(I[W.ico]));
+  t.appendChild(i);
+  const nm = el("div");
+  nm.appendChild(el("b", null, W.rot));
+  nm.appendChild(el("span", null, E.time ? "Time " + E.time.nome : "só neste aparelho"));
+  t.appendChild(nm);
+  cab.appendChild(t);
+  const ac = el("div","wac");
+  ac.appendChild(botao("Atualizar","troca","pq", () => { if (E.time) sincronizarTime(); else render(); }));
+  const volta = el("a","bt pq","Painel completo");
+  volta.href = location.pathname;
+  volta.style.textDecoration = "none";
+  ac.appendChild(volta);
+  cab.appendChild(ac);
+  f.appendChild(cab);
+  f.appendChild(corpo);
+  return f;
+}
+
+/* ---- widget 1: calendário grande ---- */
+function widgetAgenda(){
+  const f = document.createDocumentFragment();
+  const hoje = new Date(HOJE + "T00:00:00Z");
+  const prim = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth() + widgetMes, 1));
+  const ult = new Date(Date.UTC(prim.getUTCFullYear(), prim.getUTCMonth() + 1, 0));
+  const itens = base().filter(p => p.data && !p.dispensada);
+
+  const nav = el("div","wnav");
+  nav.appendChild(botao("‹", null, "pq", () => { widgetMes--; render(); }));
+  nav.appendChild(el("div","wmes", MESES[prim.getUTCMonth()] + " " + prim.getUTCFullYear()));
+  nav.appendChild(botao("›", null, "pq", () => { widgetMes++; render(); }));
+  if (widgetMes !== 0) nav.appendChild(botao("hoje", null, "pq", () => { widgetMes = 0; render(); }));
+  f.appendChild(nav);
+
+  const grade = el("div","wgrade");
+  ["dom","seg","ter","qua","qui","sex","sáb"].forEach(d => grade.appendChild(el("div","wsem", d)));
+  for (let k = 0; k < prim.getUTCDay(); k++) grade.appendChild(el("div","wvazio"));
+  for (let dia = 1; dia <= ult.getUTCDate(); dia++){
+    const iso = isoDe(new Date(Date.UTC(prim.getUTCFullYear(), prim.getUTCMonth(), dia)));
+    const doDia = itens.filter(p => p.data === iso);
+    const abertos = doDia.filter(p => !p.feita);
+    const critico = abertos.some(p => ["perdeu","fatalhoje","atrasado"].includes(estadoDe(p)));
+    const c = el("button","wdia" + (iso === HOJE ? " hoje" : "")
+      + (abertos.length ? (critico ? " crit" : " tem") : "")
+      + (doDia.length && !abertos.length ? " pronto" : ""));
+    c.type = "button";
+    c.appendChild(el("span","wn", String(dia)));
+    if (doDia.length) c.appendChild(el("span","wq", String(doDia.length)));
+    if (doDia.length) c.addEventListener("click", () => { widgetDia = widgetDia === iso ? null : iso; render(); });
+    if (iso === widgetDia) c.classList.add("aberto");
+    grade.appendChild(c);
+  }
+  f.appendChild(grade);
+
+  const doDia = widgetDia ? itens.filter(p => p.data === widgetDia) : itens
+    .filter(p => !p.feita && p.data >= HOJE).sort((a,b) => a.data.localeCompare(b.data)).slice(0, 6);
+  const cx = el("div","wlista");
+  cx.appendChild(el("div","wrot", widgetDia ? br(widgetDia) : "Próximos"));
+  if (!doDia.length) cx.appendChild(el("p","ps", widgetDia ? "Nada neste dia." : "Nada com data pela frente."));
+  doDia.forEach(p => {
+    const l = el("div","witem" + (p.feita ? " feito" : ""));
+    const cb = el("input"); cb.type = "checkbox"; cb.checked = !!p.feita;
+    cb.addEventListener("change", () => alternar(p.key));
+    l.appendChild(cb);
+    const m = el("div");
+    m.appendChild(el("div","wt", p.titulo));
+    const sub = [br(p.data)];
+    if (p.bruto.proc || p.bruto.processo) sub.push(p.bruto.proc || p.bruto.processo);
+    if (p.quem) sub.push((pessoaDe(p.quem) || {}).nome);
+    m.appendChild(el("div","ws", sub.join(" · ")));
+    l.appendChild(m);
+    cx.appendChild(l);
+  });
+  f.appendChild(cx);
+  return f;
+}
+
+/* ---- widget 2: o que fazer ---- */
+function widgetTodo(){
+  const f = document.createDocumentFragment();
+  const abertas = base().filter(p => !p.feita && !p.dispensada).sort((a,b) => {
+    const pa = perdida(a) ? 0 : a.data ? 1 : 2, pb = perdida(b) ? 0 : b.data ? 1 : 2;
+    return pa !== pb ? pa - pb : (a.data || "9").localeCompare(b.data || "9");
+  });
+  const pl = placar();
+  const topo = el("div","wnum");
+  topo.appendChild(el("b", null, String(abertas.length)));
+  topo.appendChild(el("span", null, abertas.length === 1 ? "coisa para fazer" : "coisas para fazer"));
+  if (pl.perdidas){ const x = el("div","wmal"); x.textContent = pl.perdidas + " com prazo vencido"; topo.appendChild(x); }
+  f.appendChild(topo);
+
+  if (!abertas.length){
+    const v = el("div","wlimpo");
+    v.appendChild(ico(I.estrela));
+    v.appendChild(el("b", null, "Mesa limpa"));
+    v.appendChild(el("span", null, "Nenhuma pendência conhecida."));
+    f.appendChild(v);
+    return f;
+  }
+  const cx = el("div","wlista");
+  abertas.slice(0, 20).forEach(p => {
+    const e = estadoDe(p);
+    const l = el("div","witem g " + (["perdeu","fatalhoje","atrasado"].includes(e) ? "crit" : e === "atencao" || e === "comecarhoje" ? "aten" : ""));
+    const cb = el("input"); cb.type = "checkbox";
+    cb.addEventListener("change", () => { if (novaParaMim(p)) marcarVista(p); alternar(p.key); });
+    l.appendChild(cb);
+    const m = el("div");
+    m.appendChild(el("div","wt", p.titulo));
+    const faltam = p.data && p.data >= HOJE ? uteisEntre(HOJE, p.data) : null;
+    const q = !p.data ? "sem data" : perdida(p) ? "VENCEU " + br(p.data)
+      : faltam === 0 ? "HOJE" : "em " + faltam + (faltam === 1 ? " dia útil" : " dias úteis");
+    const sub = [q];
+    if (p.bruto.proc || p.bruto.processo) sub.push(p.bruto.proc || p.bruto.processo);
+    if (p.quem) sub.push((pessoaDe(p.quem) || {}).nome);
+    m.appendChild(el("div","ws", sub.join(" · ")));
+    l.appendChild(m);
+    cx.appendChild(l);
+  });
+  f.appendChild(cx);
+  if (abertas.length > 20) f.appendChild(el("p","ps","mostrando 20 de " + abertas.length));
+  return f;
+}
+
+/* ---- widget 3: avisos ---- */
+function widgetAvisos(){
+  const f = document.createDocumentFragment();
+  const novas = base().filter(novaParaMim);
+  const comRecado = E.tarefas.filter(t => !t.removido && naoLidos(t.id));
+  const semProv = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length);
+  const totalRec = comRecado.reduce((a,t) => a + naoLidos(t.id), 0);
+
+  if (!novas.length && !totalRec && !semProv.length){
+    const v = el("div","wlimpo");
+    v.appendChild(ico(I.check));
+    v.appendChild(el("b", null, "Nada novo"));
+    v.appendChild(el("span", null, "Sem tarefa nova, sem recado e sem intimação para triar."));
+    f.appendChild(v);
+    return f;
+  }
+
+  const bloco = (rot, cor, itens, montar) => {
+    if (!itens.length) return;
+    const cx = el("div","wlista");
+    const r = el("div","wrot"); r.style.color = cor; r.textContent = rot;
+    cx.appendChild(r);
+    itens.slice(0, 8).forEach(x => cx.appendChild(montar(x)));
+    f.appendChild(cx);
+  };
+
+  bloco(totalRec + (totalRec === 1 ? " recado novo" : " recados novos"), "var(--violeta)", comRecado, t => {
+    const p = provManual().find(x => x.bruto.id === t.id);
+    const l = el("button","witem g toque"); l.type = "button";
+    const m = el("div");
+    const ult = recadosDe(t.id).slice(-1)[0];
+    m.appendChild(el("div","wt", (ult ? ult.autor + ": " : "") + (ult ? ult.texto.slice(0, 70) : "")));
+    m.appendChild(el("div","ws", t.titulo));
+    l.appendChild(m);
+    if (p) l.addEventListener("click", () => dlgRecados(p));
+    return l;
+  });
+
+  bloco(novas.length + (novas.length === 1 ? " tarefa passada para você" : " tarefas passadas para você"), "var(--azul)", novas, p => {
+    const l = el("div","witem g");
+    const cb = el("input"); cb.type = "checkbox";
+    cb.addEventListener("change", () => { marcarVista(p); alternar(p.key); });
+    l.appendChild(cb);
+    const m = el("div");
+    m.appendChild(el("div","wt", p.titulo));
+    m.appendChild(el("div","ws", (p.dePor ? "de " + p.dePor : "") + (p.data ? " · até " + br(p.data) : "")));
+    l.appendChild(m);
+    return l;
+  });
+
+  bloco(semProv.length + (semProv.length === 1 ? " intimação para triar" : " intimações para triar"), "var(--ambar)", semProv, p => {
+    const b = p.bruto;
+    const l = el("a","witem g toque");
+    l.href = location.pathname;
+    l.style.textDecoration = "none";
+    const m = el("div");
+    m.appendChild(el("div","wt", b.sigiloso ? "Processo em segredo de justiça" : ((b.partes || [])[0] || b.proc)));
+    m.appendChild(el("div","ws", br(b.disp) + " · " + b.trib + " · " + (b.tipo || "")));
+    l.appendChild(m);
+    return l;
+  });
+  return f;
+}
+
+function telaWidget(qual){
+  document.body.classList.add("modo-widget");
+  const corpo = qual === "agenda" ? widgetAgenda() : qual === "todo" ? widgetTodo() : widgetAvisos();
+  return molduraWidget(qual, corpo);
+}
+
+/* ---- em Ajustes: como pôr cada um na tela inicial ---- */
+function secaoWidgets(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab"); const d = el("div");
+  d.appendChild(el("h2", null, "Telas para a tela inicial"));
+  d.appendChild(el("p", null, "Três endereços que abrem direto num conteúdo só, em letra grande. Cada um pode virar um ícone separado no celular."));
+  cab.appendChild(d); f.appendChild(cab);
+
+  const av = el("div","aviso amb");
+  av.appendChild(el("span","k","Atenção"));
+  av.appendChild(el("div", null, "Não são widgets de tela inicial no sentido do iOS — aqueles só existem em aplicativo nativo publicado na App Store, e nenhum site pode criá-los. São atalhos em tela cheia, que é o mais próximo possível sem app nativo."));
+  f.appendChild(av);
+
+  const g = el("div","grid");
+  Object.entries(WIDGETS).forEach(([k, W]) => {
+    const c = el("div","pcard");
+    const top = el("div","top");
+    const i = el("div","wico"); i.style.background = W.cor; i.appendChild(ico(I[W.ico]));
+    top.appendChild(i);
+    const nm = el("div");
+    nm.appendChild(el("div","nm", W.rot));
+    nm.appendChild(el("div","pp", k === "agenda" ? "mês inteiro, toque no dia" : k === "todo" ? "lista do que falta, marcar com um toque" : "recados e tarefas novas"));
+    top.appendChild(nm);
+    c.appendChild(top);
+    const url = location.origin + location.pathname + "?w=" + k;
+    const cp = el("div","wurl", url);
+    c.appendChild(cp);
+    const ac = el("div"); ac.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
+    const ab = el("a","bt pri pq","Abrir"); ab.href = "?w=" + k; ab.style.textDecoration = "none";
+    ac.appendChild(ab);
+    ac.appendChild(botao("Copiar endereço","seta","pq", async () => {
+      try { await navigator.clipboard.writeText(url); avisar("Endereço copiado"); }
+      catch(e){ prompt("Copie o endereço:", url); }
+    }));
+    c.appendChild(ac);
+    g.appendChild(c);
+  });
+  f.appendChild(g);
+
+  const como = el("div","aviso az");
+  como.appendChild(el("span","k","Como fazer"));
+  const cd = el("div");
+  cd.appendChild(el("b", null, "No iPhone, um ícone por tela:"));
+  const ol = el("ol"); ol.style.cssText = "margin:8px 0 0;padding-left:20px;line-height:1.7";
+  ["Abra o endereço de uma delas no Safari (tem que ser o Safari).",
+   "Compartilhar → role a lista → Adicionar à Tela de Início.",
+   "Troque o nome para “Calendário”, “A fazer” ou “Avisos” e confirme.",
+   "Repita para as outras duas — cada uma fica com o ícone próprio."].forEach(t => ol.appendChild(el("li", null, t)));
+  cd.appendChild(ol);
+  cd.appendChild(el("div", null, "No Android é igual, pelo menu ⋮ → Adicionar à tela inicial. No computador, dá para fixar como janela pelo Chrome ou Edge."));
+  como.appendChild(cd);
+  f.appendChild(como);
+  return f;
+}
+
 function telaProcessos(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
@@ -3716,15 +4069,23 @@ function telaConfig(){
   }
 
   /* OABs */
+  if (E.time){
+    const av = el("div","aviso az");
+    av.appendChild(el("span","k","Time"));
+    av.appendChild(el("div", null, "As inscrições abaixo valem para todo o time " + E.time.nome
+      + ": quem cadastrar uma, todos passam a receber as publicações dela. A busca automática roda uma vez a cada "
+      + HORAS_ENTRE_BUSCAS + " horas, por quem abrir o painel primeiro — os outros só recebem o resultado, sem repetir a consulta ao CNJ."));
+    f.appendChild(av);
+  }
   const t = el("table","tab");
   const hd = el("tr"); ["Advogado","Inscrição","Publicações",""].forEach(h => hd.appendChild(el("th",null,h)));
   t.appendChild(el("thead")).appendChild(hd);
   const tb = el("tbody");
-  if (!E.oabs.length){
+  if (!E.oabs.filter(o => !o.removido).length){
     const tr = el("tr"); const td = el("td",null,"Nenhuma OAB cadastrada. As publicações carregadas como exemplo continuam valendo.");
     td.colSpan = 4; td.style.color = "var(--muted)"; tr.appendChild(td); tb.appendChild(tr);
   }
-  E.oabs.forEach(o => {
+  E.oabs.filter(o => !o.removido).forEach(o => {
     const rot = o.nome;
     const n = E.djen.filter(x => x.advs.includes(rot)).length;
     const tr = el("tr");
@@ -3734,7 +4095,7 @@ function telaConfig(){
     const td = el("td");
     td.appendChild(botao("Remover","lixo","pq", () => {
       if (confirm("Remover OAB/"+o.uf+" "+o.numero+"? As publicações já baixadas continuam no painel.")){
-        E.oabs = E.oabs.filter(x => !(x.uf === o.uf && x.numero === o.numero)); salvar(); render();
+        o.removido = true; tocou(o); salvar(); render();
       }
     }));
     tr.appendChild(td);
@@ -3745,6 +4106,7 @@ function telaConfig(){
   wrap.appendChild(t);
   f.appendChild(wrap);
 
+  f.appendChild(secaoWidgets());
   f.appendChild(secaoTime());
 
   /* janela + ações */
