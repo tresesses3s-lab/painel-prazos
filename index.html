@@ -281,6 +281,171 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .wlimpo b{display:block;font:700 21px/1.3 "Bricolage Grotesque",sans-serif;margin:12px 0 6px}
 .wlimpo span{color:var(--muted);font-size:14.5px}
 .wurl{font:400 11px/1.4 "IBM Plex Mono",monospace;color:var(--muted);background:var(--surf-2);padding:8px 10px;border-radius:8px;word-break:break-all}
+/* ===================== aba Processos e Financeiro ===================== */
+.dica{font:400 12.8px/1.5 "Source Sans 3",sans-serif; color:var(--muted)}
+.acs{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.acs input[type=text]{flex:1; min-width:170px}
+.linhaAcs{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:16px 0 10px}
+
+/* --- a gestalt do link: grande quando falta, discreto quando tem --- */
+.dv{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.dv.vazio{width:100%}
+.dvchama{display:flex; gap:12px; align-items:center; width:100%; text-align:left; cursor:pointer;
+  background:var(--azul-s); border:2px dashed var(--azul); border-radius:13px; padding:14px 16px; color:var(--ink)}
+.dvchama:hover{background:var(--surface); box-shadow:var(--sh-m)}
+.dvchama svg{width:22px; height:22px; stroke:var(--azul); fill:none; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; flex:none}
+.dvchama b{display:block; font:700 15px/1.25 "Bricolage Grotesque",sans-serif; letter-spacing:-.01em}
+.dvchama span{display:block; font:400 12.8px/1.4 "Source Sans 3",sans-serif; color:var(--muted); margin-top:3px}
+.dvchamatxt{font:400 12.8px/1.5 "Source Sans 3",sans-serif; color:var(--azul); margin-top:6px}
+.dvl{display:inline-flex; gap:7px; align-items:center; text-decoration:none; background:var(--verde-s);
+  color:var(--verde); border:1px solid var(--verde); border-radius:9px; padding:6px 11px;
+  font:600 12.5px/1 "Source Sans 3",sans-serif}
+.dvl svg{width:15px; height:15px; stroke:var(--verde); fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.dvl:hover{background:var(--verde); color:var(--on-cor)} .dvl:hover svg{stroke:var(--on-cor)}
+.dvmais{width:29px; height:29px; border-radius:8px; border:1px dashed var(--line-2); background:var(--surf-2); cursor:pointer; display:grid; place-items:center}
+.dvmais svg{width:14px; height:14px; stroke:var(--muted); fill:none; stroke-width:2.4; stroke-linecap:round}
+.dvedit{display:flex; flex-direction:column; gap:8px; margin:10px 0}
+.dvrow{display:flex; gap:7px; align-items:center}
+.dvrow input:first-child{max-width:150px}
+
+/* --- links gerais do financeiro, na entrada --- */
+.dgeral{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); margin:16px 0 4px}
+.dgi{display:flex; gap:7px; align-items:center}
+.dgl{flex:1; display:flex; gap:9px; align-items:center; text-decoration:none; padding:13px 15px; border-radius:13px;
+  background:var(--surface); border:1px solid var(--verde); color:var(--verde); font:600 14.5px/1 "Source Sans 3",sans-serif; box-shadow:var(--sh-s)}
+.dgl svg{width:18px; height:18px; stroke:var(--verde); fill:none; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round}
+.dgchama{flex:1; display:flex; gap:11px; align-items:center; text-align:left; cursor:pointer;
+  background:var(--ambar-s); border:2px dashed var(--ambar); border-radius:13px; padding:13px 15px; color:var(--ink)}
+.dgchama:hover{box-shadow:var(--sh-m)}
+.dgchama svg{width:20px; height:20px; stroke:var(--ambar); fill:none; stroke-width:2.1; stroke-linecap:round; stroke-linejoin:round; flex:none}
+.dgchama b{display:block; font:700 14.5px/1.2 "Bricolage Grotesque",sans-serif}
+.dgchama span{display:block; font:400 12.3px/1.4 "Source Sans 3",sans-serif; color:var(--muted); margin-top:2px}
+
+/* --- organização do acervo --- */
+.org{background:var(--surface); border:1px solid var(--line); border-radius:17px; padding:18px 20px;
+  box-shadow:var(--sh-m); display:flex; flex-direction:column; gap:16px; margin-bottom:18px}
+.orgtop{display:flex; justify-content:space-between; align-items:center; gap:16px}
+.orgtop h3{font:700 18px/1.2 "Bricolage Grotesque",sans-serif; letter-spacing:-.017em; margin:0}
+.orgtop p{font:400 13.5px/1.45 "Source Sans 3",sans-serif; color:var(--muted); margin:5px 0 0; max-width:46ch}
+.orgbars{display:grid; gap:9px; grid-template-columns:repeat(auto-fit,minmax(178px,1fr))}
+.orgb{text-align:left; cursor:pointer; background:var(--surf-2); border:1px solid transparent; border-radius:11px; padding:11px 13px; display:flex; flex-direction:column; gap:7px}
+.orgb:hover{border-color:var(--line-2); background:var(--surface)}
+.orgb.on{border-color:var(--azul); background:var(--azul-s)}
+.orgl{display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+.orgr{font:600 12.5px/1.2 "Source Sans 3",sans-serif; color:var(--ink-2)}
+.orgp{font:700 13px/1 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+.orgt{height:6px; background:var(--surf-3); border-radius:99px; overflow:hidden}
+.orgt i{display:block; height:100%; background:var(--ambar); border-radius:99px}
+.orgt i.ok{background:var(--verde)} .orgt i.ruim{background:var(--rosa)}
+.orgf{font:400 11.5px/1.35 "IBM Plex Mono",monospace; color:var(--muted)}
+
+/* --- busca e filtros --- */
+.bcx{margin:4px 0 14px}
+.bcx input[type=search]{width:100%; max-width:520px}
+.bcx .dica{margin-top:6px; max-width:70ch}
+.filtros{display:flex; flex-direction:column; gap:9px; margin-bottom:6px}
+.fg{display:flex; gap:11px; align-items:flex-start; flex-wrap:wrap}
+.fgr{font:600 10.5px/2.1 "IBM Plex Mono",monospace; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); min-width:74px; flex:none}
+
+/* --- cartão do processo --- */
+.pcard.prio-alta{border-left:4px solid var(--rosa)}
+.pcard.prio-media{border-left:4px solid var(--ambar)}
+.pcard.prio-baixa{border-left:4px solid var(--line-2)}
+.pcard .pnome{flex:1; min-width:0}
+.pcard .achou{font:500 11px/1.4 "IBM Plex Mono",monospace; color:var(--azul); margin-top:4px}
+.pmeta .corr{color:var(--ambar)}
+.pprio{flex:none; text-align:right; cursor:pointer; background:none; border:0; padding:4px 2px}
+.pprio b{display:block; font:700 12px/1 "IBM Plex Mono",monospace; letter-spacing:.09em; text-transform:uppercase}
+.pprio span{display:block; font:400 11px/1.35 "Source Sans 3",sans-serif; color:var(--muted); margin-top:4px; max-width:15ch}
+.pprio.p-alta b{color:var(--rosa)} .pprio.p-media b{color:var(--ambar)} .pprio.p-baixa b{color:var(--muted)}
+.pprio:hover span{color:var(--azul)}
+.pest{display:flex; gap:9px; align-items:center; flex-wrap:wrap}
+.and{font:600 12.5px/1 "IBM Plex Mono",monospace; padding:6px 10px; border-radius:8px; background:var(--surf-2); color:var(--ink-2)}
+.and.x{background:var(--rosa-s); color:var(--rosa)}
+.and.u{background:var(--ambar-s); color:var(--ambar)}
+.and.ok{background:var(--verde-s); color:var(--verde)}
+.pstatus{cursor:pointer; background:var(--violeta-s); color:var(--violeta); border:1px solid var(--violeta);
+  border-radius:8px; padding:5px 10px; font:600 12.3px/1.2 "Source Sans 3",sans-serif}
+.petiq{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.petiq .tag{cursor:pointer; border:1px solid transparent}
+.petiq .tag:hover{border-color:var(--azul); color:var(--azul); background:var(--azul-s)}
+.psint{font:400 13.8px/1.55 "Source Sans 3",sans-serif; color:var(--ink-2); margin:0; padding-left:11px; border-left:2px solid var(--line-2)}
+
+/* --- "esse caso virou judicial?" --- */
+.virou{background:var(--teal-s); border:1px solid var(--teal); border-radius:13px; padding:14px 16px; display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.virou > div:first-child{flex:1 1 100%}
+.virou b{display:block; font:700 14.5px/1.25 "Bricolage Grotesque",sans-serif; color:var(--ink)}
+.virou span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
+.virou input{flex:1; min-width:190px; font-family:"IBM Plex Mono",monospace}
+
+/* --- "há algo para fazer nesse processo?" --- */
+.nada{background:var(--surf-2); border:1.5px dashed var(--line-2); border-radius:13px; padding:14px 16px; display:flex; flex-direction:column; gap:11px}
+.nada b{display:block; font:700 14.5px/1.25 "Bricolage Grotesque",sans-serif}
+.nada span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--muted); margin-top:3px}
+
+/* --- atividades no cartão --- */
+.patv{display:flex; flex-direction:column; gap:6px}
+.patvi{display:flex; gap:11px; align-items:flex-start; background:var(--surf-2); border-radius:10px; padding:10px 12px}
+.patvi.crit{background:var(--rosa-s)}
+.patvi input{width:18px; height:18px; margin:1px 0 0; accent-color:var(--verde); cursor:pointer; flex:none}
+.patvi .pt{font:500 13.8px/1.35 "Source Sans 3",sans-serif}
+.patvi .ps{font:500 11.5px/1.3 "IBM Plex Mono",monospace; color:var(--muted); margin-top:3px}
+.patvi.crit .ps{color:var(--rosa); font-weight:600}
+
+/* --- publicações dobradas --- */
+.ppubs{border-top:1px solid var(--line); padding-top:11px}
+.ppubs summary{cursor:pointer; display:flex; gap:9px; align-items:center; font:600 12.8px/1 "Source Sans 3",sans-serif; color:var(--ink-2)}
+.ppubs summary .n{font:700 10.5px/1 "IBM Plex Mono",monospace; background:var(--ambar-s); color:var(--ambar); border-radius:99px; padding:4px 8px}
+.ppub{display:flex; gap:12px; padding:9px 0; border-top:1px solid var(--line)}
+.ppub .mono{font:500 11.5px/1.5 "IBM Plex Mono",monospace; color:var(--muted); flex:none; width:74px}
+.ppub > div{font:400 13px/1.45 "Source Sans 3",sans-serif}
+.acs.pgrande{border-top:1px solid var(--line); padding-top:12px}
+
+/* --- fora do radar, no fundo --- */
+.forinha{margin-top:24px; background:var(--surf-2); border:1px solid var(--line); border-radius:14px; padding:14px 17px}
+.forinha summary{cursor:pointer; display:flex; gap:11px; align-items:baseline; flex-wrap:wrap}
+.forinha summary b{font:700 15px/1.2 "Bricolage Grotesque",sans-serif}
+.forinha summary span{font:400 12.5px/1.4 "Source Sans 3",sans-serif; color:var(--muted)}
+.forai{display:flex; justify-content:space-between; gap:12px; align-items:center; flex-wrap:wrap; padding:11px 0; border-top:1px solid var(--line)}
+.forai b{display:block; font:500 13.8px/1.3 "Source Sans 3",sans-serif}
+.forai .dica{display:block; margin-top:3px}
+
+/* --- duplicados --- */
+.dup{background:var(--surf-2); border:1px solid var(--line); border-radius:13px; padding:15px 17px; margin-bottom:13px; display:flex; flex-direction:column; gap:11px}
+.dupt{font:700 14.5px/1.3 "Bricolage Grotesque",sans-serif}
+.difs{width:100%; border-collapse:collapse; font:400 12.8px/1.4 "Source Sans 3",sans-serif}
+.difs th{text-align:left; font:600 10.5px/1.6 "IBM Plex Mono",monospace; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); padding:6px 10px 6px 0; width:82px; vertical-align:top}
+.difs td{padding:6px 10px 6px 0; vertical-align:top; color:var(--ink-2); border-top:1px solid var(--line)}
+.difs tr.difere td{color:var(--rosa); font-weight:600; background:var(--rosa-s)}
+.difs tr.igual td{color:var(--muted)}
+
+/* --- financeiro --- */
+.fingrid{display:grid; gap:9px; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); margin:16px 0 4px}
+.fint{cursor:pointer; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:14px 12px; text-align:center; box-shadow:var(--sh-s)}
+.fint:hover{border-color:var(--azul)}
+.fint.on{border-color:var(--azul); background:var(--azul-s)}
+.fint b{display:block; font:700 27px/1 "IBM Plex Mono",monospace; letter-spacing:-.03em; font-variant-numeric:tabular-nums; color:var(--ink)}
+.fint b.u{color:var(--ambar)} .fint b.ok{color:var(--verde)} .fint b.x{color:var(--rosa)}
+.fint span{display:block; font:500 11.5px/1.3 "Source Sans 3",sans-serif; color:var(--muted); margin-top:7px}
+.fcard{background:var(--surface); border:1px solid var(--line); border-radius:15px; padding:16px 18px; box-shadow:var(--sh-s);
+  display:flex; flex-direction:column; gap:12px; margin-bottom:11px}
+.ftop{display:flex; justify-content:space-between; gap:13px; align-items:flex-start}
+.ftop b{font:600 15.5px/1.25 "Source Sans 3",sans-serif}
+.etiq{flex:none; font:700 10.5px/1 "IBM Plex Mono",monospace; letter-spacing:.09em; text-transform:uppercase;
+  padding:6px 10px; border-radius:7px; background:var(--surf-2); color:var(--muted); white-space:nowrap}
+.etiq.u{background:var(--ambar-s); color:var(--ambar)}
+.etiq.ok{background:var(--verde-s); color:var(--verde)}
+.etiq.x{background:var(--rosa-s); color:var(--rosa)}
+.vlista{display:flex; flex-direction:column; gap:5px}
+.vrow{display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; background:var(--surf-2); border-radius:9px; padding:8px 11px}
+.vrow b{font:600 13.5px/1 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+.vrot{font:500 11.5px/1 "IBM Plex Mono",monospace; letter-spacing:.05em; text-transform:uppercase; color:var(--violeta)}
+.vloc{font:400 13px/1.5 "Source Sans 3",sans-serif; color:var(--ink-2); margin:0; padding:9px 12px;
+  background:var(--ambar-s); border-radius:9px; border-left:3px solid var(--ambar)}
+.bt.so{padding:7px; min-width:0}
+.bt.so span{display:none}
+
 .decs{display:flex; flex-direction:column; gap:11px}
 .dec{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:14px; padding:15px 18px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--sh-s)}
 .dec.d-violeta{border-left-color:var(--violeta)} .dec.d-ambar{border-left-color:var(--ambar)} .dec.d-teal{border-left-color:var(--teal)}
@@ -522,6 +687,11 @@ const I = {
   lixo:"M4 7h16M9.5 7V5h5v2M6.5 7l1 13h9l1-13", lapis:"M4 20h4L20 8l-4-4L4 16v4z", baixar:"M12 3v13M7 12l5 5 5-5M4.5 21h15",
   alvo:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z",
   seta:"M5 12h14M13 6l6 6-6 6", troca:"M4 8h13l-3-3M20 16H7l3 3",
+  pasta:"M3.5 7.5A1.5 1.5 0 0 1 5 6h4l2 2.5h8a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18z",
+  marca:"M20.5 12.5l-8 8-9-9V4h7.5zM7.5 7.5h.01",
+  moeda:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15 9.5c0-1.4-1.3-2-3-2s-3 .6-3 2 1.3 1.9 3 2.3 3 .8 3 2.2-1.3 2.2-3 2.2-3-.7-3-2.1M12 6v12",
+  balao:"M21 12a8 8 0 1 1-3.2-6.4L21 4l-1.2 3.5A8 8 0 0 1 21 12zM4.6 17.4L3 21l3.6-1.6",
+  link:"M10 13.5a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 0 0-5.7-5.7l-1.4 1.4M14 10.5a4 4 0 0 0-5.7 0l-2.8 2.8a4 4 0 0 0 5.7 5.7l1.4-1.4",
 };
 const CORES = ["#2E5BD8","#0E9F63","#DE8A08","#DB2F4C","#7A45D6","#0C9AA0","#C2410C","#5B21B6"];
 const MESES = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -587,8 +757,12 @@ function uteisEntre(a,b){ let n=0; const d=new Date(a+"T00:00:00Z"), f=new Date(
 
 /* ===================== estado ===================== */
 const CHAVE = "painel-prazos-v2";
-const vazio = () => ({ versao:6, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null,
-  processos:[], paralelo:[], paraleloEm:null, paraleloDias:30, recados:[], emailFinanceiro:null, desafioEm:null });
+const vazio = () => ({ versao:7, oabs:[], pessoas:[], tarefas:[], djen:[], buscadoEm:null, janelaDias:60, antecedencia:3, time:null,
+  processos:[], paralelo:[], paraleloEm:null, paraleloDias:30, recados:[], emailFinanceiro:null, desafioEm:null,
+  /* casos: o registro de processo, sincroniza. duplicados: pares a conferir.
+     valores: anotação de dinheiro digitada à mão — NÃO entra em COLECOES,
+     de propósito, para valor de cliente não subir para conta pessoal. */
+  casos:[], duplicados:[], valores:{}, acervoEm:null, driveTime:null, driveFin:null });
 let E = vazio();
 try { const s = localStorage.getItem(CHAVE); if (s) E = Object.assign(vazio(), JSON.parse(s)); } catch(e){}
 /* Migração v3 -> v4: a lista "feitos" vira um campo em cada item, para a
@@ -600,12 +774,13 @@ if (Array.isArray(E.feitos)){
   delete E.feitos;
 }
 function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch(e){} }
-const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length;
+const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length || E.casos.length;
 
 let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
 let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas = false;
 let buscaProc = "", filtroProc = "todos", buscaDec = "", filtroDec = "todas";
 let widgetMes = 0, widgetDia = null;
+let filtroOrg = null, filtroPrio = "todas", filtroEtiq = "todas", filtroFin = "todos";
 function casaParalelo(i){
   return combina(buscaPar, i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo,
     (i.partes || []).join(" "), i.resumo);
@@ -881,6 +1056,10 @@ function converte(c, rotulo){
     advs:[rotulo], partes: sig?[]:partes.slice(0,4), sigiloso:sig,
     acoes: ACOES.filter(([,rx]) => rx.test(t)).map(([n]) => n), link:c.link||null,
     decisao: achaDecisao(t),
+    valores: achaValores(t),
+    /* guarda um pedaço do texto para a busca por trecho funcionar. 2000
+       caracteres pegam o dispositivo da decisão sem inflar a sincronização. */
+    textoBusca: t.slice(0, 2000),
     feita:false, pessoaId:null, atualizadoEm: new Date().toISOString() };
 }
 
@@ -1194,7 +1373,9 @@ async function salvarArquivo(nome, texto, mime){
    comparando o campo atualizadoEm. */
 
 const FS = "https://firestore.googleapis.com/v1";
-const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados", "oabs"];
+/* "valores" está FORA desta lista de propósito: é a anotação de dinheiro
+   digitada à mão, e ela não sobe para o Firestore. Tem teste travando isso. */
+const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados", "oabs", "casos"];
 /* Ritmo adaptativo: rápido enquanto há gente mexendo, lento quando está parado,
    e PARADO quando a aba está escondida. Isso é o que deixa a conversa entre duas
    pessoas parecer imediata sem estourar a cota gratuita — uma aba escondida não
@@ -1383,6 +1564,7 @@ function localDe(col){
   if (col === "processos") return E.processos;
   if (col === "recados") return E.recados;
   if (col === "oabs") return E.oabs.map(o => Object.assign({}, o, { id: o.id || (o.uf + o.numero) }));
+  if (col === "casos") return E.casos;
   if (col === "paralelo") return E.paralelo.map(i => Object.assign({}, i, { id: String(i.id) }));
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
 }
@@ -1392,6 +1574,7 @@ function aplicaLocal(col, lista){
   else if (col === "processos") E.processos = lista;
   else if (col === "recados") E.recados = lista;
   else if (col === "oabs") E.oabs = lista;
+  else if (col === "casos") E.casos = lista;
   else if (col === "paralelo") E.paralelo = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
   else E.djen = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
 }
@@ -1580,7 +1763,7 @@ function dlgOab(){
   ["AC","AL","AM","AP","BA","CE","DF","ES","GO","MA","MG","MS","MT","PA","PB","PE","PI","PR","RJ","RN","RO","RR","RS","SC","SE","SP","TO"]
     .forEach(u => uf.appendChild(new Option(u,u)));
   uf.value = "RJ";
-  const num = entrada("text","","183027");
+  const num = entrada("text","","000000");   /* exemplo fictício: nada real do escritório sobe */
   const nome = entrada("text","","Como aparece nos relatórios");
   const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--azul)";
   modal("Adicionar OAB", "O painel vai ler as publicações dos últimos " + E.janelaDias + " dias nessa inscrição, direto no DJEN do CNJ.",
@@ -1751,6 +1934,7 @@ function render(){
   if (aba === "todo")    app.appendChild(telaTodo());
   if (aba === "notif")    app.appendChild(telaNotificacoes());
   if (aba === "proc")     app.appendChild(telaProcessos());
+  if (aba === "fin")      app.appendChild(telaFinanceiro());
   if (aba === "dec")      app.appendChild(telaDecisoes());
   if (aba === "paralelo") app.appendChild(telaParalelo());
   if (aba === "equipe")  app.appendChild(telaEquipe());
@@ -1767,8 +1951,12 @@ function renderAbas(){
   const semProvidencia = provDjen().filter(p => !p.feita && !p.dispensada && !desdobramentos(p.bruto.id).length).length;
   const qProc = agrupaProcessos().filter(g => g.vencidas).length;
   const qRec = E.tarefas.filter(t => !t.removido && naoLidos(t.id)).length;
+  const gs = agrupaProcessos();
+  const semOrg = gs.filter(g => !(g.caso && g.caso.fora) && !(g.caso && (g.caso.drive || []).length)).length;
+  const dupsQ = paresDuplicados().length;
   const defs = [["painel","Painel","alvo",null],["notif","Notificações","busca",semProvidencia],
-    ["proc","Processos","lista",qProc || null],
+    ["proc","Processos","lista",dupsQ || qProc || null],
+    ["fin","Financeiro","moeda",gs.filter(g => (g.caso && g.caso.fin) === "aguardando").length || null],
     ["dec","Decisões","martelo",null],
     ["agenda","Agenda","calend",null],
     ["todo","Tarefas","lista",pl.abertas],["paralelo","Paralelo","busca",naoVistos],
@@ -2573,19 +2761,36 @@ function agrupaProcessos(){
     (i.partes || []).filter(parteBoa).forEach(p => { if (!g.partes.includes(p)) g.partes.push(p); });
   }));
   E.tarefas.filter(t => !t.removido && t.processo).forEach(t => põe(t.processo, g => g.tarefas.push(t)));
+  /* casos sem número entram como grupo próprio: divórcio extrajudicial,
+     conversa com cliente. Espaço igual ao dos processos, como pedido. */
+  E.casos.filter(c => !c.removido && c.tipo === "caso").forEach(c => {
+    m.set("caso:" + c.id, { proc:null, casoSolto:c, pubs:[], tarefas:[], partes:(c.partes || []).slice(),
+      trib:null, classe:null, orgao:null, sigiloso:false });
+  });
+  E.tarefas.filter(t => !t.removido && t.casoId && !t.processo).forEach(t => {
+    const g = m.get("caso:" + t.casoId); if (g) g.tarefas.push(t);
+  });
   return [...m.values()].map(g => {
     const abertas = g.tarefas.filter(t => !t.feita && !t.dispensada);
     const comData = abertas.filter(t => t.prazo).sort((a,b) => a.prazo.localeCompare(b.prazo));
     const ultima = g.pubs.map(p => p.disp).sort().pop() || null;
     const donos = [...new Set(abertas.map(t => t.pessoaId).filter(Boolean))];
     const vencidas = abertas.filter(t => t.prazo && t.prazo < HOJE).length;
+    const trintaDias = isoDe(new Date(Date.now() - 30 * 864e5));
     return Object.assign(g, {
       abertas, proximo: comData[0] || null, ultima, donos, vencidas,
       feitas: g.tarefas.filter(t => t.feita).length,
       semProvidencia: g.pubs.filter(p => !desdobramentos(p.id).length && !p.dispensada && !p.feita).length,
+      caso: g.casoSolto || (g.proc ? casoDoProc(g.proc) : null),
+      decisaoNova: g.pubs.some(p => p.decisao && p.disp >= trintaDias),
     });
   }).sort((a,b) => {
+    /* em cima o que tem movimento e pendência, como pedido */
+    const pk = { alta:0, media:1, baixa:2 };
+    const pra = pk[prioridadeDe(a).p], prb = pk[prioridadeDe(b).p];
+    if (pra !== prb) return pra - prb;
     if (a.vencidas !== b.vencidas) return b.vencidas - a.vencidas;
+    if (!!a.abertas.length !== !!b.abertas.length) return a.abertas.length ? -1 : 1;
     const pa = a.proximo ? a.proximo.prazo : "9", pb = b.proximo ? b.proximo.prazo : "9";
     if (pa !== pb) return pa.localeCompare(pb);
     return (b.ultima || "").localeCompare(a.ultima || "");
@@ -3204,125 +3409,1621 @@ function secaoWidgets(){
   return f;
 }
 
+/* ============================================================
+   O CASO
+   ------------------------------------------------------------
+   Até aqui o painel só guardava publicações e agrupava por número na hora de
+   mostrar. Não existia registro de processo, então não havia onde pendurar
+   etiqueta, prioridade, link do Drive ou estado financeiro.
+
+   O registro de caso é uma CAMADA POR CIMA do agrupamento, não um substituto:
+   as publicações continuam mandando nos fatos (partes, tribunal, classe) e o
+   caso guarda só o que foi acrescentado por pessoa. Duas consequências boas:
+     · o id de um caso judicial são os dígitos do número, então duas pessoas
+       cadastrando o mesmo processo escrevem no MESMO documento — duplicata
+       de processo judicial é impossível por construção;
+     · uma nova varredura nunca desfaz o que alguém digitou.
+
+   Caso sem número (divórcio extrajudicial, conversa com cliente que pode nunca
+   virar processo) ganha id próprio e fica na lista com espaço igual ao dos
+   outros. Se um dia virar judicial, o número entra e o painel confere na API.
+   ============================================================ */
+
+const API = "https://comunicaapi.pje.jus.br/api/v1/comunicacao";
+const idJudicial = num => "j" + soDigitos(num);
+
+const FASES = [
+  ["conversa",   "Conversa com cliente",  "Ainda não é caso: está sendo avaliado"],
+  ["preparo",    "Em preparação",         "Vai ser protocolado ou formalizado"],
+  ["extra",      "Extrajudicial em curso","Corre fora do Judiciário e pode nunca virar processo"],
+  ["aguardando", "Protocolado, sem número","Já foi, mas o número ainda não saiu"],
+];
+const rotuloFase = k => (FASES.find(f => f[0] === k) || ["", "Sem fase"])[1];
+
+/* Etiquetas de ramo. As três primeiras foram pedidas por nome; no acervo real
+   medido, trabalhista e juizado somam 2 processos em 198 — ficam porque o dia
+   que entrar um, a etiqueta tem de estar lá. */
+const RAMOS = [
+  ["Cível",            /c[íi]vel|procedimento comum|ordin[áa]ri|monit[óo]ri|indeniza|usucapi|invent[áa]ri|fam[íi]lia|div[óo]rci/i, /^TJ/i],
+  ["Trabalhista",      /trabalh|reclamat[óo]ri|RTOrd/i,                                    /^TRT|^TST/i],
+  ["Juizado especial", /juizado|especial c[íi]vel|\bJEC\b/i,                               /juizado/i],
+  ["Federal",          /federal|previdenci|fazenda p[úu]blica/i,                           /^TRF|^JF/i],
+  ["Criminal",         /penal|criminal|\bcrime\b/i,                                        /crimin/i],
+  ["Tribunal superior",/especial|extraordin[áa]ri/i,                                       /^ST/i],
+];
+
+function etiquetasAuto(g){
+  const et = [];
+  const classe = g.classe || "", orgao = g.orgao || "", trib = g.trib || "";
+  RAMOS.forEach(([nome, rxc, rxt]) => {
+    if (et.includes(nome)) return;
+    if (rxt.test(trib) || rxt.test(orgao) || rxc.test(classe)) et.push(nome);
+  });
+  /* grau: o que decide é o órgão, não o tribunal — TJ tem vara e câmara */
+  if (/^ST/i.test(trib)) et.push("Tribunal superior");
+  else if (/c[âa]mara|turma|desembargador|relator|grupo de|se[çc][ãa]o/i.test(orgao)
+        || /agravo de instrumento|apela[çc][ãa]o|remessa necess/i.test(classe)) et.push("2º grau");
+  else if (/vara|juizado|comarca|f[óo]rum|central/i.test(orgao)) et.push("1º grau");
+  /* tipo de peça é a própria classe do CNJ, que vem preenchida em 100% dos casos */
+  if (classe) et.push(bonito(classe));
+  return [...new Set(et)].filter(Boolean);
+}
+
+/* A classe vem do CNJ em CAIXA ALTA com acento quebrado ("APELAçãO CíVEL"). */
+function bonito(t){
+  return String(t || "").toLowerCase()
+    .replace(/(^|\s|\()([a-záàâãéêíóôõúç])/g, (m, a, b) => a + b.toUpperCase())
+    .replace(/\bDe\b/g, "de").replace(/\bDa\b/g, "da").replace(/\bDo\b/g, "do")
+    .replace(/\bEm\b/g, "em").replace(/\bE\b/g, "e").replace(/\bContra\b/g, "contra")
+    .replace(/^./, c => c.toUpperCase());
+}
+
+/* Comentários de status: a lista que você ditou, mais texto livre.
+   IMPORTANTE: isso é anotação da equipe, NÃO é fase oficial do processo — a API
+   do CNJ não devolve fase nenhuma. A tela deixa isso escrito. */
+const STATUS_PRONTOS = [
+  "Aguardando audiência", "Aguardando sentença", "Aguardando acórdão",
+  "Aguardando contestação", "Aguardando manifestação da parte", "Aguardando recurso",
+  "Aguardando perícia", "Precisa de diligência", "Aguardando cliente",
+  "Suspenso", "Em cumprimento de sentença", "Aguardando pagamento",
+];
+
+const PRIORIDADES = [
+  ["alta",  "Alta",  "x"],
+  ["media", "Média", "u"],
+  ["baixa", "Baixa", ""],
+];
+const rotuloPrio = k => (PRIORIDADES.find(p => p[0] === k) || ["", "—"])[1];
+
+/* Prioridade calculada. Existe porque classificar 198 processos à mão cansa e
+   desatualiza na semana seguinte. A sua sempre vence a minha. */
+function prioridadeCalc(g){
+  if (g.vencidas) return { p:"alta", pq:"providência vencida" };
+  if (g.proximo && g.proximo.prazo){
+    const f = uteisEntre(HOJE, g.proximo.prazo);
+    if (g.proximo.prazo < HOJE) return { p:"alta", pq:"prazo vencido" };
+    if (f <= 3) return { p:"alta", pq:"prazo em " + f + (f === 1 ? " dia útil" : " dias úteis") };
+    if (f <= 10) return { p:"media", pq:"prazo em " + f + " dias úteis" };
+  }
+  if (g.semProvidencia) return { p:"media", pq:"publicação sem triagem" };
+  if (g.decisaoNova) return { p:"media", pq:"decisão recente" };
+  if (g.ultima){
+    const dias = Math.round((new Date(HOJE) - new Date(g.ultima)) / 864e5);
+    if (dias > 120) return { p:"baixa", pq:"sem publicação há " + Math.round(dias/30) + " meses" };
+  }
+  if (!g.pubs.length && g.caso && g.caso.fase) return { p:"media", pq:rotuloFase(g.caso.fase).toLowerCase() };
+  return { p:"baixa", pq:"sem pendência conhecida" };
+}
+function prioridadeDe(g){
+  const c = g.caso;
+  if (c && c.prioridade) return { p:c.prioridade, pq:"definida por " + (c.prioridadePor || "alguém do time"), manual:true };
+  return prioridadeCalc(g);
+}
+
+/* ---------- ler e gravar o registro ---------- */
+function casoPorId(id){ return E.casos.find(c => c.id === id && !c.removido) || null; }
+function casoDoProc(proc){ return proc ? casoPorId(idJudicial(proc)) : null; }
+
+function mexeCaso(id, base, f){
+  let c = E.casos.find(x => x.id === id);
+  if (!c){ c = Object.assign({ id, tipo:"judicial", etiquetas:[], drive:[], criadoEm:agoraISO() }, base || {}); E.casos.push(c); }
+  if (c.removido) delete c.removido;
+  if (f) f(c);
+  tocou(c); salvar();
+  return c;
+}
+function casoDeGrupo(g, f){ return mexeCaso(idJudicial(g.proc), { tipo:"judicial", numero:g.proc }, f); }
+
+/* ---------- casos sem número ---------- */
+function casosSoltos(){
+  return E.casos.filter(c => !c.removido && c.tipo === "caso");
+}
+
+function dlgNovoCaso(existente){
+  const c = existente || null;
+  const tit = entrada("text", c ? c.titulo : "", "Divórcio consensual — família Andrade");
+  const partes = entrada("text", c ? (c.partes || []).join(", ") : "", "Quem são as partes, separadas por vírgula");
+  const num = entrada("text", c ? (c.numero || "") : "", "Se já tiver número do processo, cole aqui");
+  const sel = el("select");
+  FASES.forEach(([k, r]) => { const o = el("option", null, r); o.value = k; if (c && c.fase === k) o.selected = true; sel.appendChild(o); });
+  const sint = el("textarea"); sint.rows = 4; sint.placeholder = "Do que se trata, em duas linhas"; sint.value = c ? (c.sintese || "") : "";
+  const dv = entrada("url", c ? (((c.drive || [])[0] || {}).url || "") : "", "https://drive.google.com/…");
+
+  const explica = el("div","aviso az");
+  explica.appendChild(el("span","k","Por que existe"));
+  explica.appendChild(el("div", null, "Caso que pode nunca virar processo — extrajudicial, ou ainda em conversa com o cliente — "
+    + "fica aqui com o mesmo espaço dos outros. Se um dia virar judicial, você cola o número e o painel tenta puxar na API do CNJ."));
+
+  modal(c ? "Editar caso" : "Novo caso, sem processo ainda",
+    "Para o que ainda não tem número: extrajudicial, em preparação ou em conversa com o cliente.",
+    [explica, campo("Nome do caso", tit), campo("Partes", partes), campo("Em que fase está", sel),
+     campo("Síntese", sint), campo("Número do processo, se já houver", num), campo("Pasta no Drive", dv)],
+    () => {
+      const t = tit.value.trim();
+      if (!t) return avisar("Dê um nome ao caso");
+      const dig = soDigitos(num.value);
+      const dados = {
+        titulo: t, fase: sel.value, sintese: sint.value.trim(),
+        partes: partes.value.split(",").map(s => s.trim()).filter(Boolean),
+        drive: dv.value.trim() ? [{ url: dv.value.trim(), rot: "Pasta do caso" }] : (c ? c.drive : []),
+        numero: dig.length === 20 ? mascaraCNJ(dig) : "",
+      };
+      if (c){ Object.assign(c, dados); tocou(c); }
+      else E.casos.push(Object.assign({ id:"c" + uid(), tipo:"caso", etiquetas:[], drive:[], criadoEm:agoraISO() }, dados));
+      salvar(); fechar(); render();
+      const alvo = c || E.casos[E.casos.length - 1];
+      if (dados.numero) tentarNaApi(alvo);
+      else avisar(c ? "Caso atualizado" : "Caso criado");
+    }, c ? "Salvar" : "Criar caso");
+}
+
+/* "Esse caso tem número? Virou judicial? Se sim, cola o número e vê se a API puxa."
+   A rota por número não precisa de OAB nem de janela de data e devolve o
+   histórico inteiro do processo — medido: 13 publicações numa chamada. */
+async function tentarNaApi(caso){
+  const dig = soDigitos(caso.numero);
+  if (dig.length !== 20) return avisar("Número incompleto");
+  avisar("Procurando " + mascaraCNJ(dig) + " no CNJ…");
+  try {
+    const u = API + "?numeroProcesso=" + encodeURIComponent(mascaraCNJ(dig)) + "&itensPorPagina=100&pagina=1";
+    const r = await fetch(u, { headers:{ Accept:"application/json" } });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const j = await r.json();
+    const itens = (j.items || []).filter(c => c.numeroprocessocommascara || c.numero_processo);
+    if (!itens.length){
+      avisar("A API não tem publicação desse número — o caso fica como você cadastrou");
+      caso.apiVaziaEm = agoraISO(); tocou(caso); salvar(); render();
+      return;
+    }
+    const jaTem = new Set(E.djen.map(i => String(i.hash || i.id)));
+    let novas = 0;
+    itens.forEach(c => {
+      const h = String(c.hash || c.id);
+      if (jaTem.has(h)) return;
+      const it = converte(c, "busca por número");
+      tocou(it); E.djen.push(it); novas++;
+    });
+    /* o caso solto virou judicial: passa a ser o registro do processo */
+    const alvo = idJudicial(dig);
+    const conflito = E.casos.find(x => x.id === alvo && x.id !== caso.id && !x.removido);
+    if (conflito){
+      marcarDuplicata(caso, conflito);
+      avisar(novas + " publicações trazidas — e achei um cadastro repetido, veja em Duplicados");
+    } else {
+      const antigo = caso.id;
+      caso.id = alvo; caso.tipo = "judicial"; caso.numero = mascaraCNJ(dig);
+      caso.viradoEm = agoraISO(); caso.idAnterior = antigo;
+      /* o registro antigo precisa morrer no servidor, senão volta na sincronização */
+      E.casos.push({ id:antigo, removido:true, atualizadoEm:agoraISO() });
+      tocou(caso);
+      avisar(novas + (novas === 1 ? " publicação trazida" : " publicações trazidas") + " · o caso agora é judicial");
+    }
+    salvar(); render();
+  } catch(e){
+    avisar("Não consegui consultar agora: " + e.message);
+  }
+}
+
+/* ---------- duplicados ----------
+   Processo judicial não duplica: o id são os dígitos do número. Duplicata só
+   nasce de caso solto — dois cadastros do mesmo assunto, ou um caso que virou
+   judicial num número que já existia. Nunca junto sozinha. */
+function marcarDuplicata(a, b){
+  const par = [a.id, b.id].sort().join("|");
+  E.duplicados = E.duplicados || [];
+  if (!E.duplicados.some(d => d.par === par && !d.resolvido))
+    E.duplicados.push({ id:"dp" + uid(), par, em:agoraISO() });
+  salvar();
+}
+function paresDuplicados(){
+  const out = [];
+  (E.duplicados || []).filter(d => !d.resolvido).forEach(d => {
+    const [x, y] = d.par.split("|");
+    const a = casoPorId(x), b = casoPorId(y);
+    if (a && b) out.push({ d, a, b });
+  });
+  /* também sugere pelo título quase igual, que é o erro humano comum */
+  const soltos = casosSoltos();
+  for (let i = 0; i < soltos.length; i++)
+    for (let k = i + 1; k < soltos.length; k++){
+      const a = soltos[i], b = soltos[k];
+      if (!a.titulo || !b.titulo) continue;
+      if (normaliza(a.titulo) !== normaliza(b.titulo)) continue;
+      const par = [a.id, b.id].sort().join("|");
+      if ((E.duplicados || []).some(x => x.par === par)) continue;
+      out.push({ d:{ par, sugerido:true }, a, b });
+    }
+  return out;
+}
+
+function dlgDuplicados(){
+  const pares = paresDuplicados();
+  const f = document.createDocumentFragment();
+  if (!pares.length){
+    f.appendChild(el("p","dica","Nenhum cadastro repetido no momento."));
+    modal("Processos duplicados", null, [f], null, null);
+    return;
+  }
+  pares.forEach(({ d, a, b }) => {
+    const cx = el("div","dup");
+    cx.appendChild(el("div","dupt", (a.titulo || a.numero || "sem nome") + "  ·vs·  " + (b.titulo || b.numero || "sem nome")));
+    /* mostra campo por campo onde os dois diferem: é isso que decide se junta */
+    const dif = el("table","difs");
+    const campos = [["titulo","Nome"],["numero","Número"],["fase","Fase"],["sintese","Síntese"],
+      ["partes","Partes"],["status","Status"],["prioridade","Prioridade"]];
+    let diferencas = 0;
+    campos.forEach(([k, rot]) => {
+      const va = Array.isArray(a[k]) ? a[k].join(", ") : (a[k] || "");
+      const vb = Array.isArray(b[k]) ? b[k].join(", ") : (b[k] || "");
+      if (!va && !vb) return;
+      const tr = el("tr", va === vb ? "igual" : "difere");
+      tr.appendChild(el("th", null, rot));
+      tr.appendChild(el("td", null, va || "—"));
+      tr.appendChild(el("td", null, vb || "—"));
+      if (va !== vb) diferencas++;
+      dif.appendChild(tr);
+    });
+    cx.appendChild(dif);
+    cx.appendChild(el("p","dica", diferencas
+      ? diferencas + (diferencas === 1 ? " campo diferente" : " campos diferentes") + " — se forem casos distintos, explique a diferença e mantenha os dois."
+      : "Nenhum campo diferente: provavelmente é o mesmo caso cadastrado duas vezes."));
+
+    const ac = el("div","acs");
+    ac.appendChild(botao("Juntar num só","seta","pri", () => {
+      /* fica o que tem publicacao (judicial); no empate, o mais antigo */
+      const peso = x => (x.tipo === "judicial" ? 2 : 0);
+      const [fica, vai] = peso(a) > peso(b) ? [a, b]
+        : peso(b) > peso(a) ? [b, a]
+        : ((a.criadoEm || "") <= (b.criadoEm || "") ? [a, b] : [b, a]);
+      /* junta puxando o que falta de um para o outro, sem sobrescrever o que já existe */
+      ["titulo","numero","fase","sintese","status","prioridade","financeiro"].forEach(k => {
+        if (!fica[k] && vai[k]) fica[k] = vai[k];
+      });
+      fica.partes = [...new Set([...(fica.partes || []), ...(vai.partes || [])])];
+      fica.etiquetas = [...new Set([...(fica.etiquetas || []), ...(vai.etiquetas || [])])];
+      fica.drive = [...(fica.drive || []), ...(vai.drive || [])]
+        .filter((x, i, arr) => arr.findIndex(y => y.url === x.url) === i);
+      fica.juntadoEm = agoraISO();
+      vai.removido = true; tocou(vai); tocou(fica);
+      if (d.par) (E.duplicados || []).forEach(x => { if (x.par === d.par) x.resolvido = agoraISO(); });
+      salvar(); fechar(); render(); avisar("Juntados. O que faltava num veio do outro.");
+    }));
+    const exp = entrada("text", "", "Qual a diferença entre os dois?");
+    ac.appendChild(exp);
+    ac.appendChild(botao("Manter os dois","x","", () => {
+      const nota = exp.value.trim();
+      if (!nota) return avisar("Escreva a diferença, senão em duas semanas ninguém lembra");
+      a.diferenca = nota; b.diferenca = nota; tocou(a); tocou(b);
+      E.duplicados = E.duplicados || [];
+      const par = d.par;
+      const j = E.duplicados.find(x => x.par === par);
+      if (j) j.resolvido = agoraISO(); else E.duplicados.push({ id:"dp"+uid(), par, resolvido:agoraISO(), nota });
+      salvar(); fechar(); render(); avisar("Mantidos separados, com a diferença anotada");
+    }));
+    cx.appendChild(ac);
+    f.appendChild(cx);
+  });
+  modal("Processos duplicados", pares.length + (pares.length === 1 ? " par para conferir" : " pares para conferir"), [f], null, null);
+}
+
+/* ---------- varredura do acervo ----------
+   Roda nas OABs cadastradas no time. Medido: 26 chamadas cobriram 3 anos e 8
+   meses de 15 inscrições em menos de um minuto — não precisa de leva nem de
+   retomada. Antes de 2023 o DJEN devolve zero: a intimação saía no diário do
+   próprio tribunal, que não está nessa API. */
+const INICIO_ACERVO = "2023-01-01";
+
+async function varrerAcervo(aviso){
+  const oabs = E.oabs.filter(o => !o.removido);
+  if (!oabs.length){ avisar("Cadastre uma OAB primeiro"); return null; }
+  const jaTem = new Set(E.djen.map(i => String(i.hash || i.id)));
+  const hoje = HOJE;
+  let novas = 0, chamadas = 0, falhas = 0;
+  for (let k = 0; k < oabs.length; k++){
+    const o = oabs[k];
+    if (aviso) aviso("Inscrição " + (k + 1) + " de " + oabs.length + " — " + o.numero + "/" + o.uf
+      + (novas ? " · " + novas + " publicações novas" : ""));
+    for (let pag = 1; pag <= 40; pag++){
+      const u = API + "?" + new URLSearchParams({
+        numeroOab:o.numero, ufOab:o.uf,
+        dataDisponibilizacaoInicio:INICIO_ACERVO, dataDisponibilizacaoFim:hoje,
+        itensPorPagina:"100", pagina:String(pag) });
+      let j;
+      try {
+        const r = await fetch(u, { headers:{ Accept:"application/json" } });
+        chamadas++;
+        if (!r.ok) { falhas++; break; }
+        j = await r.json();
+      } catch(e){ falhas++; break; }
+      const itens = j.items || [];
+      itens.forEach(c => {
+        const h = String(c.hash || c.id);
+        if (jaTem.has(h)) return;
+        jaTem.add(h);
+        const it = converte(c, o.nome);
+        tocou(it); E.djen.push(it); novas++;
+      });
+      if (itens.length < 100) break;
+    }
+  }
+  /* NÃO cria registro de caso aqui de propósito. O processo já aparece na aba
+     porque é deduzido das publicações; o registro só nasce quando alguém
+     acrescenta algo (etiqueta, link, status). Criar duzentos documentos vazios
+     encheria o Firestore do time sem nenhum ganho. */
+  const processos = agrupaProcessos().filter(g => g.proc).length;
+  E.acervoEm = agoraISO();
+  salvar(); anotaBusca();
+  return { novas, processos, chamadas, falhas, oabs:oabs.length };
+}
+
+/* ---------- gestalt: o quanto o acervo está organizado ----------
+   Não é enfeite: cada barra aponta o que falta e leva ao lugar de resolver.
+   Nada aqui premia marcar o que não foi feito. */
+function organizacao(){
+  const gs = agrupaProcessos().filter(g => !(g.caso && g.caso.fora));
+  const t = gs.length || 1;
+  const tem = f => gs.filter(f).length;
+  const itens = [
+    { k:"drive",   rot:"Com pasta no Drive",  q:tem(g => g.caso && (g.caso.drive || []).length), ico:"link",
+      falta:"processo sem link de pasta", dica:"O link colado no processo aparece em toda atividade dele." },
+    { k:"etiq",    rot:"Com etiqueta",        q:tem(g => (g.caso && (g.caso.etiquetas || []).length) || etiquetasAuto(g).length), ico:"marca",
+      falta:"processo sem etiqueta", dica:"Grau e tipo de peça vêm preenchidos do CNJ." },
+    { k:"status",  rot:"Com status escrito",  q:tem(g => g.caso && g.caso.status), ico:"balao",
+      falta:"processo sem status", dica:"“Aguardando sentença” em dez segundos." },
+    { k:"dono",    rot:"Com responsável",     q:tem(g => g.donos.length), ico:"pessoa",
+      falta:"processo sem ninguém", dica:"Sem nome, ninguém sente que é seu." },
+    { k:"triado",  rot:"Sem publicação pendente", q:tem(g => !g.semProvidencia), ico:"busca",
+      falta:"processo com publicação sem triagem", dica:"Cada uma leva um toque para virar prazo ou baixa." },
+  ];
+  itens.forEach(i => { i.pct = Math.round(i.q / t * 100); i.resta = t - i.q; });
+  const media = Math.round(itens.reduce((a, i) => a + i.pct, 0) / itens.length);
+  return { itens, total:t, media };
+}
+
+/* ============================================================
+   ABA PROCESSOS
+   Substitui a antiga "Meus processos". Traz tudo o que está cadastrado —
+   puxado da API ou digitado à mão — inclusive o que ainda não é processo.
+   ============================================================ */
+
+/* ---------- busca em três frentes ----------
+   Você pediu nome de parte, trecho e número. São três coisas diferentes:
+     · número  → compara só os dígitos, acha com ou sem máscara
+     · parte   → sem acento, em qualquer ordem (o acervo tem 19% com acento)
+     · trecho  → procura DENTRO do texto da publicação
+   O texto integral só existe nas publicações trazidas pela varredura nova; nas
+   antigas sobra o excerto. A dica embaixo do campo diz o que está valendo. */
+function textoBuscavel(g){
+  return g.pubs.map(p => (p.textoBusca || "") + " " + (p.trecho_prazo || "")
+    + " " + ((p.decisao && p.decisao.trecho) || "")).join(" ");
+}
+function casaProcesso(g, q){
+  if (!q) return true;
+  const c = g.caso || {};
+  if (combina(q, g.proc, g.trib, g.orgao, g.classe, g.partes.join(" "),
+      c.titulo, c.sintese, c.status, (c.partes || []).join(" "),
+      (c.etiquetas || []).join(" "), etiquetasAuto(g).join(" "))) return true;
+  /* último recurso, porque é o mais caro: procurar dentro do texto */
+  return combina(q, textoBuscavel(g));
+}
+function ondeAchou(g, q){
+  if (!q) return null;
+  const c = g.caso || {};
+  if (soDigitos(q).length >= 6 && soDigitos(g.proc || "").includes(soDigitos(q))) return "número";
+  if (combina(q, g.partes.join(" "), (c.partes || []).join(" "))) return "parte";
+  if (combina(q, c.titulo, c.sintese, c.status)) return "cadastro";
+  if (combina(q, (c.etiquetas || []).join(" "), etiquetasAuto(g).join(" "))) return "etiqueta";
+  if (combina(q, textoBuscavel(g))) return "trecho da publicação";
+  return null;
+}
+
+/* ---------- a gestalt do link ----------
+   O convite quando está vazio é grande de propósito: link que ninguém cola é
+   pasta que ninguém acha. Quando tem link, encolhe e sai do caminho. */
+/* Recebe o GRUPO, não o caso: desenhar a tela não pode criar registro.
+   Se criasse, abrir a aba Processos cadastraria duzentos documentos vazios e
+   mandaria todos para o Firestore do time — barulho puro. O registro nasce
+   quando alguém realmente cola um link. */
+function blocoDrive(g, aoMudar){
+  const caso = (g && g.caso) || null;
+  const links = (caso && caso.drive) || [];
+  const box = el("div", links.length ? "dv tem" : "dv vazio");
+  if (!links.length){
+    const b = el("button","dvchama"); b.type = "button";
+    b.appendChild(ico(I.pasta));
+    const t = el("div");
+    t.appendChild(el("b", null, "Cole o link da pasta aqui"));
+    t.appendChild(el("span", null, "Depois de colado, ele aparece em toda atividade desse caso"));
+    b.appendChild(t);
+    b.addEventListener("click", () => dlgDrive(g, aoMudar));
+    box.appendChild(b);
+    return box;
+  }
+  links.forEach(l => {
+    const a = el("a","dvl"); a.href = l.url; a.target = "_blank"; a.rel = "noopener";
+    a.appendChild(ico(I.pasta));
+    a.appendChild(el("span", null, l.rot || "Pasta no Drive"));
+    box.appendChild(a);
+  });
+  const mais = el("button","dvmais"); mais.type = "button"; mais.title = "Mais links";
+  mais.appendChild(ico(I.mais));
+  mais.addEventListener("click", () => dlgDrive(g, aoMudar));
+  box.appendChild(mais);
+  return box;
+}
+
+function dlgDrive(g, aoMudar){
+  /* agora sim: a pessoa abriu o diálogo, o registro pode nascer */
+  const caso = g.caso || casoDeGrupo(g);
+  const f = document.createDocumentFragment();
+  const lista = el("div","dvedit");
+  const desenha = () => {
+    lista.innerHTML = "";
+    ((caso.drive) || []).forEach((l, i) => {
+      const r = el("div","dvrow");
+      const rot = entrada("text", l.rot || "", "Como chamar");
+      const url = entrada("url", l.url || "", "https://…");
+      rot.addEventListener("input", e => { l.rot = e.target.value; });
+      url.addEventListener("input", e => { l.url = e.target.value.trim(); });
+      r.appendChild(rot); r.appendChild(url);
+      r.appendChild(botao("","lixo","pq so", () => { caso.drive.splice(i, 1); desenha(); }));
+      lista.appendChild(r);
+    });
+    if (!caso.drive || !caso.drive.length) lista.appendChild(el("p","dica","Nenhum link ainda."));
+  };
+  caso.drive = caso.drive || [];
+  desenha();
+  const add = botao("Acrescentar link","mais","", () => { caso.drive.push({ rot:"", url:"" }); desenha(); });
+  const nota = el("div","aviso az");
+  nota.appendChild(el("span","k","Como funciona"));
+  nota.appendChild(el("div", null, "O painel guarda o endereço, não o arquivo — quem cria a pasta é você. "
+    + "Todo link colado aqui aparece nas atividades vinculadas a esse caso e no e-mail que sai dele."));
+  f.appendChild(nota); f.appendChild(lista); f.appendChild(add);
+  modal("Pastas e links do caso", caso.titulo || caso.numero || "", [f], () => {
+    caso.drive = (caso.drive || []).filter(l => l.url);
+    tocou(caso); salvar(); fechar(); render();
+    if (aoMudar) aoMudar();
+    avisar(caso.drive.length ? "Link guardado" : "Links limpos");
+  }, "Salvar");
+}
+
+/* ---------- cartão de organização ---------- */
+function cartaoOrganizacao(){
+  const o = organizacao();
+  const cx = el("div","org");
+  const top = el("div","orgtop");
+  const esq = el("div");
+  esq.appendChild(el("h3", null, "Organização do acervo"));
+  esq.appendChild(el("p", null, o.media >= 90 ? "Está redondo. Dá para confiar numa busca aqui."
+    : o.media >= 60 ? "Bom, mas ainda tem buraco. Cada barra abaixo leva ao que falta."
+    : "Tem informação faltando em muita coisa. As barras dizem onde."));
+  top.appendChild(esq);
+  top.appendChild(anel(o.media, 34, 7, o.media >= 90 ? "var(--verde)" : o.media >= 60 ? "var(--ambar)" : "var(--rosa)", o.media + "%"));
+  cx.appendChild(top);
+
+  const gr = el("div","orgbars");
+  o.itens.forEach(i => {
+    const b = el("button","orgb"); b.type = "button";
+    b.setAttribute("aria-label", i.rot + ": " + i.pct + " por cento");
+    const l1 = el("div","orgl");
+    l1.appendChild(el("span","orgr", i.rot));
+    l1.appendChild(el("b","orgp", i.pct + "%"));
+    b.appendChild(l1);
+    const tr = el("div","orgt"); const fi = el("i");
+    fi.style.width = Math.max(2, i.pct) + "%";
+    if (i.pct >= 90) fi.classList.add("ok"); else if (i.pct < 50) fi.classList.add("ruim");
+    tr.appendChild(fi); b.appendChild(tr);
+    b.appendChild(el("span","orgf", i.resta ? i.resta + " " + i.falta + (i.resta > 1 ? "s" : "") : "nada faltando"));
+    b.addEventListener("click", () => { filtroOrg = filtroOrg === i.k ? null : i.k; render(); });
+    if (filtroOrg === i.k) b.classList.add("on");
+    gr.appendChild(b);
+  });
+  cx.appendChild(gr);
+  if (filtroOrg) cx.appendChild(el("p","dica","Mostrando só o que falta nesse item. Toque de novo para ver tudo."));
+  return cx;
+}
+
+function faltaNo(g, k){
+  const c = g.caso || {};
+  if (k === "drive")  return !((c.drive || []).length);
+  if (k === "etiq")   return !((c.etiquetas || []).length) && !etiquetasAuto(g).length;
+  if (k === "status") return !c.status;
+  if (k === "dono")   return !g.donos.length;
+  if (k === "triado") return !!g.semProvidencia;
+  return false;
+}
+
+/* ---------- atividades a partir do processo ---------- */
+const ATIVIDADES = [
+  ["Verificar os autos",            null],
+  ["Atualizar o cliente",           null],
+  ["Fazer diligência",              null],
+  ["Marcar audiência",              null],
+  ["Fazer audiência",               null],
+  ["Marcar reunião com o cliente",  null],
+  ["Fazer reunião com o cliente",   null],
+  ["Transcrever audiência",         1],
+  ["Fazer manifestação",            15],
+  ["Fazer contestação",             15],
+  ["Embargos de declaração",        5],
+  ["Recurso ordinário",             15],
+  ["Recurso inominado",             10],
+  ["Apelação",                      15],
+  ["Agravo de instrumento",         15],
+  ["Agravo interno",                15],
+  ["Recurso especial",              15],
+  ["Recurso extraordinário",        15],
+  ["Contrarrazões",                 15],
+  ["Cumprimento de sentença",       null],
+  ["Pagar custas ou preparo",       5],
+  ["Juntar documento",              null],
+];
+
+function dlgAtividade(g){
+  const caso = g.caso || (g.proc ? casoDeGrupo(g) : null);
+  const sel = el("select");
+  const vazioOp = el("option", null, "Escolher da lista…"); vazioOp.value = ""; sel.appendChild(vazioOp);
+  ATIVIDADES.forEach(([nome, dias]) => {
+    const o = el("option", null, nome + (dias ? "  ·  " + dias + " dias úteis" : ""));
+    o.value = nome; o.dataset.dias = dias || ""; sel.appendChild(o);
+  });
+  const outra = el("option", null, "Outra — escrevo eu"); outra.value = "__livre"; sel.appendChild(outra);
+
+  const tit = entrada("text", "", "O que precisa ser feito");
+  const dt = entrada("date", "", "");
+  const pes = selPessoa(null);
+  const obs = el("textarea"); obs.rows = 2; obs.placeholder = "Observação (opcional)";
+
+  sel.addEventListener("change", () => {
+    const v = sel.value;
+    if (!v || v === "__livre"){ tit.value = ""; dt.value = ""; return; }
+    tit.value = v;
+    const dias = sel.selectedOptions[0].dataset.dias;
+    if (dias) dt.value = isoDe(somaUteis(new Date(HOJE + "T00:00:00Z"), parseInt(dias, 10) - 1));
+  });
+
+  const ident = el("div","aviso az");
+  ident.appendChild(el("span","k","Vinculada a"));
+  const nm = el("div");
+  nm.appendChild(el("b", null, (caso && caso.titulo) || g.partes.slice(0,2).join(" x ") || g.proc || "caso sem nome"));
+  if (g.proc) nm.appendChild(el("div","mono", g.proc));
+  const dvs = (caso && caso.drive) || [];
+  if (dvs.length) nm.appendChild(el("div", null, "A pasta do caso vai junto: " + dvs.map(l => l.rot || "Drive").join(", ")));
+  ident.appendChild(nm);
+
+  modal("Nova atividade", "A partir do processo, com o prazo padrão já calculado.",
+    [ident, campo("Atividade", sel), campo("Título", tit), campo("Prazo", dt),
+     campo("Responsável", pes), campo("Observação", obs)],
+    () => {
+      const t = tit.value.trim();
+      if (!t) return avisar("Diga o que precisa ser feito");
+      const nova = { id:uid(), titulo:t, prazo:dt.value || null,
+        pessoaId: pes.value || null, obs: obs.value.trim() || null,
+        processo: g.proc || null, casoId: caso ? caso.id : null,
+        feita:false, criada:HOJE, criadaPor: E.time ? E.time.meuNome : null };
+      if (nova.pessoaId && E.time && nova.pessoaId !== E.time.pessoaId){
+        nova.delegadaPor = E.time.meuNome; nova.delegadaEm = agoraISO();
+      }
+      tocou(nova); E.tarefas.push(nova); salvar(); fechar(); render();
+      avisar("Atividade criada" + (nova.prazo ? " para " + br(nova.prazo) : ""));
+      festa();
+    }, "Criar atividade");
+}
+
+/* ---------- editar o que veio da API ----------
+   Deixa mudar tudo, mas guarda o valor original do CNJ ao lado, para a próxima
+   varredura não desfazer a correção e para dar para saber o que é oficial. */
+function dlgEditarCaso(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const num = entrada("text", caso.numero || g.proc || "", "Número do processo");
+  const tit = entrada("text", caso.titulo || "", g.partes.slice(0,2).join(" x ") || "Nome do caso");
+  const par = entrada("text", (caso.partes || []).join(", ") || g.partes.join(", "), "Partes, separadas por vírgula");
+  const cls = entrada("text", caso.classe || g.classe || "", "Classe");
+  const trb = entrada("text", caso.trib || g.trib || "", "Tribunal");
+  const org = entrada("text", caso.orgao || g.orgao || "", "Órgão");
+  const sint = el("textarea"); sint.rows = 3; sint.value = caso.sintese || ""; sint.placeholder = "Síntese do caso";
+
+  const oficiais = [];
+  if (g.pubs.length){
+    const av = el("div","aviso amb");
+    av.appendChild(el("span","k","Atenção"));
+    av.appendChild(el("div", null, "Tribunal, órgão e classe vieram do CNJ. Se você mudar, o painel guarda o valor "
+      + "original do lado e passa a mostrar o seu — a próxima varredura não desfaz. O que veio do CNJ fica visível como “no diário: …”."));
+    oficiais.push(av);
+  }
+
+  modal("Ajustar o caso", g.proc || "cadastro à mão",
+    [...oficiais, campo("Número", num), campo("Nome do caso", tit), campo("Partes", par),
+     campo("Tribunal", trb), campo("Órgão", org), campo("Classe", cls), campo("Síntese", sint)],
+    () => {
+      const orig = caso.original || {};
+      const põe = (k, v, vindoDaApi) => {
+        v = String(v || "").trim();
+        if (vindoDaApi && v !== String(vindoDaApi) && !(k in orig)) orig[k] = vindoDaApi;
+        caso[k] = v || null;
+      };
+      põe("titulo", tit.value, null);
+      põe("sintese", sint.value, null);
+      põe("trib", trb.value, g.pubs.length ? g.trib : null);
+      põe("orgao", org.value, g.pubs.length ? g.orgao : null);
+      põe("classe", cls.value, g.pubs.length ? g.classe : null);
+      caso.partes = par.value.split(",").map(s => s.trim()).filter(Boolean);
+      caso.original = Object.keys(orig).length ? orig : undefined;
+      const dig = soDigitos(num.value);
+      if (dig.length === 20 && dig !== soDigitos(caso.numero || "")){
+        caso.numero = mascaraCNJ(dig);
+        tocou(caso); salvar(); fechar();
+        tentarNaApi(caso);
+        return;
+      }
+      tocou(caso); salvar(); fechar(); render(); avisar("Caso ajustado");
+    }, "Salvar");
+}
+
+/* ---------- status e prioridade em um toque ---------- */
+function dlgStatus(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const f = document.createDocumentFragment();
+  const av = el("div","aviso");
+  av.appendChild(el("span","k","Anotação da equipe"));
+  av.appendChild(el("div", null, "A API do CNJ não devolve fase de processo. Isso aqui é o que a equipe sabe, não informação oficial do tribunal."));
+  f.appendChild(av);
+  const cs = el("div","chips");
+  STATUS_PRONTOS.forEach(s => {
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String(caso.status === s));
+    c.appendChild(el("span", null, s));
+    c.addEventListener("click", () => {
+      caso.status = caso.status === s ? null : s;
+      caso.statusPor = E.time ? E.time.meuNome : null; caso.statusEm = agoraISO();
+      tocou(caso); salvar(); fechar(); render();
+      avisar(caso.status ? "Status: " + caso.status : "Status limpo");
+    });
+    cs.appendChild(c);
+  });
+  f.appendChild(cs);
+  const livre = entrada("text", caso.status && !STATUS_PRONTOS.includes(caso.status) ? caso.status : "", "Ou escreva o seu");
+  f.appendChild(campo("Outro status", livre));
+  modal("Status do caso", (g.proc || caso.titulo || ""), [f], () => {
+    const v = livre.value.trim();
+    if (v){ caso.status = v; caso.statusPor = E.time ? E.time.meuNome : null; caso.statusEm = agoraISO(); tocou(caso); salvar(); }
+    fechar(); render();
+  }, "Salvar");
+}
+
+function dlgEtiquetas(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const auto = etiquetasAuto(g);
+  const f = document.createDocumentFragment();
+  if (auto.length){
+    const av = el("div","aviso vd");
+    av.appendChild(el("span","k","Já preenchido"));
+    av.appendChild(el("div", null, "Do próprio CNJ: " + auto.join(" · ") + ". Não precisa digitar — só acrescentar o que falta."));
+    f.appendChild(av);
+  }
+  const usadas = [...new Set(E.casos.flatMap(c => c.etiquetas || []))].filter(x => !auto.includes(x));
+  const base = [...new Set([...RAMOS.map(r => r[0]), "Urgente", "Cliente antigo", "Pro bono", "Contencioso de massa", ...usadas])];
+  const cs = el("div","chips");
+  caso.etiquetas = caso.etiquetas || [];
+  base.forEach(t => {
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String(caso.etiquetas.includes(t)));
+    c.appendChild(el("span", null, t));
+    c.addEventListener("click", () => {
+      const i = caso.etiquetas.indexOf(t);
+      if (i < 0) caso.etiquetas.push(t); else caso.etiquetas.splice(i, 1);
+      tocou(caso); salvar(); fechar(); dlgEtiquetas(g);
+    });
+    cs.appendChild(c);
+  });
+  f.appendChild(cs);
+  const nova = entrada("text", "", "Criar etiqueta nova");
+  f.appendChild(campo("Nova etiqueta", nova));
+  modal("Etiquetas", g.proc || caso.titulo || "", [f], () => {
+    const v = nova.value.trim();
+    if (v && !caso.etiquetas.includes(v)) caso.etiquetas.push(v);
+    tocou(caso); salvar(); fechar(); render();
+  }, "Salvar");
+}
+
+function dlgPrioridade(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const calc = prioridadeCalc(g);
+  const f = document.createDocumentFragment();
+  const av = el("div","aviso az");
+  av.appendChild(el("span","k","O painel calculou"));
+  av.appendChild(el("div", null, rotuloPrio(calc.p) + " — " + calc.pq + ". Sua escolha vence a minha e fica registrada."));
+  f.appendChild(av);
+  const cs = el("div","chips");
+  PRIORIDADES.forEach(([k, rot]) => {
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String(caso.prioridade === k));
+    c.appendChild(el("span", null, rot));
+    c.addEventListener("click", () => {
+      caso.prioridade = k; caso.prioridadePor = E.time ? E.time.meuNome : "você";
+      tocou(caso); salvar(); fechar(); render(); avisar("Prioridade " + rot.toLowerCase());
+    });
+    cs.appendChild(c);
+  });
+  f.appendChild(cs);
+  if (caso.prioridade) f.appendChild(botao("Voltar ao cálculo do painel","troca","", () => {
+    delete caso.prioridade; delete caso.prioridadePor; tocou(caso); salvar(); fechar(); render();
+  }));
+  modal("Prioridade", g.proc || caso.titulo || "", [f], null, null);
+}
+
+/* ---------- fora do radar ---------- */
+const MOTIVOS_FORA = ["Arquivado", "Já pago", "Nada mais a fazer", "Acordo cumprido", "Cliente desistiu", "Não virou processo"];
+function dlgForaDoRadar(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const f = document.createDocumentFragment();
+  f.appendChild(el("p","dica","Sai da lista principal e vai para o fundo do painel. Não apaga nada e volta com um toque."));
+  const cs = el("div","chips");
+  MOTIVOS_FORA.forEach(m => {
+    const c = el("button","chip"); c.type = "button";
+    c.appendChild(el("span", null, m));
+    c.addEventListener("click", () => {
+      caso.fora = true; caso.motivoFora = m; caso.foraEm = agoraISO();
+      caso.foraPor = E.time ? E.time.meuNome : null;
+      tocou(caso); salvar(); fechar(); render(); avisar("Fora do radar: " + m.toLowerCase());
+    });
+    cs.appendChild(c);
+  });
+  f.appendChild(cs);
+  modal("Tirar do radar", g.proc || caso.titulo || "", [f], null, null);
+}
+
+/* ---------- e-mail com a lista ---------- */
+function emailListaProcessos(lista){
+  const NL = String.fromCharCode(10);
+  const L = [];
+  L.push("PROCESSOS E CASOS — " + br(HOJE));
+  if (E.time) L.push("Time " + E.time.nome);
+  L.push("");
+  const ordem = ["alta","media","baixa"];
+  ordem.forEach(pk => {
+    const gs = lista.filter(g => prioridadeDe(g).p === pk);
+    if (!gs.length) return;
+    L.push("== PRIORIDADE " + rotuloPrio(pk).toUpperCase() + " (" + gs.length + ") ==");
+    L.push("");
+    gs.forEach(g => {
+      const c = g.caso || {};
+      L.push("· " + (c.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome"));
+      if (g.proc) L.push("  Processo ...: " + g.proc + (g.trib ? "  ·  " + g.trib : ""));
+      else if (c.fase) L.push("  Fase .......: " + rotuloFase(c.fase));
+      const et = [...new Set([...(c.etiquetas || []), ...etiquetasAuto(g)])];
+      if (et.length) L.push("  Etiquetas ..: " + et.join(", "));
+      if (c.status) L.push("  Status .....: " + c.status);
+      L.push("  A quantas ..: " + comoAnda(g).txt);
+      if (g.donos.length) L.push("  Com ........: " + g.donos.map(id => (E.pessoas.find(p => p.id === id) || {}).nome).filter(Boolean).join(", "));
+      (c.drive || []).forEach(l => L.push("  " + (l.rot || "Drive") + ": " + l.url));
+      L.push("");
+    });
+  });
+  L.push("--");
+  L.push("Gerado pelo Painel de Prazos. Status e etiquetas são anotação da equipe,");
+  L.push("nao informacao oficial do tribunal.");
+  return L.join(NL);
+}
+
+function dlgEnviarLista(lista){
+  const texto = emailListaProcessos(lista);
+  const f = document.createDocumentFragment();
+  const quem = el("div","chips");
+  const alvos = new Set();
+  pessoasVivas().filter(p => p.email).forEach(p => {
+    const c = el("button","chip"); c.type = "button"; c.setAttribute("aria-pressed","true");
+    alvos.add(p.email);
+    c.appendChild(el("span", null, p.nome.split(" ")[0]));
+    c.addEventListener("click", () => {
+      if (alvos.has(p.email)) alvos.delete(p.email); else alvos.add(p.email);
+      c.setAttribute("aria-pressed", String(alvos.has(p.email)));
+    });
+    quem.appendChild(c);
+  });
+  if (!alvos.size) f.appendChild(el("p","dica","Ninguém do time tem e-mail cadastrado — cadastre em Equipe, ou envie para você mesma."));
+  else { f.appendChild(el("p","dica","Para quem vai:")); f.appendChild(quem); }
+  const pv = el("textarea"); pv.rows = 12; pv.readOnly = true; pv.value = texto;
+  f.appendChild(campo("O que vai no e-mail", pv));
+  modal("Enviar a lista por e-mail", lista.length + (lista.length === 1 ? " caso" : " casos"), [f], () => {
+    const url = "mailto:" + [...alvos].join(",")
+      + "?subject=" + encodeURIComponent("Processos e casos — " + br(HOJE))
+      + "&body=" + encodeURIComponent(texto);
+    try { window.open(url); } catch(e){}
+    fechar(); avisar("E-mail aberto"); festa();
+  }, "Abrir e-mail");
+}
+
+/* ---------- a tela ---------- */
 function telaProcessos(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
   const d = el("div");
-  d.appendChild(el("h2", null, "Meus processos"));
-  d.appendChild(el("p", null, "Cada processo com o que saiu no diário, o que falta fazer e a quantas anda. A síntese sai pronta para colar."));
+  d.appendChild(el("h2", null, "Processos e casos"));
+  d.appendChild(el("p", null, "Tudo o que está cadastrado: puxado do diário ou digitado à mão, inclusive o que ainda não é processo."));
   cab.appendChild(d);
+  const acs = el("div","acs");
+  acs.appendChild(botao("Novo caso","mais","pri", () => dlgNovoCaso()));
+  acs.appendChild(botao(E.acervoEm ? "Atualizar acervo" : "Puxar o acervo inteiro","busca", E.acervoEm ? "" : "pri", () => rodarVarredura()));
+  cab.appendChild(acs);
   f.appendChild(cab);
 
   const todos = agrupaProcessos();
   if (!todos.length){
-    f.appendChild(vazioBox("lista","Nenhum processo ainda",
-      "Assim que o painel buscar publicações nas OABs cadastradas, os processos aparecem aqui agrupados.",
-      E.oabs.length ? null : "Cadastrar OAB", () => dlgOab()));
+    f.appendChild(vazioBox("lista","Nada cadastrado ainda",
+      E.oabs.length
+        ? "As OABs do time já estão cadastradas. Puxe o acervo inteiro desde 2023 — são poucas chamadas e leva menos de um minuto."
+        : "Cadastre uma OAB do time para o painel puxar o acervo, ou crie um caso à mão.",
+      E.oabs.length ? "Puxar o acervo" : "Cadastrar OAB", () => E.oabs.length ? rodarVarredura() : dlgOab()));
+    f.appendChild(botao("Criar um caso à mão","mais","", () => dlgNovoCaso()));
     return f;
   }
 
-  const bu = entrada("search", buscaProc, "Buscar processo, parte, tribunal…");
-  bu.style.cssText = "max-width:420px;margin-bottom:14px";
+  if (!E.acervoEm && E.oabs.length){
+    const av = el("div","aviso amb");
+    av.appendChild(el("span","k","Falta o histórico"));
+    const dd = el("div");
+    dd.appendChild(el("div", null, "O painel só tem as publicações da janela curta. O acervo desde 2023 traz os processos "
+      + "antigos e as decisões antigas de uma vez — medido: poucas chamadas, menos de um minuto."));
+    dd.appendChild(botao("Puxar agora","busca","pri", () => rodarVarredura()));
+    av.appendChild(dd);
+    f.appendChild(av);
+  }
+
+  const dups = paresDuplicados();
+  if (dups.length){
+    const av = el("div","aviso x");
+    av.appendChild(el("span","k","Ver duplicados"));
+    const dd = el("div");
+    dd.appendChild(el("div", null, dups.length + (dups.length === 1 ? " par de cadastros" : " pares de cadastros")
+      + " parece ser a mesma coisa. Eu não junto sozinha: mostro campo por campo onde diferem e você decide juntar ou manter os dois explicando a diferença."));
+    dd.appendChild(botao("Conferir agora","troca","pri", () => dlgDuplicados()));
+    av.appendChild(dd);
+    f.appendChild(av);
+  }
+
+  f.appendChild(cartaoOrganizacao());
+
+  /* busca */
+  const bx = el("div","bcx");
+  const bu = entrada("search", buscaProc, "Nome da parte, número do processo ou trecho da publicação");
   bu.addEventListener("input", e => { buscaProc = e.target.value.trim(); render();
-    const nn = document.querySelector("input[type=search]"); if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
-  f.appendChild(bu);
+    const nn = document.querySelector(".bcx input[type=search]");
+    if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
+  bx.appendChild(bu);
+  const comTexto = E.djen.filter(i => i.textoBusca).length;
+  bx.appendChild(el("p","dica", "Busca por parte ignora acento e ordem das palavras. Número acha com ou sem máscara. "
+    + (comTexto ? "Busca por trecho vale nas " + comTexto + " publicações trazidas pela varredura nova."
+                : "Busca por trecho de texto só depois de puxar o acervo.")));
+  f.appendChild(bx);
 
-  /* filtro por pessoa do time — "por nome", como você pediu */
-  if (pessoasVivas().length){
+  /* filtros */
+  const linhas = el("div","filtros");
+  const grupoChips = (rot, opcoes, atual, aoTocar) => {
+    const w = el("div","fg");
+    w.appendChild(el("span","fgr", rot));
     const cs = el("div","chips");
-    const mk = (k, rot, q) => {
+    opcoes.forEach(([k, r, q]) => {
       const c = el("button","chip"); c.type = "button";
-      c.setAttribute("aria-pressed", String(filtroProc === k));
-      c.appendChild(el("span", null, rot)); c.appendChild(el("b", null, String(q)));
-      c.addEventListener("click", () => { filtroProc = k; render(); });
+      c.setAttribute("aria-pressed", String(atual === k));
+      c.appendChild(el("span", null, r));
+      if (q !== undefined && q !== null) c.appendChild(el("b", null, String(q)));
+      c.addEventListener("click", () => aoTocar(k));
       cs.appendChild(c);
-    };
-    const doDono = (g, id) => g.donos.includes(id);
-    mk("todos", "Todo o time", todos.length);
-    mk("sem", "Sem responsável", todos.filter(g => g.abertas.length && !g.donos.length).length);
-    pessoasVivas().forEach(p => mk(p.id, p.nome.split(" ")[0], todos.filter(g => doDono(g, p.id)).length));
-    f.appendChild(cs);
-  }
-
-  const filtra = g => {
-    if (!combina(buscaProc, g.proc, g.trib, g.orgao, g.classe, g.partes.join(" "))) return false;
-    if (filtroProc === "todos") return true;
-    if (filtroProc === "sem") return g.abertas.length && !g.donos.length;
-    return g.donos.includes(filtroProc);
+    });
+    w.appendChild(cs); linhas.appendChild(w);
   };
-  const lista = todos.filter(filtra);
 
-  const res = el("div","aviso az");
-  res.appendChild(el("span","k","Situação"));
-  const comVencido = lista.filter(g => g.vencidas).length;
-  res.appendChild(el("div", null, lista.length + " processos · "
-    + lista.reduce((s,g) => s + g.abertas.length, 0) + " providências em aberto"
-    + (comVencido ? " · " + comVencido + " com prazo vencido" : "")));
-  f.appendChild(res);
+  const dentro = todos.filter(g => !(g.caso && g.caso.fora));
+  const fora = todos.filter(g => g.caso && g.caso.fora);
 
-  if (!lista.length){
-    f.appendChild(vazioBox("lista","Nada nesta seleção","Nenhum processo bate com o filtro.", null));
-    return f;
+  grupoChips("Prioridade", [["todas","Todas",dentro.length],
+    ...PRIORIDADES.map(([k, r]) => [k, r, dentro.filter(g => prioridadeDe(g).p === k).length])],
+    filtroPrio, k => { filtroPrio = k; render(); });
+
+  const etiqs = [...new Set(dentro.flatMap(g => [...(g.caso && g.caso.etiquetas || []), ...etiquetasAuto(g)]))]
+    .map(t => [t, dentro.filter(g => [...(g.caso && g.caso.etiquetas || []), ...etiquetasAuto(g)].includes(t)).length])
+    .sort((a, b) => b[1] - a[1]).slice(0, 14);
+  if (etiqs.length) grupoChips("Etiqueta", [["todas","Todas",null], ...etiqs.map(([t, q]) => [t, t, q])],
+    filtroEtiq, k => { filtroEtiq = k; render(); });
+
+  const soltos = dentro.filter(g => !g.pubs.length);
+  if (soltos.length || pessoasVivas().length){
+    const ops = [["todos","Todo o time",dentro.length],
+      ["sem","Sem responsável",dentro.filter(g => !g.donos.length).length]];
+    if (soltos.length) ops.push(["caso","Ainda não é processo",soltos.length]);
+    pessoasVivas().forEach(p => ops.push([p.id, p.nome.split(" ")[0], dentro.filter(g => g.donos.includes(p.id)).length]));
+    grupoChips("Quem e o quê", ops, filtroProc, k => { filtroProc = k; render(); });
   }
+  f.appendChild(linhas);
 
-  const box = el("div","procs");
-  lista.slice(0, 80).forEach(g => {
-    const st = comoAnda(g);
-    const c = el("div","proc " + st.cor);
-    const top = el("div","ptopo");
-    const tit = el("div");
-    tit.appendChild(el("div","pnome", g.sigiloso ? "Processo em segredo de justiça" : (g.partes.slice(0,2).join(" × ") || "Partes não informadas")));
-    const meta = el("div","pmeta");
-    meta.appendChild(el("span","pr", g.proc));
-    if (g.trib) meta.appendChild(el("span", null, g.trib));
-    if (g.classe) meta.appendChild(el("span", null, g.classe.length > 34 ? g.classe.slice(0,32) + "…" : g.classe));
-    tit.appendChild(meta);
-    top.appendChild(tit);
-    top.appendChild(el("span","psit " + st.cor, st.txt));
-    c.appendChild(top);
-
-    const nums = el("div","pnums");
-    const num = (v, r) => { const x = el("div"); x.appendChild(el("b", null, String(v))); x.appendChild(el("span", null, r)); nums.appendChild(x); };
-    num(g.pubs.length, g.pubs.length === 1 ? "publicação" : "publicações");
-    num(g.abertas.length, "em aberto");
-    num(g.feitas, "concluídas");
-    if (g.ultima){ const x = el("div"); x.appendChild(el("b", null, br(g.ultima).slice(0,5))); x.appendChild(el("span", null, "última")); nums.appendChild(x); }
-    c.appendChild(nums);
-
-    if (g.abertas.length){
-      const ul = el("div","plista");
-      g.abertas.slice().sort((a,b) => (a.prazo || "9").localeCompare(b.prazo || "9")).slice(0,4).forEach(t => {
-        const l = el("div","pitem");
-        const cb = el("input"); cb.type = "checkbox";
-        cb.addEventListener("change", () => alternar("t" + t.id));
-        l.appendChild(cb);
-        l.appendChild(el("span","pq2", t.prazo ? br(t.prazo) : "sem data"));
-        l.appendChild(el("span","pt3", t.titulo));
-        if (t.pessoaId){ const q = el("span","quem"); q.appendChild(avatar(pessoaDe(t.pessoaId))); q.appendChild(el("span", null, (pessoaDe(t.pessoaId) || {}).nome.split(" ")[0])); l.appendChild(q); }
-        ul.appendChild(l);
-      });
-      if (g.abertas.length > 4) ul.appendChild(el("div","n3", "e mais " + (g.abertas.length - 4)));
-      c.appendChild(ul);
+  /* aplica */
+  const passa = g => {
+    if (!casaProcesso(g, buscaProc)) return false;
+    if (filtroOrg && !faltaNo(g, filtroOrg)) return false;
+    if (filtroPrio !== "todas" && prioridadeDe(g).p !== filtroPrio) return false;
+    if (filtroEtiq !== "todas"){
+      const et = [...(g.caso && g.caso.etiquetas || []), ...etiquetasAuto(g)];
+      if (!et.includes(filtroEtiq)) return false;
     }
+    if (filtroProc === "sem") return !g.donos.length;
+    if (filtroProc === "caso") return !g.pubs.length;
+    if (filtroProc !== "todos") return g.donos.includes(filtroProc);
+    return true;
+  };
+  const lista = dentro.filter(passa);
 
-    const rod = el("div","cr");
-    if (g.donos.length){
-      const eq = el("span","quem");
-      g.donos.slice(0,3).forEach(id => eq.appendChild(avatar(pessoaDe(id))));
-      eq.appendChild(el("span", null, g.donos.length === 1 ? (pessoaDe(g.donos[0]) || {}).nome : g.donos.length + " pessoas"));
-      rod.appendChild(eq);
-    }
-    const dir = el("div","dir");
-    dir.appendChild(botao("Copiar síntese","seta","pq", () => compartilhar(g)));
-    dir.appendChild(botao("Ver publicações","busca","pq", () => { aba = "notif"; filtroNotif = "todas"; busca = g.proc; notifSel = null; render(); }));
-    rod.appendChild(dir);
-    c.appendChild(rod);
-    box.appendChild(c);
-  });
-  f.appendChild(box);
-  if (lista.length > 80) f.appendChild(el("p","ps","mostrando os 80 primeiros de " + lista.length));
+  const barra = el("div","linhaAcs");
+  barra.appendChild(el("p","dica", lista.length + (lista.length === 1 ? " caso" : " casos")
+    + (lista.length !== dentro.length ? " de " + dentro.length : "")
+    + (fora.length ? "  ·  " + fora.length + " fora do radar no fim" : "")));
+  if (lista.length) barra.appendChild(botao("Enviar a lista por e-mail","seta","", () => dlgEnviarLista(lista)));
+  f.appendChild(barra);
+
+  if (!lista.length) f.appendChild(el("p","dica","Nada com esse filtro."));
+  lista.forEach(g => f.appendChild(cartaoProcesso(g)));
+
+  if (fora.length){
+    const dt = el("details","forinha");
+    const sm = el("summary");
+    sm.appendChild(el("b", null, "Fora do radar"));
+    sm.appendChild(el("span", null, fora.length + (fora.length === 1 ? " caso" : " casos") + " — arquivado, pago ou sem nada a fazer"));
+    dt.appendChild(sm);
+    fora.forEach(g => {
+      const r = el("div","forai");
+      const t = el("div");
+      t.appendChild(el("b", null, (g.caso.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome")));
+      t.appendChild(el("span","dica", (g.caso.motivoFora || "sem motivo")
+        + (g.caso.foraPor ? " · por " + g.caso.foraPor : "") + (g.proc ? " · " + g.proc : "")));
+      r.appendChild(t);
+      r.appendChild(botao("Trazer de volta","troca","pq", () => {
+        delete g.caso.fora; delete g.caso.motivoFora; tocou(g.caso); salvar(); render(); avisar("De volta à lista");
+      }));
+      dt.appendChild(r);
+    });
+    f.appendChild(dt);
+  }
   return f;
 }
+
+async function rodarVarredura(){
+  if (!E.oabs.filter(o => !o.removido).length) return dlgOab();
+  const cx = el("div","aviso az"); cx.appendChild(el("span","k","Varrendo"));
+  const msg = el("div", null, "Começando…"); cx.appendChild(msg);
+  const app = $("app"); app.insertBefore(cx, app.firstChild);
+  const r = await varrerAcervo(t => { msg.textContent = t; });
+  cx.remove();
+  if (!r) return;
+  render();
+  if (r.falhas) avisar(r.novas + " publicações novas · " + r.falhas + " consultas falharam, tente de novo depois");
+  else { avisar(r.novas + (r.novas === 1 ? " publicação nova" : " publicações novas") + " · " + r.processos
+    + " processos no acervo, em " + r.chamadas + " consultas"); festa(); }
+}
+
+/* ============================================================
+   VALORES PÚBLICOS, DINHEIRO E O CARTÃO DO PROCESSO
+   ------------------------------------------------------------
+   Medido em 516 publicações reais do acervo: só 7% trazem algum R$ no texto, e
+   das que trazem, 26% é custas e 23% é multa — apenas 11% é condenação. Ou
+   seja: a extração é um OFERECIMENTO, não uma fonte de dados. O Financeiro é
+   manual por natureza, e é por isso que ele empurra tudo para a planilha do
+   Drive e para o e-mail, em vez de fingir ser um sistema de cobrança.
+
+   Onde cada coisa mora:
+     · valor que saiu na decisão pública  → sincroniza (é público, veio do diário)
+     · etiqueta pago / não pago / parcelado → sincroniza (é estado, não valor)
+     · link da planilha no Drive          → sincroniza (é endereço, não valor)
+     · valor que você digita              → FICA NO APARELHO, não sobe
+   A última linha é de propósito: o Firestore em uso é conta pessoal, e valor de
+   honorário de cliente não tem por que passar por lá. E.valores está fora de
+   COLECOES — tem teste travando isso.
+   ============================================================ */
+
+const RX_VALOR = /R\$\s?\d{1,3}(?:\.\d{3})*,\d{2}/g;
+const ROTULOS_VALOR = [
+  ["Condenação",   /condeno|condena[çc][ãa]o|arbitro|indeniza[çc][ãa]o|danos morais|danos materiais/i],
+  ["Sucumbência",  /sucumb[êe]nc|honor[áa]rios advocat|honor[áa]rios de/i],
+  ["Custas",       /custas|preparo|porte de remessa|dilig[êe]ncia do oficial/i],
+  ["Multa",        /multa|astreinte|litig[âa]ncia de m[áa]-f[ée]/i],
+  ["Valor da causa", /valor da causa|valor atribu[íi]do/i],
+  ["Depósito",     /dep[óo]sito|guia|penhora|bloqueio/i],
+];
+
+/* Roda no momento em que a publicação entra, não na hora de mostrar: assim o
+   Financeiro funciona mesmo nas publicações cujo texto não foi guardado. */
+function achaValores(texto){
+  const t = String(texto || "");
+  const out = [];
+  let m, fimAnterior = 0;
+  RX_VALOR.lastIndex = 0;
+  while ((m = RX_VALOR.exec(t)) !== null){
+    /* A janela de contexto para NO valor anterior e no fim da frase anterior.
+       Sem isso, "condeno ... R$ 42.500,00. Custas de R$ 312,45" rotulava as
+       custas como condenacao — erro grave numa aba de dinheiro, porque R$ 312
+       de custas passaria por valor de condenacao. */
+    const inicioFrase = Math.max(
+      t.lastIndexOf(".", m.index - 1) + 1,
+      t.lastIndexOf(";", m.index - 1) + 1,
+      fimAnterior);
+    const antes = t.slice(Math.max(inicioFrase, m.index - 140), m.index);
+    fimAnterior = m.index + m[0].length;
+    const rot = ROTULOS_VALOR.find(([, rx]) => rx.test(antes));
+    out.push({
+      txt: m[0].replace(/\s+/g, " "),
+      n: Number(m[0].replace(/[^\d,]/g, "").replace(/\./g, "").replace(",", ".")),
+      rot: rot ? rot[0] : null,
+      trecho: (antes.slice(-70) + m[0]).replace(/\s+/g, " ").trim(),
+    });
+    if (out.length >= 12) break;
+  }
+  return out.length ? out : null;
+}
+
+const reais = n => "R$ " + (Number(n) || 0).toLocaleString("pt-BR", { minimumFractionDigits:2, maximumFractionDigits:2 });
+
+function valoresPublicos(g){
+  const out = [];
+  g.pubs.forEach(p => (p.valores || []).forEach(v =>
+    out.push(Object.assign({}, v, { disp:p.disp, pubId:p.id, dec:p.decisao }))));
+  return out.sort((a, b) => (b.disp || "").localeCompare(a.disp || ""));
+}
+
+/* ---------- estado financeiro ---------- */
+const ESTADOS_FIN = [
+  ["semvalor",  "Ainda sem valor",     ""],
+  ["aguardando","Aguardando pagamento","u"],
+  ["parcelado", "Parcelado",           "u"],
+  ["pago",      "Pago",                "ok"],
+  ["semcobrar", "Não se cobra",        ""],
+];
+const rotuloFin = k => (ESTADOS_FIN.find(e => e[0] === k) || ["", "Sem etiqueta"])[1];
+const corFin = k => (ESTADOS_FIN.find(e => e[0] === k) || ["", "", ""])[2];
+
+/* valor digitado à mão: local, nunca sincroniza */
+function valorLocal(casoId){ return (E.valores || {})[casoId] || null; }
+function poeValorLocal(casoId, dados){
+  E.valores = E.valores || {};
+  if (!dados) delete E.valores[casoId];
+  else E.valores[casoId] = Object.assign({}, E.valores[casoId], dados, { em:agoraISO() });
+  salvar();
+}
+
+function dlgFinDoCaso(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const loc = valorLocal(caso.id) || {};
+  const f = document.createDocumentFragment();
+
+  const sel = el("div","chips");
+  ESTADOS_FIN.forEach(([k, rot]) => {
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String((caso.fin || "semvalor") === k));
+    c.appendChild(el("span", null, rot));
+    c.addEventListener("click", () => {
+      caso.fin = k; caso.finEm = agoraISO(); caso.finPor = E.time ? E.time.meuNome : null;
+      tocou(caso); salvar(); fechar(); render(); avisar("Financeiro: " + rot.toLowerCase());
+    });
+    sel.appendChild(c);
+  });
+  f.appendChild(el("p","dica","Etiqueta do caso — essa o time todo vê:"));
+  f.appendChild(sel);
+
+  /* planilha no Drive: é onde os valores realmente moram */
+  const pl = entrada("url", caso.planilha || "", "https://docs.google.com/spreadsheets/…");
+  const cxPl = el("div", caso.planilha ? "dv tem" : "dv vazio");
+  if (!caso.planilha){
+    cxPl.appendChild(el("p","dvchamatxt","A planilha de valores é a fonte de verdade. Cole o endereço dela aqui e o painel passa a apontar para ela em vez de guardar número."));
+  }
+  f.appendChild(campo("Planilha de valores no Drive", pl));
+  f.appendChild(cxPl);
+
+  const vals = valoresPublicos(g);
+  if (vals.length){
+    const av = el("div","aviso vd");
+    av.appendChild(el("span","k","Achado no diário"));
+    const dd = el("div");
+    dd.appendChild(el("div", null, vals.length + (vals.length === 1 ? " valor apareceu" : " valores apareceram")
+      + " no texto público das publicações desse processo. Isso é dado do diário, não lançamento — confira antes de usar."));
+    const ul = el("div","vlista");
+    vals.slice(0, 8).forEach(v => {
+      const r = el("div","vrow");
+      r.appendChild(el("b","mono", v.txt));
+      r.appendChild(el("span","vrot", v.rot || "não dá para saber do quê"));
+      r.appendChild(el("span","dica", br(v.disp)));
+      ul.appendChild(r);
+    });
+    dd.appendChild(ul);
+    av.appendChild(dd);
+    f.appendChild(av);
+  }
+
+  const meu = entrada("text", loc.nota || "", "Ex.: contratual 10x de …, entrada em …");
+  const nl = el("div","aviso amb");
+  nl.appendChild(el("span","k","Fica só neste aparelho"));
+  nl.appendChild(el("div", null, "O que você escrever no campo abaixo não sobe para o time nem para a nuvem. "
+    + "Serve de rascunho até ir para a planilha do Drive ou por e-mail. Se você limpar o navegador, isso se perde — a planilha, não."));
+  f.appendChild(nl);
+  f.appendChild(campo("Anotação de valores (local)", meu));
+
+  modal("Financeiro do caso", (caso.titulo || g.proc || ""), [f], () => {
+    caso.planilha = pl.value.trim() || null;
+    tocou(caso);
+    poeValorLocal(caso.id, meu.value.trim() ? { nota: meu.value.trim() } : null);
+    salvar(); fechar(); render(); avisar("Guardado");
+  }, "Salvar");
+}
+
+/* ---------- e-mail com os valores de um processo ----------
+   "O app só envia os valores por processo, de forma organizada, com um clique." */
+function emailValores(g){
+  const NL = String.fromCharCode(10);
+  const caso = g.caso || {};
+  const loc = valorLocal(caso.id) || {};
+  const vals = valoresPublicos(g);
+  const L = [];
+  L.push("VALORES DO PROCESSO — " + br(HOJE));
+  L.push("");
+  L.push("Caso .........: " + (caso.titulo || g.partes.slice(0,2).join(" x ") || "sem nome"));
+  if (g.proc) L.push("Processo .....: " + g.proc);
+  if (g.trib)  L.push("Tribunal .....: " + g.trib);
+  if (g.classe) L.push("Classe .......: " + g.classe);
+  L.push("Etiqueta .....: " + rotuloFin(caso.fin || "semvalor"));
+  if (caso.status) L.push("Status .......: " + caso.status);
+  L.push("");
+  if (caso.planilha){ L.push("PLANILHA DE VALORES"); L.push(caso.planilha); L.push(""); }
+  (caso.drive || []).forEach(l => L.push((l.rot || "Pasta") + ": " + l.url));
+  if (caso.contrato){ L.push("Contrato de honorários: " + caso.contrato); }
+  if (caso.drive && caso.drive.length) L.push("");
+
+  if (vals.length){
+    L.push("VALORES QUE APARECERAM NO DIÁRIO (dado público, não lançamento)");
+    vals.forEach(v => L.push("  " + br(v.disp) + "  " + v.txt.padEnd(18) + (v.rot || "sem rótulo claro")));
+    L.push("");
+  } else {
+    L.push("Nenhum valor apareceu no texto público desse processo.");
+    L.push("");
+  }
+  if (loc.nota){ L.push("ANOTACAO DE VALORES"); L.push("  " + loc.nota); L.push(""); }
+
+  L.push("HISTORICO DO PROCESSO");
+  const hist = [
+    ...g.pubs.map(p => ({ d:p.disp, t:(p.tipo || "publicação") + (p.decisao ? " — " + p.decisao.rotulo : "") })),
+    ...g.tarefas.filter(t => t.feita).map(t => ({ d:t.prazo || t.criada, t:"feito: " + t.titulo })),
+  ].filter(x => x.d).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 14);
+  hist.forEach(h => L.push("  " + br(h.d) + "  " + h.t));
+  L.push("");
+  L.push("A PREENCHER PELO FINANCEIRO");
+  ["Honorario contratual", "Honorario de sucumbencia", "Entrada", "Parcelas (quantas x quanto)",
+   "Recebido ate hoje", "Em aberto", "Data do proximo vencimento", "Forma de pagamento", "Nota fiscal"]
+    .forEach(k => L.push("  " + k.padEnd(32) + ": R$ ______________"));
+  L.push("");
+  L.push("--");
+  L.push("Nenhum valor financeiro fica guardado no painel. Os numeros vivem na");
+  L.push("planilha do Drive; o painel so organiza e manda.");
+  return L.join(NL);
+}
+
+function dlgEnviarValores(g){
+  const texto = emailValores(g);
+  const caso = g.caso || {};
+  const f = document.createDocumentFragment();
+  const alvos = new Set();
+  const quem = el("div","chips");
+  const põe = (rot, mail, ligado) => {
+    if (!mail) return;
+    if (ligado) alvos.add(mail);
+    const c = el("button","chip"); c.type = "button"; c.setAttribute("aria-pressed", String(ligado));
+    c.appendChild(el("span", null, rot));
+    c.addEventListener("click", () => {
+      if (alvos.has(mail)) alvos.delete(mail); else alvos.add(mail);
+      c.setAttribute("aria-pressed", String(alvos.has(mail)));
+    });
+    quem.appendChild(c);
+  };
+  if (E.emailFinanceiro) põe("Financeiro", E.emailFinanceiro, true);
+  /* sem e-mail do financeiro cadastrado, o time ja vem marcado: era isso que
+     voce pediu — "por email aos emails cadastrados do time" */
+  pessoasVivas().filter(p => p.email).forEach(p => põe(p.nome.split(" ")[0], p.email, !E.emailFinanceiro));
+  f.appendChild(el("p","dica","Para quem vai — os e-mails cadastrados do time:"));
+  f.appendChild(quem);
+  const novo = entrada("email", E.emailFinanceiro || "", "Outro e-mail");
+  f.appendChild(campo("Acrescentar e-mail", novo));
+
+  if (!caso.planilha){
+    const av = el("div","aviso amb");
+    av.appendChild(el("span","k","Sem planilha"));
+    av.appendChild(el("div", null, "Esse caso não tem planilha no Drive. O e-mail vai sair sem o endereço dela — "
+      + "quem receber não vai saber onde lançar."));
+    f.appendChild(av);
+  }
+  const pv = el("textarea"); pv.rows = 14; pv.readOnly = true; pv.value = texto;
+  f.appendChild(campo("O que vai no e-mail", pv));
+
+  modal("Enviar os valores", (caso.titulo || g.proc || ""), [f], () => {
+    const extra = novo.value.trim();
+    if (extra){ alvos.add(extra); E.emailFinanceiro = extra; salvar(); }
+    if (!alvos.size) return avisar("Escolha ao menos um destinatário");
+    const url = "mailto:" + [...alvos].join(",")
+      + "?subject=" + encodeURIComponent("Valores — " + (g.proc || caso.titulo || "caso"))
+      + "&body=" + encodeURIComponent(texto);
+    try { window.open(url); } catch(e){}
+    caso.valoresEnviadoEm = agoraISO(); tocou(caso); salvar();
+    fechar(); render(); avisar("E-mail aberto"); festa();
+  }, "Abrir e-mail");
+}
+
+/* ---------- a aba Financeiro ---------- */
+function telaFinanceiro(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Financeiro"));
+  d.appendChild(el("p", null, "Todos os casos cadastrados, só na parte de valores. Os números moram na planilha do Drive — aqui fica a etiqueta, o histórico e o botão de mandar."));
+  cab.appendChild(d);
+  f.appendChild(cab);
+
+  /* o link geral do time, em relevância na entrada, como você pediu */
+  const geral = el("div", E.driveFin || E.driveTime ? "dgeral tem" : "dgeral vazio");
+  const mkLink = (rot, val, chave, dica) => {
+    const b = el("div","dgi");
+    if (val){
+      const a = el("a","dgl"); a.href = val; a.target = "_blank"; a.rel = "noopener";
+      a.appendChild(ico(I.pasta)); a.appendChild(el("span", null, rot));
+      b.appendChild(a);
+      b.appendChild(botao("","lapis","pq so", () => dlgLinkGeral(chave, rot, dica)));
+    } else {
+      const bt = el("button","dgchama"); bt.type = "button";
+      bt.appendChild(ico(I.pasta));
+      const t = el("div");
+      t.appendChild(el("b", null, "Cole o link: " + rot));
+      t.appendChild(el("span", null, dica));
+      bt.appendChild(t);
+      bt.addEventListener("click", () => dlgLinkGeral(chave, rot, dica));
+      b.appendChild(bt);
+    }
+    geral.appendChild(b);
+  };
+  mkLink("Drive do time", E.driveTime, "driveTime", "A pasta que todo mundo abre primeiro");
+  mkLink("Pasta do financeiro", E.driveFin, "driveFin", "Onde ficam as planilhas de valores");
+  f.appendChild(geral);
+
+  const todos = agrupaProcessos();
+  if (!todos.length){
+    f.appendChild(vazioBox("lista","Nenhum caso ainda","Os casos aparecem aqui assim que existirem em Processos.", null, null));
+    return f;
+  }
+
+  /* números do topo: contagem, não soma de dinheiro — o painel não soma valor */
+  const cont = {};
+  todos.forEach(g => { const k = (g.caso && g.caso.fin) || "semvalor"; cont[k] = (cont[k] || 0) + 1; });
+  const grid = el("div","fingrid");
+  ESTADOS_FIN.forEach(([k, rot, cor]) => {
+    const b = el("button","fint" + (filtroFin === k ? " on" : "")); b.type = "button";
+    b.appendChild(el("b","mono" + (cor ? " " + cor : ""), String(cont[k] || 0)));
+    b.appendChild(el("span", null, rot));
+    b.addEventListener("click", () => { filtroFin = filtroFin === k ? "todos" : k; render(); });
+    grid.appendChild(b);
+  });
+  f.appendChild(grid);
+
+  const comPub = todos.filter(g => valoresPublicos(g).length).length;
+  const semPlan = todos.filter(g => !(g.caso && g.caso.planilha)).length;
+  const av = el("div","aviso az");
+  av.appendChild(el("span","k","Como isso funciona"));
+  av.appendChild(el("div", null, "O painel não guarda valor: guarda a etiqueta, o link da planilha e o histórico do processo. "
+    + comPub + (comPub === 1 ? " caso tem" : " casos têm") + " valor aparecendo no texto público do diário — medido no acervo, isso acontece em cerca de 7% das publicações, "
+    + "e a maior parte é custas e multa, não honorário. "
+    + (semPlan ? semPlan + (semPlan === 1 ? " caso ainda não tem" : " casos ainda não têm") + " planilha ligada." : "Todos os casos têm planilha ligada.")));
+  f.appendChild(av);
+
+  const lista = todos.filter(g => filtroFin === "todos" || ((g.caso && g.caso.fin) || "semvalor") === filtroFin)
+    .sort((a, b) => {
+      const ordem = { aguardando:0, parcelado:1, semvalor:2, pago:3, semcobrar:4 };
+      const oa = ordem[(a.caso && a.caso.fin) || "semvalor"], ob = ordem[(b.caso && b.caso.fin) || "semvalor"];
+      if (oa !== ob) return oa - ob;
+      return (b.ultima || "").localeCompare(a.ultima || "");
+    });
+
+  const barra = el("div","linhaAcs");
+  barra.appendChild(el("p","dica", lista.length + (lista.length === 1 ? " caso" : " casos")));
+  if (lista.length) barra.appendChild(botao("Enviar a lista de valores","seta","", () => dlgEnviarListaValores(lista)));
+  f.appendChild(barra);
+
+  lista.forEach(g => {
+    const caso = g.caso || {};
+    const vals = valoresPublicos(g);
+    const loc = valorLocal(caso.id) || {};
+    const cx = el("div","fcard");
+    const top = el("div","ftop");
+    const nm = el("div");
+    nm.appendChild(el("b", null, caso.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome"));
+    const mt = el("div","pmeta");
+    if (g.proc) mt.appendChild(el("span","pr", g.proc));
+    if (g.trib) mt.appendChild(el("span", null, g.trib));
+    nm.appendChild(mt);
+    top.appendChild(nm);
+    const et = el("span","etiq " + (corFin(caso.fin || "semvalor") || ""));
+    et.textContent = rotuloFin(caso.fin || "semvalor");
+    top.appendChild(et);
+    cx.appendChild(top);
+
+    if (vals.length){
+      const vl = el("div","vlista");
+      vals.slice(0, 4).forEach(v => {
+        const r = el("div","vrow");
+        r.appendChild(el("b","mono", v.txt));
+        r.appendChild(el("span","vrot", v.rot || "sem rótulo claro"));
+        r.appendChild(el("span","dica", br(v.disp) + (v.dec ? " · " + v.dec.rotulo : "")));
+        vl.appendChild(r);
+      });
+      if (vals.length > 4) vl.appendChild(el("p","dica","e mais " + (vals.length - 4) + " no diário"));
+      cx.appendChild(vl);
+    }
+    if (loc.nota) cx.appendChild(el("p","vloc", "Anotação local: " + loc.nota));
+
+    const acs = el("div","acs");
+    if (caso.planilha){
+      const a = el("a","bt pq"); a.href = caso.planilha; a.target = "_blank"; a.rel = "noopener";
+      a.appendChild(ico(I.pasta)); a.appendChild(el("span", null, "Abrir planilha"));
+      acs.appendChild(a);
+    } else {
+      acs.appendChild(botao("Ligar a planilha","pasta","pri pq", () => dlgFinDoCaso(g)));
+    }
+    acs.appendChild(botao("Enviar valores","seta","email pq", () => dlgEnviarValores(g)));
+    acs.appendChild(botao("Etiqueta e anotação","lapis","pq", () => dlgFinDoCaso(g)));
+    cx.appendChild(acs);
+    f.appendChild(cx);
+  });
+  return f;
+}
+
+function dlgLinkGeral(chave, rot, dica){
+  const i = entrada("url", E[chave] || "", "https://drive.google.com/…");
+  modal(rot, dica, [campo("Endereço", i)], () => {
+    E[chave] = i.value.trim() || null; salvar(); fechar(); render();
+    avisar(E[chave] ? rot + " guardado" : "Link removido");
+  }, "Salvar");
+}
+
+function dlgEnviarListaValores(lista){
+  const NL = String.fromCharCode(10);
+  const L = ["VALORES POR PROCESSO — " + br(HOJE)];
+  if (E.time) L.push("Time " + E.time.nome);
+  if (E.driveFin) L.push("Pasta do financeiro: " + E.driveFin);
+  L.push("");
+  ESTADOS_FIN.forEach(([k, rot]) => {
+    const gs = lista.filter(g => ((g.caso && g.caso.fin) || "semvalor") === k);
+    if (!gs.length) return;
+    L.push("== " + rot.toUpperCase() + " (" + gs.length + ") ==");
+    gs.forEach(g => {
+      const c = g.caso || {};
+      L.push("  · " + (c.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome"));
+      if (g.proc) L.push("    " + g.proc + (g.trib ? "  ·  " + g.trib : ""));
+      if (c.planilha) L.push("    planilha: " + c.planilha);
+      const v = valoresPublicos(g);
+      if (v.length) L.push("    no diário: " + v.slice(0,3).map(x => x.txt + " (" + (x.rot || "?") + ")").join(", "));
+      const loc = valorLocal(c.id);
+      if (loc && loc.nota) L.push("    anotação: " + loc.nota);
+    });
+    L.push("");
+  });
+  L.push("--");
+  L.push("Valores em reais nao ficam guardados no painel. Os numeros estao nas");
+  L.push("planilhas ligadas a cada caso.");
+  const texto = L.join(NL);
+  const alvos = new Set();
+  const quem = el("div","chips");
+  const f = document.createDocumentFragment();
+  if (E.emailFinanceiro) alvos.add(E.emailFinanceiro);
+  pessoasVivas().filter(p => p.email).forEach(p => {
+    if (!E.emailFinanceiro) alvos.add(p.email);
+    const c = el("button","chip"); c.type = "button";
+    c.setAttribute("aria-pressed", String(alvos.has(p.email)));
+    c.appendChild(el("span", null, p.nome.split(" ")[0]));
+    c.addEventListener("click", () => {
+      if (alvos.has(p.email)) alvos.delete(p.email); else alvos.add(p.email);
+      c.setAttribute("aria-pressed", String(alvos.has(p.email)));
+    });
+    quem.appendChild(c);
+  });
+  f.appendChild(el("p","dica","Para quem vai:")); f.appendChild(quem);
+  const extra = entrada("email", E.emailFinanceiro || "", "E-mail do financeiro");
+  f.appendChild(campo("E-mail", extra));
+  const pv = el("textarea"); pv.rows = 13; pv.readOnly = true; pv.value = texto;
+  f.appendChild(campo("O que vai", pv));
+  modal("Enviar a lista de valores", lista.length + " casos", [f], () => {
+    const e2 = extra.value.trim();
+    if (e2){ alvos.add(e2); E.emailFinanceiro = e2; salvar(); }
+    if (!alvos.size) return avisar("Escolha ao menos um destinatário");
+    try { window.open("mailto:" + [...alvos].join(",") + "?subject="
+      + encodeURIComponent("Valores por processo — " + br(HOJE)) + "&body=" + encodeURIComponent(texto)); } catch(e){}
+    fechar(); avisar("E-mail aberto"); festa();
+  }, "Abrir e-mail");
+}
+
+/* ============================================================
+   O CARTÃO DO PROCESSO
+   ============================================================ */
+function cartaoProcesso(g){
+  const caso = g.caso || {};
+  const prio = prioridadeDe(g);
+  const and = comoAnda(g);
+  const cx = el("div","pcard prio-" + prio.p);
+
+  /* cabeça */
+  const top = el("div","top");
+  const nm = el("div","pnome");
+  const titulo = caso.titulo || (g.sigiloso ? "Processo em segredo de justiça" : g.partes.slice(0,2).join(" x ")) || g.proc || "Sem nome";
+  nm.appendChild(el("div","nm", titulo));
+  const mt = el("div","pmeta");
+  if (g.proc) mt.appendChild(el("span","pr", g.proc));
+  else if (caso.fase) mt.appendChild(el("span","pr", rotuloFase(caso.fase)));
+  if (caso.trib || g.trib) mt.appendChild(el("span", null, caso.trib || g.trib));
+  const cls = caso.classe || g.classe;
+  if (cls) mt.appendChild(el("span", null, cls.length > 34 ? bonito(cls).slice(0,32) + "…" : bonito(cls)));
+  if (caso.original && caso.original.trib) mt.appendChild(el("span","corr", "no diário: " + caso.original.trib));
+  nm.appendChild(mt);
+  if (buscaProc){
+    const onde = ondeAchou(g, buscaProc);
+    if (onde) nm.appendChild(el("div","achou", "achado por " + onde));
+  }
+  top.appendChild(nm);
+  const pb = el("button","pprio p-" + prio.p); pb.type = "button";
+  pb.title = prio.pq;
+  pb.appendChild(el("b", null, rotuloPrio(prio.p)));
+  pb.appendChild(el("span", null, prio.manual ? "você definiu" : prio.pq));
+  pb.addEventListener("click", () => dlgPrioridade(g));
+  top.appendChild(pb);
+  cx.appendChild(top);
+
+  /* a quantas anda + status */
+  const est = el("div","pest");
+  est.appendChild(el("span","and " + (and.cor || ""), and.txt));
+  if (caso.status){
+    const s = el("button","pstatus"); s.type = "button";
+    s.appendChild(el("span", null, caso.status));
+    s.addEventListener("click", () => dlgStatus(g));
+    est.appendChild(s);
+  }
+  if (caso.diferenca) est.appendChild(el("span","dica","≠ " + caso.diferenca));
+  cx.appendChild(est);
+
+  /* etiquetas */
+  const et = [...new Set([...(caso.etiquetas || []), ...etiquetasAuto(g)])];
+  if (et.length){
+    const ec = el("div","petiq");
+    et.slice(0, 6).forEach(t => {
+      const b = el("button","tag"); b.type = "button";
+      b.appendChild(el("span", null, t));
+      b.addEventListener("click", () => { filtroEtiq = t; render(); });
+      ec.appendChild(b);
+    });
+    ec.appendChild(botao("","mais","pq so", () => dlgEtiquetas(g)));
+    cx.appendChild(ec);
+  }
+
+  /* síntese */
+  if (caso.sintese) cx.appendChild(el("p","psint", caso.sintese));
+
+  /* a gestalt do link */
+  cx.appendChild(blocoDrive(g, null));
+
+  /* "esse caso tem número? virou judicial?" */
+  if (!g.proc && caso.tipo === "caso"){
+    const q = el("div","virou");
+    const t = el("div");
+    t.appendChild(el("b", null, "Esse caso já tem número? Virou judicial?"));
+    t.appendChild(el("span", null, caso.apiVaziaEm
+      ? "Você já tentou em " + br(caso.apiVaziaEm.slice(0,10)) + " e o CNJ não tinha nada. Pode tentar de novo."
+      : "Cole o número e eu procuro no CNJ. Se achar, o histórico inteiro entra aqui."));
+    q.appendChild(t);
+    const inp = entrada("text", caso.numero || "", "0000000-00.0000.0.00.0000");
+    q.appendChild(inp);
+    q.appendChild(botao("Procurar no CNJ","busca","pri", () => {
+      const dig = soDigitos(inp.value);
+      if (dig.length !== 20) return avisar("O número do CNJ tem 20 dígitos");
+      caso.numero = mascaraCNJ(dig); tocou(caso); salvar();
+      tentarNaApi(caso);
+    }));
+    cx.appendChild(q);
+  }
+
+  /* atividades */
+  const abertas = g.abertas || [];
+  if (abertas.length){
+    const li = el("div","patv");
+    abertas.slice(0, 4).forEach(t => {
+      const r = el("div","patvi" + (t.prazo && t.prazo < HOJE ? " crit" : ""));
+      const ck = el("input"); ck.type = "checkbox";
+      ck.addEventListener("change", () => { t.feita = true; t.feitaEm = agoraISO();
+        t.feitaPor = E.time ? E.time.meuNome : null; tocou(t); salvar(); render(); festa(); });
+      r.appendChild(ck);
+      const tt = el("div");
+      tt.appendChild(el("div","pt", t.titulo));
+      const sub = [];
+      if (t.prazo) sub.push(t.prazo < HOJE ? "VENCEU " + br(t.prazo) : br(t.prazo));
+      const dono = E.pessoas.find(p => p.id === t.pessoaId);
+      if (dono) sub.push(dono.nome.split(" ")[0]);
+      if (sub.length) tt.appendChild(el("div","ps", sub.join(" · ")));
+      r.appendChild(tt);
+      li.appendChild(r);
+    });
+    if (abertas.length > 4) li.appendChild(el("p","dica","e mais " + (abertas.length - 4) + " em aberto"));
+    cx.appendChild(li);
+  } else if (!g.semProvidencia){
+    /* "Há algo para fazer nesse processo?" */
+    const q = el("div","nada");
+    const t = el("div");
+    t.appendChild(el("b", null, "Há algo para fazer nesse processo?"));
+    t.appendChild(el("span", null, g.ultima
+      ? "Nenhuma atividade em aberto. Última publicação em " + br(g.ultima) + "."
+      : "Nenhuma atividade em aberto e nenhuma publicação registrada."));
+    q.appendChild(t);
+    const ac = el("div","acs");
+    ac.appendChild(botao("Sim, criar atividade","mais","pri", () => dlgAtividade(g)));
+    ac.appendChild(botao("Não, tirar do radar","x","", () => dlgForaDoRadar(g)));
+    q.appendChild(ac);
+    cx.appendChild(q);
+  }
+
+  /* publicações, dobradas */
+  if (g.pubs.length){
+    const dt = el("details","ppubs");
+    const sm = el("summary");
+    sm.appendChild(el("b", null, g.pubs.length + (g.pubs.length === 1 ? " publicação" : " publicações")));
+    if (g.semProvidencia) sm.appendChild(el("span","n", g.semProvidencia + " sem triagem"));
+    dt.appendChild(sm);
+    g.pubs.slice().sort((a, b) => (b.disp || "").localeCompare(a.disp || "")).slice(0, 12).forEach(p => {
+      const r = el("div","ppub");
+      r.appendChild(el("span","mono", br(p.disp)));
+      const tx = el("div");
+      tx.appendChild(el("div", null, (p.tipo || "publicação") + (p.decisao ? " — " + p.decisao.rotulo : "")));
+      if (p.trecho_prazo) tx.appendChild(el("div","dica", p.trecho_prazo));
+      if ((p.valores || []).length) tx.appendChild(el("div","dica",
+        "valores no texto: " + p.valores.slice(0,3).map(v => v.txt).join(", ")));
+      r.appendChild(tx);
+      dt.appendChild(r);
+    });
+    cx.appendChild(dt);
+  }
+
+  /* ações — a de criar atividade é a grande, de propósito */
+  const acs = el("div","acs pgrande");
+  acs.appendChild(botao("Nova atividade","mais","pri", () => dlgAtividade(g)));
+  acs.appendChild(botao("Status","lista","pq", () => dlgStatus(g)));
+  acs.appendChild(botao("Etiquetas","marca","pq", () => dlgEtiquetas(g)));
+  const fin = el("button","bt pq" + (caso.fin && caso.fin !== "semvalor" ? " " + (corFin(caso.fin) || "") : ""));
+  fin.type = "button";
+  fin.appendChild(ico(I.moeda));
+  fin.appendChild(el("span", null, rotuloFin(caso.fin || "semvalor")));
+  fin.addEventListener("click", () => dlgFinDoCaso(g));
+  acs.appendChild(fin);
+  acs.appendChild(botao("Ajustar","lapis","pq", () => dlgEditarCaso(g)));
+  acs.appendChild(botao("Síntese","seta","pq", () => compartilhar(g)));
+  if (!caso.fora) acs.appendChild(botao("Fora do radar","x","pq", () => dlgForaDoRadar(g)));
+  cx.appendChild(acs);
+  return cx;
+}
+
 
 async function rodarBuscaNovas(){
   if (buscandoNovas) return;
