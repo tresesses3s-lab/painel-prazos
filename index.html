@@ -281,6 +281,41 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .wlimpo b{display:block;font:700 21px/1.3 "Bricolage Grotesque",sans-serif;margin:12px 0 6px}
 .wlimpo span{color:var(--muted);font-size:14.5px}
 .wurl{font:400 11px/1.4 "IBM Plex Mono",monospace;color:var(--muted);background:var(--surf-2);padding:8px 10px;border-radius:8px;word-break:break-all}
+/* ===================== pastas, ordem e estrela ===================== */
+.sels{display:flex; gap:20px; flex-wrap:wrap; margin:2px 0 14px}
+.selg{display:flex; gap:9px; align-items:center}
+.selg select{padding:7px 10px}
+.pasta{margin-bottom:14px; border:1px solid var(--line); border-radius:15px; background:var(--surf-2); overflow:hidden}
+.pasta > summary{cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 18px; list-style:none}
+.pasta > summary::-webkit-details-marker{display:none}
+.pasta > summary b{display:block; font:700 16.5px/1.2 "Bricolage Grotesque",sans-serif; letter-spacing:-.015em}
+.pasta > summary span:not(.pq){display:block; font:400 12.5px/1.4 "Source Sans 3",sans-serif; color:var(--muted); margin-top:3px}
+.pasta > summary .pq{flex:none; font:700 13px/1 "IBM Plex Mono",monospace; background:var(--surf-3); color:var(--ink-2);
+  border-radius:99px; padding:6px 12px; font-variant-numeric:tabular-nums}
+.pasta[open] > summary{border-bottom:1px solid var(--line)}
+.pastac{display:flex; flex-direction:column; gap:11px; padding:14px}
+.pasta.p-agora{border-color:var(--rosa)}
+.pasta.p-agora > summary{background:var(--rosa-s)}
+.pasta.p-agora > summary b{color:var(--rosa)}
+.pasta.p-agora > summary .pq{background:var(--rosa); color:var(--on-cor)}
+.pasta.p-andando{border-color:var(--azul)}
+.pasta.p-andando > summary{background:var(--azul-s)}
+.pasta.p-andando > summary .pq{background:var(--azul); color:var(--on-cor)}
+.pasta.p-caso{border-color:var(--teal)}
+.pasta.p-caso > summary{background:var(--teal-s)}
+.pasta.p-caso > summary .pq{background:var(--teal); color:var(--on-cor)}
+.pasta.p-parado > summary b{color:var(--muted)}
+.pcard{position:relative}
+.pcard.fixo{border-color:var(--ouro); box-shadow:0 0 0 1px var(--ouro), var(--sh-s)}
+.pord{position:absolute; top:11px; right:11px; display:flex; gap:4px; align-items:center}
+.pfix,.pseta{width:27px; height:27px; border-radius:8px; border:1px solid var(--line); background:var(--surface);
+  cursor:pointer; display:grid; place-items:center; color:var(--muted); font:600 13px/1 "IBM Plex Mono",monospace; padding:0}
+.pfix svg{width:14px; height:14px; stroke:var(--muted); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.pfix:hover svg,.pseta:hover{stroke:var(--ouro); color:var(--ouro)}
+.pfix.on{background:var(--ouro-s); border-color:var(--ouro)}
+.pfix.on svg{stroke:var(--ouro); fill:var(--ouro)}
+.pcard .top{padding-right:96px}
+
 /* ===================== aba Processos e Financeiro ===================== */
 .dica{font:400 12.8px/1.5 "Source Sans 3",sans-serif; color:var(--muted)}
 .acs{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
@@ -445,6 +480,11 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
   background:var(--ambar-s); border-radius:9px; border-left:3px solid var(--ambar)}
 .bt.so{padding:7px; min-width:0}
 .bt.so span{display:none}
+
+.ppub{width:100%; text-align:left; cursor:pointer; background:none; border:0; border-top:1px solid var(--line)}
+.ppub:hover{background:var(--surf-2)}
+.ppub:hover .abrirp{color:var(--azul)}
+.abrirp{font:400 11.5px/1.4 "IBM Plex Mono",monospace; color:var(--muted); margin-top:3px}
 
 .decs{display:flex; flex-direction:column; gap:11px}
 .dec{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--azul); border-radius:14px; padding:15px 18px; display:flex; flex-direction:column; gap:10px; box-shadow:var(--sh-s)}
@@ -762,7 +802,10 @@ const vazio = () => ({ versao:7, oabs:[], pessoas:[], tarefas:[], djen:[], busca
   /* casos: o registro de processo, sincroniza. duplicados: pares a conferir.
      valores: anotação de dinheiro digitada à mão — NÃO entra em COLECOES,
      de propósito, para valor de cliente não subir para conta pessoal. */
-  casos:[], duplicados:[], valores:{}, acervoEm:null, driveTime:null, driveFin:null });
+  casos:[], duplicados:[], valores:{}, acervoEm:null, driveTime:null, driveFin:null,
+  /* corteTarefas: data a partir da qual o painel é responsável pelo prazo.
+     Publicação anterior é histórico — aparece, mas não gera tarefa. */
+  corteTarefas:null });
 let E = vazio();
 try { const s = localStorage.getItem(CHAVE); if (s) E = Object.assign(vazio(), JSON.parse(s)); } catch(e){}
 /* Migração v3 -> v4: a lista "feitos" vira um campo em cada item, para a
@@ -781,6 +824,7 @@ let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas
 let buscaProc = "", filtroProc = "todos", buscaDec = "", filtroDec = "todas";
 let widgetMes = 0, widgetDia = null;
 let filtroOrg = null, filtroPrio = "todas", filtroEtiq = "todas", filtroFin = "todos";
+let agruparPor = "relev", ordenarPor = "relev";
 function casaParalelo(i){
   return combina(buscaPar, i.proc, i.trib, i.orgao, i.rotulo, i.classe, i.tipo,
     (i.partes || []).join(" "), i.resumo);
@@ -826,7 +870,12 @@ const ROTULO = {
 };
 
 function provDjen(){
-  return E.djen.filter(i => !i.removido && (i.sessao || i.fim || (i.acoes && i.acoes.length))).map(i => ({
+  /* ehHistorico corta o acervo antigo: a varredura trouxe 2023 em diante e
+     cada publicação com prazo calculado virava uma providência vencida, como
+     se ninguém tivesse feito nada em três anos. Publicação anterior ao corte
+     continua visível no processo, nas decisões e nos valores — só não vira
+     tarefa, não entra na agenda e não conta no placar. */
+  return E.djen.filter(i => !i.removido && !ehHistorico(i) && (i.sessao || i.fim || (i.acoes && i.acoes.length))).map(i => ({
     key:"d"+i.id, fonte:"djen", bruto:i,
     tipo: i.sessao ? "sessao" : i.fim ? "prazo" : "acao",
     data: i.fim || i.sessao || i.disp,
@@ -1569,14 +1618,16 @@ function localDe(col){
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
 }
 function aplicaLocal(col, lista){
-  if (col === "pessoas") E.pessoas = lista;
-  else if (col === "tarefas") E.tarefas = lista;
-  else if (col === "processos") E.processos = lista;
-  else if (col === "recados") E.recados = lista;
-  else if (col === "oabs") E.oabs = lista;
-  else if (col === "casos") E.casos = lista;
-  else if (col === "paralelo") E.paralelo = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
-  else E.djen = lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id }));
+  /* fundeNoLugar em vez de trocar o array: ver o comentário na função. Trocar
+     matava, sem aviso, tudo o que estivesse sendo digitado num diálogo aberto. */
+  if (col === "pessoas") fundeNoLugar(E.pessoas, lista);
+  else if (col === "tarefas") fundeNoLugar(E.tarefas, lista);
+  else if (col === "processos") fundeNoLugar(E.processos, lista);
+  else if (col === "recados") fundeNoLugar(E.recados, lista);
+  else if (col === "oabs") fundeNoLugar(E.oabs, lista);
+  else if (col === "casos") fundeNoLugar(E.casos, lista);
+  else if (col === "paralelo") fundeNoLugar(E.paralelo, lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id })));
+  else fundeNoLugar(E.djen, lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id })));
 }
 const chaveDe = o => String(o.id);
 const quando = o => o.atualizadoEm || "1970-01-01T00:00:00.000Z";
@@ -1613,6 +1664,9 @@ async function sincronizarTime(silencioso){
         enviou = true;
       }
     }
+    /* o corte do histórico é uma data só, compartilhada: quem sincroniza adota
+       a do time, senão cada navegador silenciaria um conjunto diferente */
+    try { const c = await lerCorte(); if (c && c.em && c.em !== E.corteTarefas) E.corteTarefas = c.em; } catch(x){}
     E.time.sincronizadoEm = agoraISO();
     salvar();
     if (enviou) await baterSinal(); else { try { sinalVisto = await lerSinal(); } catch(x){} }
@@ -2780,7 +2834,7 @@ function agrupaProcessos(){
     return Object.assign(g, {
       abertas, proximo: comData[0] || null, ultima, donos, vencidas,
       feitas: g.tarefas.filter(t => t.feita).length,
-      semProvidencia: g.pubs.filter(p => !desdobramentos(p.id).length && !p.dispensada && !p.feita).length,
+      semProvidencia: g.pubs.filter(p => !ehHistorico(p) && !desdobramentos(p.id).length && !p.dispensada && !p.feita).length,
       caso: g.casoSolto || (g.proc ? casoDoProc(g.proc) : null),
       decisaoNova: g.pubs.some(p => p.decisao && p.disp >= trintaDias),
     });
@@ -3410,6 +3464,126 @@ function secaoWidgets(){
 }
 
 /* ============================================================
+   CORTE DO HISTÓRICO
+   ------------------------------------------------------------
+   A varredura trouxe 2023 até hoje. Só que o painel transforma toda publicação
+   com prazo calculado em providência aberta — então o acervo antigo virou
+   centenas de "PERDEU" de coisas que provavelmente já foram feitas anos atrás.
+
+   A regra passa a ser: publicação anterior ao corte é HISTÓRICO. Ela continua
+   aparecendo no processo, nas decisões, nos valores e na busca por trecho —
+   só não gera tarefa, não entra na agenda, não conta no placar e não dispara
+   alarme de prazo perdido.
+
+   O corte é UMA data, compartilhada pelo time no documento meta/corte. Assim
+   não precisa marcar novecentas publicações uma por uma nem sincronizar isso:
+   quem lê a data aplica a regra sozinho, e o resultado é igual para todos.
+   ============================================================ */
+
+const ehHistorico = i => !!E.corteTarefas && !!i.disp && i.disp < E.corteTarefas;
+
+async function lerCorte(){
+  if (!E.time) return null;
+  try {
+    const d = await fsChama(caminho("meta", "corte"), { method:"GET" });
+    const o = d ? deDoc(d) : null;
+    return o && o.em ? o : null;
+  } catch(e){ return null; }
+}
+async function gravaCorte(data){
+  E.corteTarefas = data || null;
+  salvar();
+  if (!E.time) return;
+  try { await fsGrava("meta", "corte", { em: data || "", por: E.time.meuNome || "", quando: agoraISO() }); } catch(e){}
+}
+
+/* Adivinha o corte para quem já tem o acervo puxado: é a publicação mais antiga
+   que já estava no painel ANTES da varredura. Tudo mais velho que isso o painel
+   nunca acompanhou, então nunca foi responsável pelo prazo. */
+function corteAdivinhado(){
+  if (!E.acervoEm) return null;
+  const limite = new Date(new Date(E.acervoEm).getTime() - 20 * 60000).toISOString();
+  const antes = E.djen.filter(i => i.disp && (i.atualizadoEm || "") < limite).map(i => i.disp).sort();
+  return antes[0] || null;
+}
+
+function quantoHistorico(){
+  return E.djen.filter(i => !i.removido && ehHistorico(i)).length;
+}
+function tarefasFantasma(){
+  /* publicações antes do corte que gerariam providência se o corte não existisse */
+  return E.djen.filter(i => !i.removido && ehHistorico(i)
+    && (i.sessao || i.fim || (i.acoes && i.acoes.length))).length;
+}
+
+function dlgCorte(){
+  const atual = E.corteTarefas || corteAdivinhado() || dataLocal();
+  const dt = entrada("date", atual, "");
+  const f = document.createDocumentFragment();
+  const av = el("div","aviso az");
+  av.appendChild(el("span","k","O que essa data faz"));
+  av.appendChild(el("div", null, "Publicação disponibilizada ANTES dessa data conta como histórico: "
+    + "continua no processo, nas decisões, nos valores e na busca, mas não vira tarefa, não entra na agenda "
+    + "e não dispara alarme de prazo perdido. Publicação a partir dessa data é responsabilidade do painel."));
+  f.appendChild(av);
+  f.appendChild(campo("Painel passa a acompanhar a partir de", dt));
+  const conta = el("p","dica","");
+  const recalc = () => {
+    const antes = E.corteTarefas;
+    E.corteTarefas = dt.value;
+    conta.textContent = quantoHistorico() + " publicações ficam como histórico, silenciando "
+      + tarefasFantasma() + " tarefas antigas. " + (E.djen.length - quantoHistorico()) + " continuam valendo.";
+    E.corteTarefas = antes;
+  };
+  dt.addEventListener("change", recalc); recalc();
+  f.appendChild(conta);
+  const nota = el("div","aviso amb");
+  nota.appendChild(el("span","k","Vale para o time"));
+  nota.appendChild(el("div", null, "A data é compartilhada: mudar aqui muda para todo mundo. Nada é apagado — "
+    + "se você trouxer a data para trás, as tarefas antigas voltam a aparecer."));
+  f.appendChild(nota);
+  modal("A partir de quando o painel é responsável", null, [f], () => {
+    gravaCorte(dt.value || null);
+    fechar(); render();
+    avisar(quantoHistorico() + " publicações agora são histórico");
+  }, "Salvar");
+}
+
+/* ============================================================
+   FUNDIR SEM TROCAR OS OBJETOS
+   ------------------------------------------------------------
+   Trocar o array inteiro na sincronização parecia inofensivo e não era.
+   Qualquer diálogo aberto guarda uma referência ao objeto — o caso que está
+   recebendo o link do Drive, por exemplo. A sincronização roda a cada 7
+   segundos; se rodasse nesses segundos, o array era substituído, a referência
+   virava órfã, e o que a pessoa acabou de digitar ia para o lixo SEM AVISO.
+   Foi por isso que o link do Drive não chegava ao time e o "fora do radar"
+   não pegava. Agora o objeto é o mesmo do começo ao fim.
+   ============================================================ */
+function fundeNoLugar(atual, lista){
+  const porId = new Map(atual.map(o => [String(o.id), o]));
+  const saida = lista.map(novo => {
+    const velho = porId.get(String(novo.id));
+    if (!velho) return novo;
+    Object.keys(velho).forEach(k => { if (!(k in novo)) delete velho[k]; });
+    Object.assign(velho, novo);
+    return velho;
+  });
+  atual.length = 0;
+  for (const o of saida) atual.push(o);
+  return atual;
+}
+
+/* Segundo cinto: o diálogo resolve o caso pelo id na hora de salvar, em vez de
+   confiar na referência que pegou quando abriu. */
+function comCaso(id, f){
+  const c = E.casos.find(x => x.id === id);
+  if (!c) return null;
+  f(c); tocou(c); salvar();
+  return c;
+}
+
+/* ============================================================
    O CASO
    ------------------------------------------------------------
    Até aqui o painel só guardava publicações e agrupava por número na hora de
@@ -3738,7 +3912,7 @@ async function varrerAcervo(aviso){
   if (!oabs.length){ avisar("Cadastre uma OAB primeiro"); return null; }
   const jaTem = new Set(E.djen.map(i => String(i.hash || i.id)));
   const hoje = HOJE;
-  let novas = 0, chamadas = 0, falhas = 0;
+  let novas = 0, chamadas = 0, falhas = 0, completadas = 0;
   for (let k = 0; k < oabs.length; k++){
     const o = oabs[k];
     if (aviso) aviso("Inscrição " + (k + 1) + " de " + oabs.length + " — " + o.numero + "/" + o.uf
@@ -3758,9 +3932,23 @@ async function varrerAcervo(aviso){
       const itens = j.items || [];
       itens.forEach(c => {
         const h = String(c.hash || c.id);
-        if (jaTem.has(h)) return;
-        jaTem.add(h);
         const it = converte(c, o.nome);
+        if (jaTem.has(h)){
+          /* Publicação que já estava no painel: NÃO pular. As que entraram
+             antes desta versão não têm valores extraídos nem texto guardado,
+             então nunca mostrariam valor nem seriam achadas por trecho. Aqui
+             elas ganham isso — sem tocar no que é humano (feita, dispensada,
+             responsável, delegação), que sempre vence o que vem da API. */
+          const velho = E.djen.find(x => String(x.hash || x.id) === h);
+          if (velho && (!velho.textoBusca || !velho.valores)){
+            velho.textoBusca = it.textoBusca;
+            if (it.valores) velho.valores = it.valores;
+            if (!velho.decisao && it.decisao) velho.decisao = it.decisao;
+            tocou(velho); completadas++;
+          }
+          return;
+        }
+        jaTem.add(h);
         tocou(it); E.djen.push(it); novas++;
       });
       if (itens.length < 100) break;
@@ -3772,8 +3960,15 @@ async function varrerAcervo(aviso){
      encheria o Firestore do time sem nenhum ganho. */
   const processos = agrupaProcessos().filter(g => g.proc).length;
   E.acervoEm = agoraISO();
+  /* na primeira varredura o corte nasce sozinho: a publicação mais antiga que
+     já estava no painel antes dela. O que é mais velho que isso o painel nunca
+     acompanhou, então nunca foi responsável pelo prazo. */
+  if (!E.corteTarefas){
+    const c = corteAdivinhado();
+    if (c) await gravaCorte(c);
+  }
   salvar(); anotaBusca();
-  return { novas, processos, chamadas, falhas, oabs:oabs.length };
+  return { novas, processos, chamadas, falhas, completadas, oabs:oabs.length };
 }
 
 /* ---------- gestalt: o quanto o acervo está organizado ----------
@@ -3899,11 +4094,34 @@ function dlgDrive(g, aoMudar){
   nota.appendChild(el("div", null, "O painel guarda o endereço, não o arquivo — quem cria a pasta é você. "
     + "Todo link colado aqui aparece nas atividades vinculadas a esse caso e no e-mail que sai dele."));
   f.appendChild(nota); f.appendChild(lista); f.appendChild(add);
+  /* quem pode abrir o link é assunto do Drive, não do painel — a tela diz isso
+     e mostra os e-mails do time para colar na partilha do Google */
+  const perm = el("div","aviso amb");
+  perm.appendChild(el("span","k","Quem consegue abrir"));
+  const pd = el("div");
+  pd.appendChild(el("div", null, "O painel compartilha o ENDEREÇO com o time na mesma hora. "
+    + "Abrir a pasta depende da partilha que você fez no próprio Google Drive: "
+    + "ou marque “qualquer pessoa com o link”, ou acrescente os e-mails abaixo."));
+  const mails = pessoasVivas().filter(p => p.email).map(p => p.email);
+  if (mails.length){
+    const cp = el("div","wurl", mails.join(", "));
+    pd.appendChild(cp);
+    pd.appendChild(botao("Copiar os e-mails do time","seta","pq", async () => {
+      try { await navigator.clipboard.writeText(mails.join(", ")); avisar("E-mails copiados — cole na partilha do Drive"); }
+      catch(e){ prompt("Copie:", mails.join(", ")); }
+    }));
+  } else pd.appendChild(el("div", null, "Ninguém do time tem e-mail cadastrado ainda — cadastre em Equipe."));
+  perm.appendChild(pd);
+  f.appendChild(perm);
+
   modal("Pastas e links do caso", caso.titulo || caso.numero || "", [f], () => {
-    caso.drive = (caso.drive || []).filter(l => l.url);
-    tocou(caso); salvar(); fechar(); render();
+    const limpos = (caso.drive || []).filter(l => l.url);
+    /* pelo id: se a sincronização rodou enquanto o endereço estava sendo colado,
+       a referência de cima já era outra e o link se perdia calado */
+    comCaso(caso.id, c => { c.drive = limpos; });
+    fechar(); render();
     if (aoMudar) aoMudar();
-    avisar(caso.drive.length ? "Link guardado" : "Links limpos");
+    avisar(limpos.length ? "Link guardado e enviado ao time" : "Links limpos");
   }, "Salvar");
 }
 
@@ -4183,9 +4401,13 @@ function dlgForaDoRadar(g){
     const c = el("button","chip"); c.type = "button";
     c.appendChild(el("span", null, m));
     c.addEventListener("click", () => {
-      caso.fora = true; caso.motivoFora = m; caso.foraEm = agoraISO();
-      caso.foraPor = E.time ? E.time.meuNome : null;
-      tocou(caso); salvar(); fechar(); render(); avisar("Fora do radar: " + m.toLowerCase());
+      /* pelo id, não pela referência: a sincronização pode ter trocado o objeto
+         entre abrir o diálogo e clicar aqui */
+      comCaso(caso.id, c => {
+        c.fora = true; c.motivoFora = m; c.foraEm = agoraISO();
+        c.foraPor = E.time ? E.time.meuNome : null;
+      });
+      fechar(); render(); avisar("Descartado: " + m.toLowerCase());
     });
     cs.appendChild(c);
   });
@@ -4255,12 +4477,125 @@ function dlgEnviarLista(lista){
 }
 
 /* ---------- a tela ---------- */
+/* ============================================================
+   PASTAS E ORDEM
+   ------------------------------------------------------------
+   Lista corrida de oitenta processos não diz o que é relevante. As pastas
+   dizem: a primeira é o que precisa de você hoje, a última é o que está
+   dormindo. Vêm abertas ou fechadas conforme isso.
+   ============================================================ */
+
+const PASTAS = [
+  ["agora",   "Precisa de você agora", "Prazo vencido, vencendo esta semana, ou publicação sem triagem", true],
+  ["andando", "Andando",               "Tem atividade em aberto ou publicação recente",                  true],
+  ["caso",    "Ainda não é processo",  "Extrajudicial, em preparação ou em conversa com o cliente",      true],
+  ["parado",  "Parado",                "Sem atividade e sem publicação há mais de 45 dias",              false],
+];
+const rotuloPasta = k => (PASTAS.find(p => p[0] === k) || ["", "Sem pasta"])[1];
+const diasDesde = iso => iso ? Math.round((new Date(HOJE) - new Date(iso)) / 864e5) : 9999;
+
+function pastaDe(g){
+  if (g.caso && g.caso.fora) return "fora";
+  if (!g.pubs.length && g.caso && g.caso.tipo === "caso") return "caso";
+  if (g.vencidas || g.semProvidencia) return "agora";
+  if (g.proximo && g.proximo.prazo && uteisEntre(HOJE, g.proximo.prazo) <= 5) return "agora";
+  if (g.abertas.length) return "andando";
+  if (diasDesde(g.ultima) <= 45) return "andando";
+  return "parado";
+}
+
+const AGRUPAR = [
+  ["relev",  "Relevância"],
+  ["etiq",   "Etiqueta"],
+  ["pessoa", "Responsável"],
+  ["trib",   "Tribunal"],
+  ["nenhum", "Sem pasta"],
+];
+const ORDENAR = [
+  ["relev",  "Relevância"],
+  ["recente","Notificação mais recente"],
+  ["minha",  "Minha ordem"],
+];
+
+function chavesDeAgrupamento(g){
+  if (agruparPor === "etiq"){
+    const et = [...new Set([...(g.caso && g.caso.etiquetas || []), ...etiquetasAuto(g)])];
+    return et.length ? et : ["Sem etiqueta"];
+  }
+  if (agruparPor === "pessoa"){
+    if (!g.donos.length) return ["Sem responsável"];
+    return g.donos.map(id => (E.pessoas.find(p => p.id === id) || {}).nome || "Alguém");
+  }
+  if (agruparPor === "trib") return [g.trib || (g.caso && g.caso.trib) || "Sem tribunal"];
+  return [pastaDe(g)];
+}
+
+const temRank = g => g.caso && typeof g.caso.rank === "number";
+const rankDe = g => temRank(g) ? g.caso.rank : Infinity;
+
+function ordenaDentro(lista){
+  const fix = g => (g.caso && g.caso.fixado) ? 0 : 1;
+  return lista.slice().sort((a, b) => {
+    if (fix(a) !== fix(b)) return fix(a) - fix(b);
+    if (ordenarPor === "recente") return (b.ultima || "").localeCompare(a.ultima || "");
+    if (ordenarPor === "minha"){
+      /* o que você ordenou vem primeiro, na sua ordem; o resto segue por data.
+         Assim mover um processo não embaralha os outros oitenta. */
+      if (temRank(a) !== temRank(b)) return temRank(a) ? -1 : 1;
+      if (temRank(a) && rankDe(a) !== rankDe(b)) return rankDe(a) - rankDe(b);
+      return (b.ultima || "").localeCompare(a.ultima || "");
+    }
+    return 0; /* relevância: agrupaProcessos já ordenou */
+  });
+}
+
+/* "Minha ordem": sobe e desce. Grava no MÁXIMO dois registros — o que se move
+   e, se ainda não tiver número, o vizinho. A primeira versão numerava a pasta
+   inteira, o que criava oitenta documentos e embaralhava a lista na primeira
+   seta, porque numerava na ordem crua em vez da ordem da tela. */
+function moveNaOrdem(g, lista, delta){
+  const ord = ordenaDentro(lista);
+  const i = ord.indexOf(g), j = i + delta;
+  if (i < 0 || j < 0 || j >= ord.length) return;
+  /* Numera o começo da pasta até o ponto de destino, NA ORDEM QUE ESTÁ NA TELA.
+     Sem isso o item movido pulava acima de quem ainda não tem número, porque
+     quem tem número vem antes — subia duas casas em vez de uma. Numerar só
+     até o destino mantém a escrita pequena: mover o terceiro grava três. */
+  const ate = Math.max(i, j);
+  for (let k = 0; k <= ate; k++){
+    const x = ord[k];
+    if (temRank(x)) continue;
+    const c = x.caso || (x.proc ? casoDeGrupo(x) : null);
+    if (c) comCaso(c.id, y => { y.rank = k * 100; });
+  }
+  /* re-resolve depois do laço: o registro do caso pode ter NASCIDO ali dentro,
+     e o g.caso do agrupamento é uma foto de antes disso. */
+  const achaCaso = x => (x.caso && E.casos.includes(x.caso) ? x.caso : (x.proc ? casoDoProc(x.proc) : null));
+  const a = achaCaso(ord[i]), b = achaCaso(ord[j]);
+  if (!a || !b) return;
+  const ra = a.rank, rb = b.rank;
+  comCaso(a.id, x => { x.rank = rb; });
+  comCaso(b.id, x => { x.rank = ra; });
+  render();
+}
+
+function seletor(rot, opcoes, atual, aoTrocar){
+  const w = el("div","selg");
+  w.appendChild(el("span","fgr", rot));
+  const s = el("select");
+  opcoes.forEach(([k, r]) => { const o = el("option", null, r); o.value = k; if (atual === k) o.selected = true; s.appendChild(o); });
+  s.addEventListener("change", () => aoTrocar(s.value));
+  w.appendChild(s);
+  return w;
+}
+
+/* ---------- a tela ---------- */
 function telaProcessos(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
   const d = el("div");
   d.appendChild(el("h2", null, "Processos e casos"));
-  d.appendChild(el("p", null, "Tudo o que está cadastrado: puxado do diário ou digitado à mão, inclusive o que ainda não é processo."));
+  d.appendChild(el("p", null, "Em pastas, do que precisa de você hoje ao que está dormindo."));
   cab.appendChild(d);
   const acs = el("div","acs");
   acs.appendChild(botao("Novo caso","mais","pri", () => dlgNovoCaso()));
@@ -4272,20 +4607,28 @@ function telaProcessos(){
   if (!todos.length){
     f.appendChild(vazioBox("lista","Nada cadastrado ainda",
       E.oabs.length
-        ? "As OABs do time já estão cadastradas. Puxe o acervo inteiro desde 2023 — são poucas chamadas e leva menos de um minuto."
+        ? "As OABs do time já estão cadastradas. Puxe o acervo desde 2023 — são poucas chamadas e leva menos de um minuto."
         : "Cadastre uma OAB do time para o painel puxar o acervo, ou crie um caso à mão.",
       E.oabs.length ? "Puxar o acervo" : "Cadastrar OAB", () => E.oabs.length ? rodarVarredura() : dlgOab()));
     f.appendChild(botao("Criar um caso à mão","mais","", () => dlgNovoCaso()));
     return f;
   }
 
-  if (!E.acervoEm && E.oabs.length){
-    const av = el("div","aviso amb");
-    av.appendChild(el("span","k","Falta o histórico"));
+  /* o histórico e as tarefas que ele deixaria de fora */
+  if (E.acervoEm){
+    const q = quantoHistorico(), t = tarefasFantasma();
+    const av = el("div", E.corteTarefas ? "aviso vd" : "aviso x");
+    av.appendChild(el("span","k", E.corteTarefas ? "Histórico" : "Atenção"));
     const dd = el("div");
-    dd.appendChild(el("div", null, "O painel só tem as publicações da janela curta. O acervo desde 2023 traz os processos "
-      + "antigos e as decisões antigas de uma vez — medido: poucas chamadas, menos de um minuto."));
-    dd.appendChild(botao("Puxar agora","busca","pri", () => rodarVarredura()));
+    if (E.corteTarefas){
+      dd.appendChild(el("div", null, q + " publicações anteriores a " + br(E.corteTarefas)
+        + " contam como histórico: aparecem no processo, nas decisões e nos valores, mas não geram tarefa. "
+        + (t ? "Isso silenciou " + t + " tarefas antigas que já deviam estar feitas." : "")));
+    } else {
+      dd.appendChild(el("div", null, "O acervo antigo está gerando tarefa como se fosse prazo de agora. "
+        + "Defina de quando em diante o painel é responsável — o que vier antes fica como histórico."));
+    }
+    dd.appendChild(botao(E.corteTarefas ? "Mudar a data do corte" : "Definir o corte agora","calend", E.corteTarefas ? "pq" : "pri", () => dlgCorte()));
     av.appendChild(dd);
     f.appendChild(av);
   }
@@ -4296,7 +4639,7 @@ function telaProcessos(){
     av.appendChild(el("span","k","Ver duplicados"));
     const dd = el("div");
     dd.appendChild(el("div", null, dups.length + (dups.length === 1 ? " par de cadastros" : " pares de cadastros")
-      + " parece ser a mesma coisa. Eu não junto sozinha: mostro campo por campo onde diferem e você decide juntar ou manter os dois explicando a diferença."));
+      + " parece ser a mesma coisa. Eu não junto sozinha: mostro campo por campo onde diferem e você decide."));
     dd.appendChild(botao("Conferir agora","troca","pri", () => dlgDuplicados()));
     av.appendChild(dd);
     f.appendChild(av);
@@ -4312,10 +4655,18 @@ function telaProcessos(){
     if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
   bx.appendChild(bu);
   const comTexto = E.djen.filter(i => i.textoBusca).length;
-  bx.appendChild(el("p","dica", "Busca por parte ignora acento e ordem das palavras. Número acha com ou sem máscara. "
-    + (comTexto ? "Busca por trecho vale nas " + comTexto + " publicações trazidas pela varredura nova."
-                : "Busca por trecho de texto só depois de puxar o acervo.")));
+  bx.appendChild(el("p","dica", "Parte ignora acento e ordem das palavras. Número acha com ou sem máscara. "
+    + (comTexto ? "Trecho vale nas " + comTexto + " publicações com texto guardado." : "Trecho de texto só depois de puxar o acervo.")));
   f.appendChild(bx);
+
+  /* pasta e ordem */
+  const sels = el("div","sels");
+  sels.appendChild(seletor("Pastas", AGRUPAR, agruparPor, v => { agruparPor = v; render(); }));
+  sels.appendChild(seletor("Ordem", ORDENAR, ordenarPor, v => { ordenarPor = v; render(); }));
+  f.appendChild(sels);
+  if (ordenarPor === "minha"){
+    f.appendChild(el("p","dica","Na sua ordem: use as setas no canto de cada cartão. O que você ordenar sobe para o topo da pasta, na sua ordem; o resto continua por data. A estrela fixa no topo em qualquer ordem."));
+  }
 
   /* filtros */
   const linhas = el("div","filtros");
@@ -4347,17 +4698,14 @@ function telaProcessos(){
   if (etiqs.length) grupoChips("Etiqueta", [["todas","Todas",null], ...etiqs.map(([t, q]) => [t, t, q])],
     filtroEtiq, k => { filtroEtiq = k; render(); });
 
-  const soltos = dentro.filter(g => !g.pubs.length);
-  if (soltos.length || pessoasVivas().length){
+  if (pessoasVivas().length){
     const ops = [["todos","Todo o time",dentro.length],
       ["sem","Sem responsável",dentro.filter(g => !g.donos.length).length]];
-    if (soltos.length) ops.push(["caso","Ainda não é processo",soltos.length]);
     pessoasVivas().forEach(p => ops.push([p.id, p.nome.split(" ")[0], dentro.filter(g => g.donos.includes(p.id)).length]));
-    grupoChips("Quem e o quê", ops, filtroProc, k => { filtroProc = k; render(); });
+    grupoChips("Quem", ops, filtroProc, k => { filtroProc = k; render(); });
   }
   f.appendChild(linhas);
 
-  /* aplica */
   const passa = g => {
     if (!casaProcesso(g, buscaProc)) return false;
     if (filtroOrg && !faltaNo(g, filtroOrg)) return false;
@@ -4367,7 +4715,6 @@ function telaProcessos(){
       if (!et.includes(filtroEtiq)) return false;
     }
     if (filtroProc === "sem") return !g.donos.length;
-    if (filtroProc === "caso") return !g.pubs.length;
     if (filtroProc !== "todos") return g.donos.includes(filtroProc);
     return true;
   };
@@ -4376,17 +4723,51 @@ function telaProcessos(){
   const barra = el("div","linhaAcs");
   barra.appendChild(el("p","dica", lista.length + (lista.length === 1 ? " caso" : " casos")
     + (lista.length !== dentro.length ? " de " + dentro.length : "")
-    + (fora.length ? "  ·  " + fora.length + " fora do radar no fim" : "")));
+    + (fora.length ? "  ·  " + fora.length + " descartados no fim" : "")));
   if (lista.length) barra.appendChild(botao("Enviar a lista por e-mail","seta","", () => dlgEnviarLista(lista)));
   f.appendChild(barra);
 
-  if (!lista.length) f.appendChild(el("p","dica","Nada com esse filtro."));
-  lista.forEach(g => f.appendChild(cartaoProcesso(g)));
+  if (!lista.length){ f.appendChild(el("p","dica","Nada com esse filtro.")); }
+  else if (agruparPor === "nenhum"){
+    ordenaDentro(lista).forEach(g => f.appendChild(cartaoProcesso(g, lista)));
+  } else {
+    /* monta as pastas */
+    const mapa = new Map();
+    lista.forEach(g => chavesDeAgrupamento(g).forEach(k => {
+      if (!mapa.has(k)) mapa.set(k, []);
+      mapa.get(k).push(g);
+    }));
+    let ordem;
+    if (agruparPor === "relev") ordem = PASTAS.map(p => p[0]).filter(k => mapa.has(k));
+    else ordem = [...mapa.keys()].sort((a, b) => {
+      const sa = /^Sem /.test(a) ? 1 : 0, sb = /^Sem /.test(b) ? 1 : 0;
+      if (sa !== sb) return sa - sb;
+      return mapa.get(b).length - mapa.get(a).length;
+    });
+    ordem.forEach(k => {
+      const gs = ordenaDentro(mapa.get(k));
+      const meta = agruparPor === "relev" ? PASTAS.find(p => p[0] === k) : null;
+      const dt = el("details","pasta p-" + (agruparPor === "relev" ? k : "outra"));
+      dt.open = meta ? meta[3] : true;
+      if (buscaProc || filtroOrg) dt.open = true;
+      const sm = el("summary");
+      const tt = el("div");
+      tt.appendChild(el("b", null, meta ? meta[1] : k));
+      if (meta) tt.appendChild(el("span", null, meta[2]));
+      sm.appendChild(tt);
+      sm.appendChild(el("span","pq", String(gs.length)));
+      dt.appendChild(sm);
+      const cx = el("div","pastac");
+      gs.forEach(g => cx.appendChild(cartaoProcesso(g, gs)));
+      dt.appendChild(cx);
+      f.appendChild(dt);
+    });
+  }
 
   if (fora.length){
     const dt = el("details","forinha");
     const sm = el("summary");
-    sm.appendChild(el("b", null, "Fora do radar"));
+    sm.appendChild(el("b", null, "Descartados"));
     sm.appendChild(el("span", null, fora.length + (fora.length === 1 ? " caso" : " casos") + " — arquivado, pago ou sem nada a fazer"));
     dt.appendChild(sm);
     fora.forEach(g => {
@@ -4396,8 +4777,10 @@ function telaProcessos(){
       t.appendChild(el("span","dica", (g.caso.motivoFora || "sem motivo")
         + (g.caso.foraPor ? " · por " + g.caso.foraPor : "") + (g.proc ? " · " + g.proc : "")));
       r.appendChild(t);
+      const id = g.caso.id;
       r.appendChild(botao("Trazer de volta","troca","pq", () => {
-        delete g.caso.fora; delete g.caso.motivoFora; tocou(g.caso); salvar(); render(); avisar("De volta à lista");
+        comCaso(id, c => { delete c.fora; delete c.motivoFora; });
+        render(); avisar("De volta à lista");
       }));
       dt.appendChild(r);
     });
@@ -4405,6 +4788,7 @@ function telaProcessos(){
   }
   return f;
 }
+
 
 async function rodarVarredura(){
   if (!E.oabs.filter(o => !o.removido).length) return dlgOab();
@@ -4416,8 +4800,9 @@ async function rodarVarredura(){
   if (!r) return;
   render();
   if (r.falhas) avisar(r.novas + " publicações novas · " + r.falhas + " consultas falharam, tente de novo depois");
-  else { avisar(r.novas + (r.novas === 1 ? " publicação nova" : " publicações novas") + " · " + r.processos
-    + " processos no acervo, em " + r.chamadas + " consultas"); festa(); }
+  else { avisar(r.novas + (r.novas === 1 ? " publicação nova" : " publicações novas")
+    + (r.completadas ? " · " + r.completadas + " antigas ganharam valores e texto" : "")
+    + " · " + r.processos + " processos no acervo, em " + r.chamadas + " consultas"); festa(); }
 }
 
 /* ============================================================
@@ -4863,11 +5248,36 @@ function dlgEnviarListaValores(lista){
 /* ============================================================
    O CARTÃO DO PROCESSO
    ============================================================ */
-function cartaoProcesso(g){
+function cartaoProcesso(g, lista){
   const caso = g.caso || {};
   const prio = prioridadeDe(g);
   const and = comoAnda(g);
-  const cx = el("div","pcard prio-" + prio.p);
+  const cx = el("div","pcard prio-" + prio.p + (caso.fixado ? " fixo" : ""));
+
+  /* estrela e setas: a ordem que você cria. A estrela vale em qualquer ordem;
+     as setas só aparecem quando a ordem escolhida é a sua. */
+  const ord = el("div","pord");
+  const btEstrela = el("button","pfix" + (caso.fixado ? " on" : "")); btEstrela.type = "button";
+  btEstrela.title = caso.fixado ? "Soltar do topo" : "Fixar no topo";
+  btEstrela.setAttribute("aria-pressed", String(!!caso.fixado));
+  btEstrela.appendChild(ico(I.estrela));
+  btEstrela.addEventListener("click", () => {
+    const c = g.caso || (g.proc ? casoDeGrupo(g) : null);
+    if (!c) return;
+    comCaso(c.id, x => { if (x.fixado) delete x.fixado; else x.fixado = true; });
+    render(); avisar((g.caso && g.caso.fixado) ? "Fixado no topo" : "Soltou do topo");
+  });
+  ord.appendChild(btEstrela);
+  if (ordenarPor === "minha" && lista && lista.length > 1){
+    const sobe = el("button","pseta"); sobe.type = "button"; sobe.title = "Subir";
+    sobe.textContent = "\u2191";
+    sobe.addEventListener("click", () => moveNaOrdem(g, lista, -1));
+    const desce = el("button","pseta"); desce.type = "button"; desce.title = "Descer";
+    desce.textContent = "\u2193";
+    desce.addEventListener("click", () => moveNaOrdem(g, lista, 1));
+    ord.appendChild(sobe); ord.appendChild(desce);
+  }
+  cx.appendChild(ord);
 
   /* cabeça */
   const top = el("div","top");
@@ -4993,13 +5403,19 @@ function cartaoProcesso(g){
     if (g.semProvidencia) sm.appendChild(el("span","n", g.semProvidencia + " sem triagem"));
     dt.appendChild(sm);
     g.pubs.slice().sort((a, b) => (b.disp || "").localeCompare(a.disp || "")).slice(0, 12).forEach(p => {
-      const r = el("div","ppub");
+      /* a linha é um botão: leva à triagem daquela publicação, com a certidão em
+         PDF e a grade de atos. Sem isso o processo era um beco sem saída. */
+      const r = el("button","ppub"); r.type = "button";
+      r.addEventListener("click", () => {
+        aba = "notif"; filtroNotif = "todas"; busca = g.proc || ""; notifSel = p.id; render();
+      });
       r.appendChild(el("span","mono", br(p.disp)));
       const tx = el("div");
       tx.appendChild(el("div", null, (p.tipo || "publicação") + (p.decisao ? " — " + p.decisao.rotulo : "")));
       if (p.trecho_prazo) tx.appendChild(el("div","dica", p.trecho_prazo));
-      if ((p.valores || []).length) tx.appendChild(el("div","dica",
+      if (p.valores && p.valores.length) tx.appendChild(el("div","dica",
         "valores no texto: " + p.valores.slice(0,3).map(v => v.txt).join(", ")));
+      tx.appendChild(el("div","abrirp","abrir a triagem desta publicação"));
       r.appendChild(tx);
       dt.appendChild(r);
     });
@@ -5929,6 +6345,12 @@ if (location.protocol === "http:" || location.protocol === "https:"){
 }
 
 /* ===================== início ===================== */
+/* Quem já puxou o acervo antes desta versão está com centenas de tarefas
+   antigas em aberto. O corte nasce aqui, uma vez, e sobe para o time. */
+if (E.acervoEm && !E.corteTarefas){
+  const c = corteAdivinhado();
+  if (c){ E.corteTarefas = c; salvar(); if (E.time) gravaCorte(c); }
+}
 render();
 if (E.time){ sincronizarTime(true); ligarAoVivo(); }
 setTimeout(() => { testarBusca().then(ok => { if (ok) buscaAutomatica(); }); }, 4000);
