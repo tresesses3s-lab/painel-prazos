@@ -294,8 +294,13 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .confbt:hover{background:var(--ambar); color:var(--on-cor)}
 .confbt.ok{border-style:solid; border-color:var(--verde); background:var(--verde-s); color:var(--verde)}
 .confbt.ok:hover{background:var(--verde); color:var(--on-cor)}
+/* nome novo chegando por publicação: cor própria, porque não é "nunca conferiu"
+   (âmbar) nem "está em ordem" (verde) — é conferido que mudou debaixo do pé. */
+.confbt.nova{border-style:solid; border-color:var(--rosa); background:var(--rosa-s); color:var(--rosa)}
+.confbt.nova:hover{background:var(--rosa); color:var(--on-cor)}
 .partesed{display:flex; flex-direction:column; gap:8px; margin:10px 0}
 .pered{display:flex; gap:7px; align-items:center}
+.pered.nova input{border-color:var(--rosa)}
 .pered input{flex:1; min-width:0}
 .pered select{flex:none; max-width:170px}
 .pered.adv input{opacity:.55; text-decoration:line-through}
@@ -320,6 +325,23 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .andar b{display:block; font:700 15px/1.3 "Bricolage Grotesque",sans-serif; color:var(--ink)}
 .andar span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
 
+/* ---- rotinas recorrentes ---- */
+.rotlista{display:flex; flex-direction:column; gap:14px}
+.rotcard{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--line-2);
+  border-radius:15px; padding:16px 18px}
+.rotcard.hoje{border-left-color:var(--teal)}
+.rotcard.atras{border-left-color:var(--rosa); background:var(--rosa-s)}
+.rotcard.ok{border-left-color:var(--verde); opacity:.72}
+.rotit{font:600 16px/1.35 "Source Sans 3",sans-serif; color:var(--ink)}
+.rotcard .ts{display:flex; gap:14px; flex-wrap:wrap; margin-top:5px; font-size:12.5px; color:var(--muted)}
+.rotcard .ps{margin-top:8px}
+.rotcard .acoes{margin-top:14px; justify-content:flex-start}
+.sug{margin-top:24px; border:1px dashed var(--line-2); border-radius:14px; padding:14px 17px}
+.sug summary{cursor:pointer; font:700 11px/1.6 "IBM Plex Mono",monospace; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--muted)}
+.sugl{display:flex; gap:14px; align-items:center; justify-content:space-between;
+  padding:11px 0; border-top:1px solid var(--line)}
+.sugl > div{min-width:0}
 .cobr{background:var(--surface); border:1px solid var(--line); border-radius:17px; padding:16px 18px;
   box-shadow:var(--sh-m); display:flex; flex-direction:column; gap:9px; margin-bottom:18px}
 .cobrtop{display:flex; justify-content:space-between; align-items:center; gap:12px}
@@ -700,8 +722,9 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .aviso{display:flex; gap:13px; align-items:flex-start; border-radius:13px; padding:15px 18px; font-size:14.5px; line-height:1.55; margin-bottom:24px}
 .aviso.amb{background:var(--ambar-s); color:var(--ink-2)}
 .aviso.az{background:var(--azul-s); color:var(--ink-2)}
+.aviso.rs{background:var(--rosa-s); color:var(--ink-2)}
 .aviso .k{font:700 10.5px/1.6 "IBM Plex Mono",monospace; letter-spacing:.11em; text-transform:uppercase; flex:none}
-.aviso.amb .k{color:var(--ambar)} .aviso.az .k{color:var(--azul)}
+.aviso.amb .k{color:var(--ambar)} .aviso.az .k{color:var(--azul)} .aviso.rs .k{color:var(--rosa)}
 .aviso strong{color:var(--ink)}
 .vazio{padding:52px 26px; text-align:center; background:var(--surface); border:1.5px dashed var(--line-2); border-radius:16px}
 .vazio .ic{width:52px; height:52px; margin:0 auto 15px; border-radius:16px; background:var(--azul-s); display:grid; place-items:center}
@@ -867,7 +890,11 @@ const vazio = () => ({ versao:7, oabs:[], pessoas:[], tarefas:[], djen:[], busca
   /* audiencias e pessoal sincronizam. pessoalTitulos NÃO: o título do
      compromisso pessoal fica no aparelho, senão qualquer pessoa com o código
      do time leria a consulta médica de quem o marcou. */
-  audiencias:[], pessoal:[], pessoalTitulos:{} });
+  audiencias:[], pessoal:[], pessoalTitulos:{},
+  /* rotinas: o que se repete e não tem prazo de tribunal. Sincroniza, porque a
+     rotina é do escritório, não de uma pessoa — e a marcação "já fiz" precisa
+     ser vista pelos outros, senão duas pessoas fazem a mesma coisa. */
+  rotinas:[] });
 let E = vazio();
 try { const s = localStorage.getItem(CHAVE); if (s) E = Object.assign(vazio(), JSON.parse(s)); } catch(e){}
 /* Migração v3 -> v4: a lista "feitos" vira um campo em cada item, para a
@@ -879,7 +906,7 @@ if (Array.isArray(E.feitos)){
   delete E.feitos;
 }
 function salvar(){ try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch(e){} }
-const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length || E.casos.length;
+const configurado = () => E.oabs.length || E.djen.length || E.tarefas.length || E.pessoas.length || !!E.time || E.processos.length || E.casos.length || (E.rotinas || []).length;
 
 let aba = "painel", filtro = "tudo", busca = "", buscaPar = "", medalhasAntes = new Set(), primeira = true;
 let notifSel = null, filtroAgenda = "todos", filtroNotif = "pend", buscandoNovas = false;
@@ -1227,7 +1254,12 @@ async function varrerParalelo(aviso){
   const lista = E.processos.filter(p => !p.removido);
   if (!lista.length) throw new Error("Nenhum processo na lista. Importe a lista do Acompanhamento Paralelo primeiro.");
   const fim = HOJE, ini = dataLocal(new Date(Date.now() - (E.paraleloDias || 30) * 864e5));
-  let novos = 0, comMovimento = 0, lidos = 0;
+  /* Falha de rede aqui não pode ser só "continue": são 3,5s por processo, então
+     uma rede recusada faria a varredura girar quase doze minutos sem trazer
+     nada e terminar dizendo "0 novos", como se não houvesse movimento. Rede
+     recusada e aparelho offline abortam na hora; "inalcançável" pode ser um
+     soluço do serviço, então tolera dois seguidos antes de desistir. */
+  let novos = 0, comMovimento = 0, lidos = 0, seguidas = 0;
   for (const p of lista){
     lidos++;
     if (aviso) aviso(lidos, lista.length, p.rotulo || mascaraCNJ(p.numero));
@@ -1237,9 +1269,18 @@ async function varrerParalelo(aviso){
     try {
       const r = await fetch(url);
       if (r.status === 429){ await new Promise(x => setTimeout(x, 9000)); continue; }
-      if (!r.ok) continue;
+      if (r.status === 403){ motivoRede = "recusada"; podeBuscar = false; throw new Error(frasRede("recusada")); }
+      if (!r.ok){ seguidas = 0; continue; }
       d = await r.json();
-    } catch(e){ continue; }
+      seguidas = 0;
+    } catch(e){
+      if (e && e.jaExplicado) throw e;
+      if (!(e instanceof TypeError)) throw e;   /* erro de rede; qualquer outro sobe */
+      const motivo = await diagnosticarRede();
+      seguidas++;
+      if (motivo !== "inalcancavel" || seguidas >= 2) throw await explicaFalha(e);
+      continue;
+    }
     const itens = d.items || [];
     if (itens.length) comMovimento++;
     itens.forEach(c => {
@@ -1326,13 +1367,91 @@ async function buscaAutomatica(){
   } catch(e){ /* silenciosa: o botão manual mostra o erro de verdade */ }
 }
 
-async function testarBusca(){
-  if (podeBuscar !== null) return podeBuscar;
+/* ---------- por que o CNJ não respondeu ----------
+   O DJEN fica atrás do CloudFront. Quando ele recusa o pedido, devolve 403 com
+   uma página de erro que NÃO traz cabeçalho CORS — e aí o `fetch` da página nem
+   chega a VER o 403: estoura "Failed to fetch", igualzinho a estar sem internet.
+   Confundir as duas coisas é caro. "Sem internet" a pessoa resolve sozinha em
+   dez segundos; "esta rede é recusada" ela não resolve mexendo no painel — e
+   até 17/09/2026 o app dizia que a causa era acesso vindo de datacenter e
+   mandava abrir numa rede residencial, conselho que não conserta nada.
+
+   Discriminador medido em 17/09/2026, com a saída de internet em Londres:
+     fetch normal                    → TypeError "Failed to fetch"
+     mesmo pedido em mode:"no-cors"  → RESOLVE opaque (a resposta CHEGOU)
+     host inexistente em no-cors     → rejeita
+   Logo: resolveu em no-cors = o CNJ respondeu e recusou; rejeitou = não se
+   alcança o CNJ. É a única forma de separar os dois casos de dentro da página,
+   já que o corpo e o status da resposta recusada são invisíveis para nós. */
+const API_TRIBUNAL = "https://comunicaapi.pje.jus.br/api/v1/comunicacao/tribunal";
+let motivoRede = null;   /* "offline" | "recusada" | "inalcancavel" | null = tudo certo */
+
+const TITULO_REDE = {
+  offline:      "Sem internet",
+  recusada:     "O CNJ recusou esta rede",
+  inalcancavel: "Não deu para alcançar o CNJ",
+};
+const TEXTO_REDE = {
+  offline: "O aparelho está sem internet. Quando a conexão voltar, toque em buscar de novo.",
+  recusada: "O DJEN só atende pedido que sai do Brasil. Estando fora do país, ou numa VPN com saída no "
+    + "exterior, a consulta não passa — e a rede pode estar ótima para todo o resto, por isso não parece "
+    + "problema de conexão. Ligue uma VPN com saída no Brasil, ou use uma rede brasileira, e tente de novo.",
+  inalcancavel: "Não chegou resposta nenhuma do CNJ. Pode ser o serviço fora do ar por alguns minutos, ou "
+    + "um firewall entre você e ele. Tente de novo mais tarde.",
+};
+const TEXTO_RESTO = " O resto do painel funciona normalmente: marcar, criar tarefa, delegar, agenda e "
+  + "financeiro não dependem do CNJ.";
+const frasRede = m => TEXTO_REDE[m] + (m === "offline" ? "" : TEXTO_RESTO);
+
+async function diagnosticarRede(){
+  if (navigator.onLine === false) return "offline";
+  try { await fetch(API_TRIBUNAL, { mode:"no-cors", cache:"no-store" }); return "recusada"; }
+  catch(e){ return "inalcancavel"; }
+}
+
+/* Troca o erro cru de uma chamada ao DJEN por uma frase que diz o que fazer.
+   Marca `jaExplicado` para não diagnosticar duas vezes a mesma falha. */
+async function explicaFalha(e){
+  if (e && e.jaExplicado) return e;
+  motivoRede = await diagnosticarRede();
+  podeBuscar = false;
+  const novo = new Error(frasRede(motivoRede));
+  novo.jaExplicado = true;
+  novo.motivo = motivoRede;
+  return novo;
+}
+
+/* `forcar` existe porque o resultado era guardado para sempre: quem ligava a
+   VPN depois de abrir o painel continuava vendo "sem busca automática" até
+   recarregar a página. O botão de testar de novo passa true. */
+async function testarBusca(forcar){
+  if (podeBuscar !== null && !forcar) return podeBuscar;
   try {
-    const r = await fetch("https://comunicaapi.pje.jus.br/api/v1/comunicacao/tribunal", {cache:"no-store"});
+    const r = await fetch(API_TRIBUNAL, {cache:"no-store"});
     podeBuscar = r.ok;
-  } catch(e){ podeBuscar = false; }
+    motivoRede = r.ok ? null : "recusada";
+  } catch(e){
+    podeBuscar = false;
+    motivoRede = await diagnosticarRede();
+  }
   return podeBuscar;
+}
+
+/* Diálogo único para falha de rede, usado por toda varredura. O aviso flutuante
+   some em 4,2s — curto demais para uma instrução que a pessoa precisa seguir. */
+function dlgRede(motivo){
+  const m = $("modal"); m.innerHTML = "";
+  m.appendChild(el("h3", null, TITULO_REDE[motivo] || "Não deu para consultar o CNJ"));
+  m.appendChild(el("p","sb", frasRede(motivo)));
+  const ac = el("div","acoes");
+  ac.appendChild(botao("Testar de novo","troca","pri", async () => {
+    const ok = await testarBusca(true);
+    fechar(); render();
+    avisar(ok ? "Pronto, o CNJ respondeu" : "Ainda não passa: " + (TITULO_REDE[motivoRede] || "").toLowerCase());
+  }));
+  ac.appendChild(botao("Entendi","check","", () => { fechar(); render(); }));
+  m.appendChild(ac);
+  $("fundo").classList.add("on");
 }
 
 async function buscarOab(uf, numero, nome, aviso){
@@ -1343,9 +1462,13 @@ async function buscarOab(uf, numero, nome, aviso){
     const url = "https://comunicaapi.pje.jus.br/api/v1/comunicacao?numeroOab="+encodeURIComponent(numero)
       + "&ufOab="+encodeURIComponent(uf) + "&dataDisponibilizacaoInicio="+ini + "&dataDisponibilizacaoFim="+fim
       + "&itensPorPagina=100&pagina="+pagina;
-    const r = await fetch(url);
+    let r;
+    try { r = await fetch(url); }
+    catch(e){ throw await explicaFalha(e); }
     if (r.status === 429) throw new Error("O CNJ pediu para desacelerar (429). Espere um minuto e tente de novo.");
-    if (r.status === 403) throw new Error("O CNJ recusou esta rede (403). Ele bloqueia acesso vindo de datacenter — abra o arquivo numa máquina em rede residencial ou do escritório.");
+    /* 403 legível só chega quando a recusa vem com CORS; o caso comum é o
+       CloudFront barrar antes e cair no catch acima. Mesma explicação nos dois. */
+    if (r.status === 403){ motivoRede = "recusada"; podeBuscar = false; throw new Error(frasRede("recusada")); }
     if (!r.ok) throw new Error("O CNJ respondeu HTTP " + r.status + ".");
     const d = await r.json();
     if (total === null) total = d.count;
@@ -1502,7 +1625,7 @@ const FS = "https://firestore.googleapis.com/v1";
 /* "valores" e "pessoalTitulos" estão FORA desta lista de propósito: o valor
    digitado à mão e o título do compromisso pessoal não sobem para o Firestore.
    Tem teste travando os dois. */
-const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados", "oabs", "casos", "audiencias", "pessoal"];
+const COLECOES = ["pessoas", "tarefas", "djen", "processos", "paralelo", "recados", "oabs", "casos", "audiencias", "rotinas", "pessoal"];
 /* Ritmo adaptativo: rápido enquanto há gente mexendo, lento quando está parado,
    e PARADO quando a aba está escondida. Isso é o que deixa a conversa entre duas
    pessoas parecer imediata sem estourar a cota gratuita — uma aba escondida não
@@ -1693,6 +1816,7 @@ function localDe(col){
   if (col === "oabs") return E.oabs.map(o => Object.assign({}, o, { id: o.id || (o.uf + o.numero) }));
   if (col === "casos") return E.casos;
   if (col === "audiencias") return E.audiencias;
+  if (col === "rotinas") return E.rotinas;
   if (col === "pessoal") return E.pessoal;
   if (col === "paralelo") return E.paralelo.map(i => Object.assign({}, i, { id: String(i.id) }));
   return E.djen.map(i => Object.assign({}, i, { id: String(i.id) }));
@@ -1707,6 +1831,7 @@ function aplicaLocal(col, lista){
   else if (col === "oabs") fundeNoLugar(E.oabs, lista);
   else if (col === "casos") fundeNoLugar(E.casos, lista);
   else if (col === "audiencias") fundeNoLugar(E.audiencias, lista);
+  else if (col === "rotinas") fundeNoLugar(E.rotinas, lista);
   else if (col === "pessoal") fundeNoLugar(E.pessoal, lista);
   else if (col === "paralelo") fundeNoLugar(E.paralelo, lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id })));
   else fundeNoLugar(E.djen, lista.map(i => Object.assign({}, i, { id: isNaN(+i.id) ? i.id : +i.id })));
@@ -2072,6 +2197,7 @@ function render(){
   if (aba === "proc")     app.appendChild(telaProcessos());
   if (aba === "fin")      app.appendChild(telaFinanceiro());
   if (aba === "aud")      app.appendChild(telaAudiencias());
+  if (aba === "rotinas")  app.appendChild(telaRotinas());
   if (aba === "pess")     app.appendChild(telaPessoal());
   if (aba === "dec")      app.appendChild(telaDecisoes());
   if (aba === "paralelo") app.appendChild(telaParalelo());
@@ -2098,6 +2224,7 @@ function renderAbas(){
     ["aud","Audiências","martelo",semTranscricao().length || sessoesPropostas().length || null],
     ["dec","Decisões","martelo",null],
     ["agenda","Agenda","calend",null],
+    ["rotinas","Rotinas","troca", (rotinasAtrasadas().length + rotinasPendentesHoje().length) || null],
     ["todo","Tarefas","lista",pl.abertas],["paralelo","Paralelo","busca",naoVistos],
     ["equipe","Equipe","pessoa",pessoasVivas().length],
     ["pess","Pessoal","estrela",meusPessoais().filter(p => p.quando.slice(0,10) >= HOJE).length || null],
@@ -4013,7 +4140,10 @@ async function varrerAcervo(aviso){
   if (!oabs.length){ avisar("Cadastre uma OAB primeiro"); return null; }
   const jaTem = new Set(E.djen.map(i => String(i.hash || i.id)));
   const hoje = HOJE;
-  let novas = 0, chamadas = 0, falhas = 0, completadas = 0;
+  /* `erroRede` guarda o PRIMEIRO motivo diagnosticado. Sem ele a varredura
+     devolvia só "N consultas falharam, tente de novo depois" — que para quem
+     está fora do Brasil é conselho vazio: nunca vai funcionar tentando de novo. */
+  let novas = 0, chamadas = 0, falhas = 0, completadas = 0, erroRede = null;
   for (let k = 0; k < oabs.length; k++){
     const o = oabs[k];
     if (aviso) aviso("Inscrição " + (k + 1) + " de " + oabs.length + " — " + o.numero + "/" + o.uf
@@ -4027,9 +4157,9 @@ async function varrerAcervo(aviso){
       try {
         const r = await fetch(u, { headers:{ Accept:"application/json" } });
         chamadas++;
-        if (!r.ok) { falhas++; break; }
+        if (!r.ok) { falhas++; if (r.status === 403 && !erroRede) erroRede = "recusada"; break; }
         j = await r.json();
-      } catch(e){ falhas++; break; }
+      } catch(e){ falhas++; if (!erroRede) erroRede = await diagnosticarRede(); break; }
       const itens = j.items || [];
       itens.forEach(c => {
         const h = String(c.hash || c.id);
@@ -4069,7 +4199,7 @@ async function varrerAcervo(aviso){
     if (c) await gravaCorte(c);
   }
   salvar(); anotaBusca();
-  return { novas, processos, chamadas, falhas, completadas, oabs:oabs.length };
+  return { novas, processos, chamadas, falhas, completadas, erroRede, oabs:oabs.length };
 }
 
 /* ---------- gestalt: o quanto o acervo está organizado ----------
@@ -4272,6 +4402,7 @@ function faltaNo(g, k){
   if (k === "dono")   return !g.donos.length;
   if (k === "triado") return !!g.semProvidencia;
   if (k === "partes") return g.pubs.length && !conferidas(g);
+  if (k === "partesnovas") return partesNovas(g).length > 0;
   return false;
 }
 
@@ -4620,13 +4751,51 @@ function palpitePolo(nome){
   return "?";
 }
 
-/* As partes que valem: as conferidas, se houver; senão a proposta da API. */
+/* ---------- parte que chega DEPOIS da conferência ----------
+   Defeito que isto conserta: `partesDo()` devolvia só `partesEd`, então, uma vez
+   conferido o processo, nome que aparecesse numa publicação nova ficava
+   INVISÍVEL — e o selo continuava verde, "partes conferidas". Justamente no caso
+   que importa: litisconsorte que entra no meio, terceiro chamado ao processo,
+   sucessão de parte. O painel afirmava saber quem eram as partes enquanto
+   escondia a única novidade.
+   Agora o que a API traz e ninguém conferiu volta à tona marcado como novo, e a
+   conferência deixa de valer até alguém olhar. O que NÃO é parte (advogado,
+   serventuário) sai de vez pelo diálogo e fica registrado em `partesFora` —
+   sem isso o mesmo nome voltaria a incomodar a cada varredura. */
+const mesmoNome = (a, b) => normaliza(a) === normaliza(b);
+
+/* nomes vindos das publicações, já descontados os que alguém descartou */
+function nomesDaApi(g){
+  const fora = (g.caso || {}).partesFora || [];
+  return (g.partes || []).filter(n => !fora.some(x => mesmoNome(x, n)));
+}
+
+/* só existe "parte nova" onde já houve conferência; antes disso é tudo proposta */
+function partesNovas(g){
+  const c = g.caso;
+  if (!c || !c.partesEd || !c.partesEd.length) return [];
+  return nomesDaApi(g).filter(n => !c.partesEd.some(p => mesmoNome(p.nome, n)));
+}
+
+/* qual publicação trouxe o nome — é o que deixa a pessoa conferir sem abrir os autos */
+function pubDaParte(g, nome){
+  return g.pubs.filter(p => (p.partes || []).some(n => mesmoNome(n, nome)))
+    .sort((a, b) => String(a.disp || "").localeCompare(String(b.disp || "")))
+    .pop() || null;
+}
+
+/* As partes que valem: as conferidas, mais o que chegou depois, sinalizado. */
 function partesDo(g){
   const c = g.caso;
-  if (c && c.partesEd && c.partesEd.length) return c.partesEd;
-  return (g.partes || []).map(n => ({ nome: n, polo: palpitePolo(n), proposta: true }));
+  if (c && c.partesEd && c.partesEd.length){
+    const novas = partesNovas(g).map(n => ({ nome:n, polo:palpitePolo(n), proposta:true, nova:true }));
+    return c.partesEd.concat(novas);
+  }
+  return nomesDaApi(g).map(n => ({ nome: n, polo: palpitePolo(n), proposta: true }));
 }
-function conferidas(g){ return !!(g.caso && g.caso.partesOk); }
+/* conferência com parte nova pendente NÃO conta como conferida: é assim que a
+   cobrança "partes não conferidas" (faltaNo) volta a aparecer sozinha. */
+function conferidas(g){ return !!(g.caso && g.caso.partesOk) && !partesNovas(g).length; }
 function porPolo(g, polo){ return partesDo(g).filter(p => p.polo === polo).map(p => p.nome); }
 
 /* Título do processo: "Autor × Réu" quando se sabe; senão os dois primeiros
@@ -4644,8 +4813,18 @@ function tituloDe(g){
 
 function dlgPartes(g){
   const caso = g.caso || casoDeGrupo(g);
-  const lista = partesDo(g).map(p => ({ nome:p.nome, polo:p.polo }));
+  const lista = partesDo(g).map(p => ({ nome:p.nome, polo:p.polo, nova:!!p.nova }));
+  const novas = partesNovas(g);
   const f = document.createDocumentFragment();
+
+  if (novas.length){
+    const nv = el("div","aviso rs");
+    nv.appendChild(el("span","k", novas.length === 1 ? "Chegou 1 nome novo" : "Chegaram " + novas.length + " nomes novos"));
+    nv.appendChild(el("div", null, "Depois da última conferência, publicação nova trouxe nome que não estava aqui. "
+      + "Pode ser litisconsorte que entrou, terceiro chamado ao processo, sucessão de parte — ou só o advogado da outra "
+      + "banda. Diga o que é cada um: o que você apagar some de vez e não volta na próxima varredura."));
+    f.appendChild(nv);
+  }
 
   const av = el("div","aviso amb");
   av.appendChild(el("span","k","Por que isso precisa da sua mão"));
@@ -4659,7 +4838,14 @@ function dlgPartes(g){
     box.innerHTML = "";
     if (!lista.length) box.appendChild(el("p","dica","Nenhum nome. Acrescente abaixo."));
     lista.forEach((p, i) => {
-      const r = el("div","pered" + (p.polo === "advogado" ? " adv" : ""));
+      const r = el("div","pered" + (p.polo === "advogado" ? " adv" : "") + (p.nova ? " nova" : ""));
+      if (p.nova){
+        const pb = pubDaParte(g, p.nome);
+        const tg = el("span","tag t-rosa","nova");
+        tg.title = pb ? "Veio da publicação de " + br(pb.disp) + (pb.trib ? " · " + pb.trib : "")
+          + (pb.tipo ? " · " + pb.tipo : "") : "Veio de publicação posterior à conferência";
+        r.appendChild(tg);
+      }
       const nm = entrada("text", p.nome, "Nome");
       nm.addEventListener("input", e => { p.nome = e.target.value; });
       r.appendChild(nm);
@@ -4689,6 +4875,10 @@ function dlgPartes(g){
     const limpa = lista.filter(p => p.nome && p.nome.trim()).map(p => ({ nome:p.nome.trim(), polo:p.polo }));
     comCaso(caso.id, c => {
       c.partesEd = limpa;
+      /* Nome que a API trouxe e você não quis fica registrado como descartado.
+         Sem isso ele voltaria como "parte nova" na varredura seguinte, e a
+         pessoa apagaria o mesmo advogado da outra banda todo mês. */
+      c.partesFora = (g.partes || []).filter(n => !limpa.some(p => mesmoNome(p.nome, n)));
       c.partesOk = { por: (E.time && E.time.meuNome) || "você", em: agoraISO() };
     });
     fechar(); render();
@@ -5398,6 +5588,309 @@ function telaPessoal(){
 }
 
 /* ============================================================
+   ROTINAS RECORRENTES
+   ------------------------------------------------------------
+   O que não tem prazo de tribunal não cobra ninguém. "Organizar os prazos da
+   semana" e "subir os documentos no Drive" são o tipo de coisa que todo mundo
+   concorda que devia acontecer toda segunda e que ninguém faz — porque não
+   existe em lugar nenhum, só na cabeça.
+
+   Esta aba faz duas coisas, e só: mostra o que é para hoje (e o que passou em
+   branco), e leva a rotina para o Google Agenda JÁ REPETINDO, pelo parâmetro
+   `recur` com uma RRULE. Quem cobra de verdade é o celular, não este painel.
+
+   Duas decisões deliberadas:
+   1. Rotina NÃO vira tarefa. Se virasse, uma rotina semanal despejaria 52
+      itens por ano na aba Tarefas e afogaria prazo de verdade. Tem marcação
+      própria, por ocorrência, em `feitos[data]`.
+   2. Nada é criado sozinho. As sugestões ficam num quadro à parte e só entram
+      se alguém tocar — mesmo princípio dos 200 documentos vazios que o cartão
+      do processo quase criou no Firestore.
+   ============================================================ */
+
+const DIAS_SEM = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const DIAS_RRULE = ["SU","MO","TU","WE","TH","FR","SA"];
+const FREQS = [
+  ["semanal",   "Toda semana"],
+  ["quinzenal", "De 15 em 15 dias"],
+  ["mensal",    "Uma vez por mês"],
+  ["uteis",     "Todo dia útil"],
+];
+
+/* sugestões prontas — proposta, não cadastro */
+const ROTINAS_SUGERIDAS = [
+  { titulo:"Organizar os prazos da semana", freq:"semanal", dia:1, hora:"09:00",
+    detalhe:"Passar os prazos da semana, conferir quem é responsável por cada um e pôr na agenda o que ainda estiver solto." },
+  { titulo:"Subir os documentos da semana no Drive", freq:"semanal", dia:1, hora:"17:00",
+    detalhe:"Guardar na pasta do processo o que foi produzido na semana, para ninguém procurar documento no e-mail de outra pessoa." },
+  { titulo:"Conferir as partes dos processos novos", freq:"semanal", dia:3, hora:"14:00",
+    detalhe:"A API mistura parte e advogado e não diz quem é autor. Vinte minutos por semana tiram o palpite do painel." },
+  { titulo:"Revisar os processos parados", freq:"mensal", dia:1, hora:"10:00",
+    detalhe:"Olhar a pasta “Parado” e decidir: dar um passo, mudar o status ou tirar do radar." },
+  { titulo:"Fechar o financeiro do mês", freq:"mensal", dia:28, hora:"16:00",
+    detalhe:"Conferir o que foi lançado, o que está aguardando e o que precisa ir para o financeiro." },
+];
+
+const rotinasVivas = () => (E.rotinas || []).filter(r => !r.removido);
+
+/* A ocorrência do período em que `ref` cai. É a âncora de tudo: "foi feita?" e
+   "está atrasada?" perguntam sempre sobre uma DATA, nunca sobre a rotina. */
+function ocorrenciaDe(r, ref){
+  const base = new Date((ref || HOJE) + "T00:00:00Z");
+  if (r.freq === "uteis") return util(base) ? isoDe(base) : null;
+  if (r.freq === "mensal"){
+    const ano = base.getUTCFullYear(), mes = base.getUTCMonth();
+    /* dia 31 em mês de 30 cai no último dia do mês, não some */
+    const ultimo = new Date(Date.UTC(ano, mes + 1, 0)).getUTCDate();
+    return isoDe(new Date(Date.UTC(ano, mes, Math.min(r.dia || 1, ultimo))));
+  }
+  /* semanal e quinzenal: o dia da semana pedido, dentro da semana de `ref` */
+  const d = new Date(base);
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() - (r.dia || 1) + 7) % 7));
+  const iso = isoDe(d);
+  if (r.freq !== "quinzenal") return iso;
+  /* quinzenal conta semanas cheias desde a criação, para as duas pessoas do
+     time chegarem à MESMA semana sem precisar sincronizar um contador */
+  const desde = new Date((r.criadoEm || iso).slice(0,10) + "T00:00:00Z");
+  const semanas = Math.floor((d - desde) / 6048e5);
+  return semanas % 2 === 0 ? iso : null;
+}
+
+function proximaDe(r){
+  for (let i = 0; i < 62; i++){
+    const dia = isoDe(new Date(Date.now() + i * 864e5));
+    const oc = ocorrenciaDe(r, dia);
+    if (oc && oc >= HOJE && !rotinaFeita(r, oc)) return oc;
+  }
+  return null;
+}
+/* Última ocorrência que passou em branco. Só UMA: listar todas as segundas do
+   ano em que ninguém organizou prazo vira ruído e a pessoa desliga a aba. */
+function atrasadaDe(r){
+  for (let i = 1; i <= 45; i++){
+    const dia = isoDe(new Date(Date.now() - i * 864e5));
+    const oc = ocorrenciaDe(r, dia);
+    if (oc && oc < HOJE && oc >= (r.criadoEm || "").slice(0,10)) return rotinaFeita(r, oc) ? null : oc;
+  }
+  return null;
+}
+const rotinaFeita = (r, data) => !!((r.feitos || {})[data]);
+const rotinaHoje  = r => ocorrenciaDe(r, HOJE) === HOJE;
+const rotinasPendentesHoje = () => rotinasVivas().filter(r => rotinaHoje(r) && !rotinaFeita(r, HOJE));
+const rotinasAtrasadas     = () => rotinasVivas().filter(r => atrasadaDe(r));
+
+function marcarRotina(r, data, feito){
+  const alvo = E.rotinas.find(x => x.id === r.id); if (!alvo) return;
+  alvo.feitos = alvo.feitos || {};
+  if (feito) alvo.feitos[data] = { por:(E.time && E.time.meuNome) || "você", em:agoraISO() };
+  else delete alvo.feitos[data];
+  tocou(alvo); salvar();
+}
+
+function rrule(r){
+  if (r.freq === "uteis")     return "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR";
+  if (r.freq === "mensal"){
+    const d = r.dia || 1;
+    /* Dia 29, 30 e 31 não existem em todo mês. `ocorrenciaDe` encosta no último
+       dia; `BYMONTHDAY=31` sozinho faria o Google PULAR fevereiro, abril, junho,
+       setembro e novembro — a agenda diria uma coisa e o painel outra.
+       `BYMONTHDAY=<d>,-1` com `BYSETPOS=1` reproduz o encosto: em março o
+       conjunto é {30,31} e vence 30; em fevereiro sobra só o dia 28. */
+    return d >= 29 ? "RRULE:FREQ=MONTHLY;BYMONTHDAY=" + d + ",-1;BYSETPOS=1"
+                   : "RRULE:FREQ=MONTHLY;BYMONTHDAY=" + d;
+  }
+  if (r.freq === "quinzenal") return "RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=" + DIAS_RRULE[r.dia || 1];
+  return "RRULE:FREQ=WEEKLY;BYDAY=" + DIAS_RRULE[r.dia || 1];
+}
+function quandoDiz(r){
+  const f = (FREQS.find(x => x[0] === r.freq) || [])[1] || "";
+  if (r.freq === "mensal") return "Todo dia " + (r.dia || 1) + ", às " + (r.hora || "09:00");
+  if (r.freq === "uteis")  return "Todo dia útil, às " + (r.hora || "09:00");
+  return f + ", " + DIAS_SEM[r.dia || 1] + ", às " + (r.hora || "09:00");
+}
+
+/* O evento nasce na PRÓXIMA ocorrência e repete dali em diante. Marcar no
+   passado faria o Google mostrar a série começando em data já vencida. */
+function linkAgendaRotina(r, comTime){
+  const dia = proximaDe(r) || ocorrenciaDe(r, HOJE) || HOJE;
+  const [hh, mm] = String(r.hora || "09:00").split(":");
+  const ini = dia.replace(/-/g, "") + "T" + hh + mm + "00";
+  const fimD = new Date(Number(dia.slice(0,4)), Number(dia.slice(5,7)) - 1, Number(dia.slice(8,10)), Number(hh), Number(mm) + 45);
+  const fim = isoDe(fimD).replace(/-/g, "") + "T" + String(fimD.getHours()).padStart(2,"0")
+    + String(fimD.getMinutes()).padStart(2,"0") + "00";
+  const campos = { action:"TEMPLATE", text: r.titulo,
+    dates: ini + "/" + fim,
+    details: (r.detalhe ? r.detalhe + "\n\n" : "") + "Rotina do Painel de Prazos · " + quandoDiz(r),
+    recur: rrule(r) };
+  if (comTime){
+    const mails = pessoasVivas().filter(p => p.email).map(p => p.email);
+    if (mails.length) campos.add = mails.join(",");
+  } else {
+    const eu = euSou();
+    if (eu && eu.email) campos.add = eu.email;
+  }
+  return "https://calendar.google.com/calendar/render?" + new URLSearchParams(campos).toString();
+}
+
+async function icsRotina(r){
+  const dia = proximaDe(r) || ocorrenciaDe(r, HOJE) || HOJE;
+  const [hh, mm] = String(r.hora || "09:00").split(":");
+  const L = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Painel de Prazos//rotinas//PT-BR","CALSCALE:GREGORIAN",
+    "BEGIN:VEVENT","UID:rot-" + r.id + "@painel-prazos","DTSTAMP:" + carimbo(),
+    "DTSTART:" + dia.replace(/-/g,"") + "T" + hh + mm + "00",
+    "DURATION:PT45M", rrule(r),
+    "SUMMARY:" + icsEsc(r.titulo),
+    "DESCRIPTION:" + icsEsc((r.detalhe || "") + " — " + quandoDiz(r)),
+    "BEGIN:VALARM","TRIGGER:-PT30M","ACTION:DISPLAY","DESCRIPTION:" + icsEsc(r.titulo),"END:VALARM",
+    "END:VEVENT","END:VCALENDAR"];
+  await salvarArquivo("rotina-" + r.id + ".ics", L.map(dobra).join("\r\n"), "text/calendar");
+}
+
+function dlgRotina(existente){
+  const r = existente || { freq:"semanal", dia:1, hora:"09:00" };
+  const tit = entrada("text", r.titulo || "", "Ex.: organizar os prazos da semana");
+  const det = el("textarea"); det.rows = 3; det.value = r.detalhe || "";
+  det.placeholder = "O que exatamente é para fazer. Aparece dentro do evento da agenda.";
+  const fr = el("select");
+  FREQS.forEach(([k, rot]) => { const o = el("option", null, rot); o.value = k; if (r.freq === k) o.selected = true; fr.appendChild(o); });
+  const diaSem = el("select");
+  DIAS_SEM.forEach((n, i) => { const o = el("option", null, n); o.value = String(i); if ((r.dia ?? 1) === i) o.selected = true; diaSem.appendChild(o); });
+  const diaMes = entrada("number", String(r.freq === "mensal" ? (r.dia || 1) : 1), "Dia do mês");
+  diaMes.min = "1"; diaMes.max = "31";
+  const hora = entrada("time", r.hora || "09:00");
+  const quem = selPessoa(r.pessoaId);
+
+  const cSem = campo("Em que dia", diaSem), cMes = campo("Dia do mês", diaMes);
+  const pinta = () => { cSem.hidden = (fr.value === "mensal" || fr.value === "uteis"); cMes.hidden = fr.value !== "mensal"; };
+  fr.addEventListener("change", pinta); pinta();
+
+  modal(existente ? "Editar rotina" : "Nova rotina recorrente",
+    "O painel lembra; o Google Agenda cobra.",
+    [campo("O que é", tit), campo("Detalhe", det), campo("Com que frequência", fr), cSem, cMes,
+     campo("A que horas", hora), campo("De quem é", quem)], () => {
+    if (!tit.value.trim()) return avisar("Dê um nome à rotina");
+    const dia = fr.value === "mensal" ? Math.min(31, Math.max(1, +diaMes.value || 1)) : +diaSem.value;
+    if (existente){
+      const alvo = E.rotinas.find(x => x.id === existente.id);
+      Object.assign(alvo, { titulo:tit.value.trim(), detalhe:det.value.trim(), freq:fr.value, dia,
+        hora:hora.value || "09:00", pessoaId:quem.value || null });
+      tocou(alvo);
+    } else {
+      const novo = { id:uid(), titulo:tit.value.trim(), detalhe:det.value.trim(), freq:fr.value, dia,
+        hora:hora.value || "09:00", pessoaId:quem.value || null, feitos:{}, criadoEm:agoraISO() };
+      tocou(novo); E.rotinas.push(novo);
+    }
+    salvar(); fechar(); render();
+    avisar(existente ? "Rotina ajustada" : "Rotina criada — agora ponha na agenda");
+  }, existente ? "Salvar" : "Criar rotina");
+}
+
+function cartaoRotina(r){
+  const atras = atrasadaDe(r), hoje = rotinaHoje(r), feitaHoje = rotinaFeita(r, HOJE);
+  const c = el("div","rotcard" + (atras ? " atras" : hoje && !feitaHoje ? " hoje" : feitaHoje ? " ok" : ""));
+  const top = el("div","rottop");
+  const nm = el("div");
+  const h = el("div","rotit");
+  if (atras) h.appendChild(el("span","tag t-rosa","passou em branco"));
+  else if (hoje && !feitaHoje) h.appendChild(el("span","tag t-teal","é hoje"));
+  else if (feitaHoje) h.appendChild(el("span","tag","feita hoje"));
+  h.appendChild(document.createTextNode(" " + r.titulo));
+  nm.appendChild(h);
+  const ts = el("div","ts");
+  ts.appendChild(el("span", null, quandoDiz(r)));
+  const prox = proximaDe(r);
+  if (prox) ts.appendChild(el("span", null, prox === HOJE ? "hoje" : "próxima: " + br(prox)));
+  if (atras) ts.appendChild(el("span", null, "última: " + br(atras)));
+  const p = r.pessoaId && pessoaDe(r.pessoaId);
+  if (p){ const q = el("span","quem"); q.appendChild(avatar(p)); q.appendChild(el("span",null,p.nome)); ts.appendChild(q); }
+  nm.appendChild(ts);
+  if (r.detalhe) nm.appendChild(el("p","ps", r.detalhe));
+  top.appendChild(nm);
+  c.appendChild(top);
+
+  const acs = el("div","acoes");
+  const a = el("a","bt pri"); a.href = linkAgendaRotina(r, false); a.target = "_blank"; a.rel = "noopener";
+  a.appendChild(ico(I.calend)); a.appendChild(el("span", null, "Pôr na agenda, repetindo"));
+  acs.appendChild(a);
+  if (pessoasVivas().filter(x => x.email).length){
+    const at = el("a","bt"); at.href = linkAgendaRotina(r, true); at.target = "_blank"; at.rel = "noopener";
+    at.appendChild(ico(I.pessoa)); at.appendChild(el("span", null, "Convidar a equipe"));
+    acs.appendChild(at);
+  }
+  acs.appendChild(botao(".ics","baixar","", () => icsRotina(r)));
+  const alvo = atras || (hoje ? HOJE : null);
+  if (alvo) acs.appendChild(botao(rotinaFeita(r, alvo) ? "Desmarcar" : "Já fiz", "check", rotinaFeita(r, alvo) ? "" : "grita pq",
+    () => { marcarRotina(r, alvo, !rotinaFeita(r, alvo)); render(); if (!rotinaFeita(r, alvo)) return; festa(); }));
+  acs.appendChild(botao("Editar","lapis","", () => dlgRotina(r)));
+  acs.appendChild(botao("","lixo","pq so", () => {
+    const alvoR = E.rotinas.find(x => x.id === r.id);
+    alvoR.removido = true; tocou(alvoR); salvar(); render(); avisar("Rotina removida");
+  }));
+  c.appendChild(acs);
+  return c;
+}
+
+function telaRotinas(){
+  const f = document.createDocumentFragment();
+  const cab = el("div","cab");
+  const d = el("div");
+  d.appendChild(el("h2", null, "Rotinas recorrentes"));
+  d.appendChild(el("p", null, "O que tem de acontecer toda semana e não tem prazo de tribunal empurrando. "
+    + "O painel lembra aqui; quem cobra no celular é o Google Agenda."));
+  cab.appendChild(d);
+  cab.appendChild(botao("Nova rotina","mais","pri", () => dlgRotina()));
+  f.appendChild(cab);
+
+  const vivas = rotinasVivas();
+  const atrasadas = rotinasAtrasadas();
+  const hojes = rotinasPendentesHoje();
+
+  if (atrasadas.length || hojes.length){
+    const av = el("div","aviso" + (atrasadas.length ? " rs" : " amb"));
+    av.appendChild(el("span","k", atrasadas.length ? "Passou em branco" : "É para hoje"));
+    av.appendChild(el("div", null, atrasadas.length
+      ? atrasadas.length + (atrasadas.length === 1 ? " rotina passou" : " rotinas passaram") + " sem ninguém marcar. "
+        + "Se não é para acontecer mesmo, apague a rotina em vez de deixar cobrando — lista que sempre grita deixa de ser lida."
+      : hojes.length + (hojes.length === 1 ? " rotina é para hoje." : " rotinas são para hoje.")));
+    f.appendChild(av);
+  }
+
+  if (!vivas.length){
+    f.appendChild(vazioBox("troca","Nenhuma rotina ainda",
+      "Comece por uma das sugestões abaixo, ou escreva a sua.","Nova rotina",() => dlgRotina()));
+  } else {
+    const ordem = { atras:0, hoje:1, resto:2 };
+    const peso = r => atrasadaDe(r) ? ordem.atras : (rotinaHoje(r) && !rotinaFeita(r, HOJE)) ? ordem.hoje : ordem.resto;
+    const box = el("div","rotlista");
+    vivas.slice().sort((a, b) => peso(a) - peso(b) || String(proximaDe(a) || "9").localeCompare(String(proximaDe(b) || "9")))
+      .forEach(r => box.appendChild(cartaoRotina(r)));
+    f.appendChild(box);
+  }
+
+  /* sugestões: só as que ainda não existem, e só entram com um toque */
+  const faltam = ROTINAS_SUGERIDAS.filter(s => !vivas.some(r => normaliza(r.titulo) === normaliza(s.titulo)));
+  if (faltam.length){
+    const dt = el("details","sug"); if (!vivas.length) dt.open = true;
+    dt.appendChild(el("summary", null, "Sugestões (" + faltam.length + ")"));
+    dt.appendChild(el("p","dica","Nada aqui é criado sozinho. Toque para acrescentar e depois ajuste o dia e a hora."));
+    faltam.forEach(s => {
+      const li = el("div","sugl");
+      const t = el("div");
+      t.appendChild(el("b", null, s.titulo));
+      t.appendChild(el("div","ps", quandoDiz(s) + " · " + s.detalhe));
+      li.appendChild(t);
+      li.appendChild(botao("Acrescentar","mais","", () => {
+        const novo = Object.assign({}, s, { id:uid(), feitos:{}, pessoaId:null, criadoEm:agoraISO() });
+        tocou(novo); E.rotinas.push(novo); salvar(); render(); avisar("Rotina acrescentada — agora ponha na agenda");
+      }));
+      dt.appendChild(li);
+    });
+    f.appendChild(dt);
+  }
+  return f;
+}
+
+/* ============================================================
    COBRANÇAS: O QUE FALTA LIGAR AO CALENDÁRIO, AO DRIVE E AO E-MAIL
    ------------------------------------------------------------
    Não é medalha: é uma lista do que está solto, com um clique que resolve.
@@ -5405,11 +5898,25 @@ function telaPessoal(){
 function cobrancas(){
   const gs = agrupaProcessos().filter(g => !(g.caso && g.caso.fora));
   const semDrive = gs.filter(g => !((g.caso && g.caso.drive) || []).length);
-  const semConferir = gs.filter(g => g.pubs.length && !conferidas(g));
+  /* dois estados diferentes, e o segundo é mais grave: "nunca conferiu" é
+     pendência antiga; "chegou nome novo" é processo que alguém já tinha dado
+     por conferido e mudou debaixo do pé. Separados para não se diluírem num
+     número só — e sem sobreposição, senão o mesmo processo conta duas vezes. */
+  const comNovas = gs.filter(g => partesNovas(g).length);
+  const semConferir = gs.filter(g => g.pubs.length && !conferidas(g) && !partesNovas(g).length);
   const semAgenda = base().filter(p => !p.feita && !p.dispensada && p.data && p.data >= HOJE && !p.noCalendario);
   const paradosCom = gs.filter(g => precisaAndar(g));
   const audSem = semTranscricao();
+  const rotHoje = rotinasPendentesHoje(), rotAtras = rotinasAtrasadas();
   const out = [];
+  if (rotAtras.length || rotHoje.length) out.push({ k:"rotinas", ico:"troca",
+    tit: rotAtras.length
+      ? rotAtras.length + (rotAtras.length === 1 ? " rotina passou em branco" : " rotinas passaram em branco")
+      : rotHoje.length + (rotHoje.length === 1 ? " rotina é para hoje" : " rotinas são para hoje"),
+    pq: rotAtras.length
+      ? "Rotina sem prazo de tribunal não cobra ninguém sozinha — por isso ela está aqui."
+      : "Marque quando fizer, ou ponha no Google Agenda para o celular cobrar.",
+    rot:"Ver as rotinas", fn: () => { aba = "rotinas"; render(); } });
   if (semAgenda.length) out.push({ k:"agenda", ico:"calend",
     tit: semAgenda.length + (semAgenda.length === 1 ? " prazo fora da sua agenda" : " prazos fora da sua agenda"),
     pq:"Prazo que só existe no painel não avisa ninguém no celular.",
@@ -5418,6 +5925,10 @@ function cobrancas(){
     tit: semDrive.length + (semDrive.length === 1 ? " processo sem pasta" : " processos sem pasta no Drive"),
     pq:"Sem o link, cada pessoa procura o documento por conta própria.",
     rot:"Ver quais", fn: () => { aba = "proc"; filtroOrg = "drive"; render(); } });
+  if (comNovas.length) out.push({ k:"partesnovas", ico:"pessoa",
+    tit: comNovas.length + (comNovas.length === 1 ? " processo com nome novo nas partes" : " processos com nome novo nas partes"),
+    pq:"Já estavam conferidos, e publicação nova trouxe nome que não estava lá — litisconsorte, terceiro chamado, sucessão.",
+    rot:"Ver o que mudou", fn: () => { aba = "proc"; filtroOrg = "partesnovas"; render(); } });
   if (semConferir.length) out.push({ k:"partes", ico:"pessoa",
     tit: semConferir.length + (semConferir.length === 1 ? " processo com partes não conferidas" : " processos com partes não conferidas"),
     pq:"A API mistura parte e advogado e não diz quem é autor. Enquanto ninguém confere, o nome no painel é palpite.",
@@ -5665,7 +6176,8 @@ async function rodarVarredura(){
   cx.remove();
   if (!r) return;
   render();
-  if (r.falhas) avisar(r.novas + " publicações novas · " + r.falhas + " consultas falharam, tente de novo depois");
+  if (r.erroRede) dlgRede(r.erroRede);
+  else if (r.falhas) avisar(r.novas + " publicações novas · " + r.falhas + " consultas falharam, tente de novo depois");
   else { avisar(r.novas + (r.novas === 1 ? " publicação nova" : " publicações novas")
     + (r.completadas ? " · " + r.completadas + " antigas ganharam valores e texto" : "")
     + " · " + r.processos + " processos no acervo, em " + r.chamadas + " consultas"); festa(); }
@@ -6167,10 +6679,15 @@ function cartaoProcesso(g, lista){
     pt.appendChild(b);
   });
   if (g.pubs.length){
-    const cf = el("button","confbt" + (conferidas(g) ? " ok" : "")); cf.type = "button";
-    cf.textContent = conferidas(g) ? "partes conferidas" : "conferir partes";
-    cf.title = conferidas(g)
+    const nvs = partesNovas(g), ok = conferidas(g);
+    const cf = el("button","confbt" + (ok ? " ok" : nvs.length ? " nova" : "")); cf.type = "button";
+    cf.textContent = ok ? "partes conferidas"
+      : nvs.length ? (nvs.length === 1 ? "1 nome novo nas partes" : nvs.length + " nomes novos nas partes")
+      : "conferir partes";
+    cf.title = ok
       ? "Conferido por " + ((caso.partesOk || {}).por || "alguém") + ". Toque para revisar."
+      : nvs.length ? "Publicação posterior à conferência trouxe: " + nvs.slice(0,3).join(", ")
+        + (nvs.length > 3 ? " e mais " + (nvs.length - 3) : "") + ". Toque para dizer o que é cada um."
       : "A API mistura parte e advogado e não diz quem é autor. O que está aí é palpite.";
     cf.addEventListener("click", () => dlgPartes(g));
     pt.appendChild(cf);
@@ -7122,8 +7639,17 @@ function telaConfig(){
 
   if (podeBuscar === false){
     const a = el("div","aviso amb");
-    a.appendChild(el("span","k","Atenção"));
-    a.appendChild(el("div",null,"Nesta página a busca automática no DJEN não funciona — o navegador bloqueia chamada a servidor externo aqui, ou o CNJ recusou a rede. Marcar, criar tarefa e delegar continuam funcionando normalmente. Para buscar por OAB, abra o arquivo do pacote local numa máquina em rede residencial ou do escritório."));
+    a.appendChild(el("span","k", TITULO_REDE[motivoRede] || "Sem busca automática"));
+    a.appendChild(el("div", null, motivoRede
+      ? frasRede(motivoRede)
+      : "A busca automática no DJEN não está respondendo agora." + TEXTO_RESTO));
+    const ac = el("div","acoes");
+    ac.appendChild(botao("Testar de novo","troca","", async () => {
+      const ok = await testarBusca(true);
+      render();
+      avisar(ok ? "Pronto, o CNJ respondeu" : "Ainda não passa: " + (TITULO_REDE[motivoRede] || "").toLowerCase());
+    }));
+    a.appendChild(ac);
     f.appendChild(a);
   }
 
@@ -7296,8 +7822,14 @@ if (E.acervoEm && !E.corteTarefas){
 render();
 if (E.time){ sincronizarTime(true); ligarAoVivo(); }
 setTimeout(() => { testarBusca().then(ok => { if (ok) buscaAutomatica(); }); }, 4000);
+const SUBLINHA_REDE = {
+  offline:      "DJEN · sem internet",
+  recusada:     "DJEN · o CNJ recusou esta rede",
+  inalcancavel: "DJEN · o CNJ não respondeu",
+};
 testarBusca().then(ok => {
-  $("sublinha").textContent = ok ? "DJEN · busca por OAB disponível" : "DJEN · modo local (sem busca automática)";
+  $("sublinha").textContent = ok ? "DJEN · busca por OAB disponível"
+    : (SUBLINHA_REDE[motivoRede] || "DJEN · modo local (sem busca automática)");
   if (aba === "config") render();
 });
 </script>
