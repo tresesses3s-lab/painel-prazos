@@ -325,6 +325,29 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .andar b{display:block; font:700 15px/1.3 "Bricolage Grotesque",sans-serif; color:var(--ink)}
 .andar span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
 
+/* ---- apelido do processo ---- */
+.apbt{display:inline-flex; gap:5px; align-items:center; cursor:pointer; padding:1px 8px; border-radius:99px;
+  border:1px dashed var(--line-2); background:transparent; color:var(--muted);
+  font:500 11.5px/1.5 "IBM Plex Mono",monospace}
+.apbt svg{width:11px; height:11px; stroke:currentColor; fill:none; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round}
+.apbt:hover{border-color:var(--azul); border-style:solid; color:var(--azul)}
+.nm{cursor:pointer}
+.nm:hover{text-decoration:underline; text-decoration-style:dotted; text-underline-offset:4px}
+/* ---- onde se acessa o processo ---- */
+.acc{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:9px}
+.acc.vazio{width:100%}
+.accchama{display:inline-flex; gap:8px; align-items:center; cursor:pointer; padding:7px 13px; border-radius:9px;
+  border:1px dashed var(--line-2); background:transparent; color:var(--muted);
+  font:600 12.8px/1.35 "Source Sans 3",sans-serif}
+.accchama:hover{border-color:var(--azul); color:var(--azul)}
+.accchama svg,.accl svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.accl{display:inline-flex; gap:7px; align-items:center; text-decoration:none; background:var(--azul-s); color:var(--azul);
+  padding:6px 12px; border-radius:9px; font:600 12.8px/1.2 "Source Sans 3",sans-serif}
+.accl:hover{background:var(--azul); color:var(--on-cor)}
+.accl.semurl{background:var(--surf-2); color:var(--muted); cursor:default}
+.accmais{width:29px; height:29px; border-radius:8px; border:1px dashed var(--line-2); background:var(--surf-2); cursor:pointer; display:grid; place-items:center}
+.accmais svg{width:13px; height:13px; stroke:var(--muted); fill:none; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round}
+.sugap{display:flex; gap:7px; flex-wrap:wrap; margin:6px 0 4px}
 /* ---- situação processual no cartão ---- */
 .sitl{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; cursor:pointer; text-align:left;
   margin-top:9px; padding:7px 12px; border-radius:9px; border:1px solid var(--line-2); background:var(--surf-2)}
@@ -424,6 +447,12 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .pfix.on{background:var(--ouro-s); border-color:var(--ouro)}
 .pfix.on svg{stroke:var(--ouro); fill:var(--ouro)}
 .pcard .top{padding-right:96px}
+/* `.pnome` é filho de um flex e sem min-width:0 não encolhe: o texto empurrava
+   o selo de prioridade para cima de si mesmo em tela estreita, e as etiquetas
+   de parte ficavam espremidas a uma letra ("? A"). Vale para qualquer largura,
+   não só no celular. */
+.pcard .pnome{min-width:0; flex:1}
+.polo{min-width:0}
 
 /* ===================== aba Processos e Financeiro ===================== */
 .dica{font:400 12.8px/1.5 "Source Sans 3",sans-serif; color:var(--muted)}
@@ -795,6 +824,14 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
   .dupla{grid-template-columns:1fr}
   .topo{position:static}
   .tarefa{grid-template-columns:24px 1fr}
+  /* No celular o selo de prioridade desce em vez de disputar a mesma linha
+     com o nome do processo: lado a lado, sobravam poucos caracteres para
+     cada um e os dois ficavam ilegíveis. */
+  .pcard .top{flex-direction:column; align-items:flex-start; gap:8px; padding-right:38px}
+  .pcard .pprio{text-align:left; width:100%}
+  .pcard .pprio span{max-width:none}
+  .sitl{width:100%}
+  .acc{width:100%}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
 </style>
@@ -4314,6 +4351,7 @@ function casaProcesso(g, q){
   const c = g.caso || {};
   if (combina(q, g.proc, g.trib, g.orgao, g.classe, g.partes.join(" "),
       c.titulo, c.sintese, c.status, (c.partes || []).join(" "),
+      (c.sistemas || []).map(s => s.nome).join(" "),
       (c.etiquetas || []).join(" "), etiquetasAuto(g).join(" "))) return true;
   /* último recurso, porque é o mais caro: procurar dentro do texto */
   return combina(q, textoBuscavel(g));
@@ -4329,7 +4367,9 @@ function ondeAchou(g, q){
     const qual = todas.find(n => combina(q, n));
     return qual ? "parte: " + (qual.length > 38 ? qual.slice(0, 36) + "…" : qual) : "parte";
   }
-  if (combina(q, c.titulo, c.sintese, c.status)) return "cadastro";
+  if (combina(q, c.titulo)) return "apelido";
+  if (combina(q, (c.sistemas || []).map(s => s.nome).join(" "))) return "onde se acessa";
+  if (combina(q, c.sintese, c.status)) return "cadastro";
   if (combina(q, (c.etiquetas || []).join(" "), etiquetasAuto(g).join(" "))) return "etiqueta";
   if (combina(q, textoBuscavel(g))) return "trecho da publicação";
   return null;
@@ -4366,6 +4406,143 @@ function blocoDrive(g, aoMudar){
   const mais = el("button","dvmais"); mais.type = "button"; mais.title = "Mais links";
   mais.appendChild(ico(I.mais));
   mais.addEventListener("click", () => dlgDrive(g, aoMudar));
+  box.appendChild(mais);
+  return box;
+}
+
+/* ============================================================
+   APELIDO E ONDE SE ACESSA O PROCESSO
+   ------------------------------------------------------------
+   Duas coisas que só a pessoa sabe e que o CNJ nunca vai mandar.
+
+   O apelido NÃO é campo novo: é o `caso.titulo` que já existia, mas vivia
+   como segundo campo de um diálogo de sete chamado "Ajustar o caso". Ninguém
+   acha, e de fato ninguém usou. Agora ele fica ao lado do número, que é onde
+   a pergunta nasce — "que processo é esse mesmo?".
+
+   "Onde acessa" é novo. O número do processo não diz em que sistema ele é
+   trabalhado, e é isso que trava a pessoa na hora de fazer: descobrir se
+   aquele caso está no PJe, no Projuris, no e-SAJ. Fica no caso e vale para o
+   time, porque a resposta é a mesma para todo mundo.
+   ============================================================ */
+
+const SISTEMAS = ["PJe", "Projuris", "e-SAJ", "PROJUDI", "eproc", "SEEU", "ESAJ", "Portal do TRT", "Outro"];
+
+/* sistemas já usados no acervo vêm primeiro: quem cadastra o segundo processo
+   do mesmo tribunal não devia digitar o endereço de novo */
+function sistemasConhecidos(){
+  const m = new Map();
+  (E.casos || []).filter(c => !c.removido).forEach(c =>
+    (c.sistemas || []).forEach(s => { if (s.nome && !m.has(s.nome)) m.set(s.nome, s.url || ""); }));
+  return m;
+}
+
+function dlgApelido(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const ap = entrada("text", caso.titulo || "", "Ex.: MARIA x CONSTRUTORA — Trabalhista");
+  const f = document.createDocumentFragment();
+  f.appendChild(el("p","dica","Como VOCÊ chama esse caso. É o que aparece grande no cartão, na busca e nos e-mails. "
+    + "Os nomes das partes continuam aparecendo abaixo, do jeito que vieram do diário."));
+  if (g.partes && g.partes.length){
+    const sug = el("div","sugap");
+    const propostas = [...new Set([
+      g.partes.slice(0, 2).join(" x "),
+      (g.partes[0] || "").split(" ")[0] + (g.partes[1] ? " x " + (g.partes[1] || "").split(" ")[0] : ""),
+      (g.partes[0] || "").split(" ")[0] + (g.classe ? " — " + bonito(g.classe) : ""),
+    ].filter(s => s && s.trim().length > 3))];
+    propostas.forEach(p => {
+      const b = el("button","chip"); b.type = "button";
+      b.appendChild(el("span", null, p.length > 44 ? p.slice(0, 42) + "…" : p));
+      b.addEventListener("click", () => { ap.value = p; ap.focus(); });
+      sug.appendChild(b);
+    });
+    if (sug.childNodes.length){
+      f.appendChild(el("p","dica","Atalhos, se servirem:"));
+      f.appendChild(sug);
+    }
+  }
+  modal("Dar um nome a este processo", g.proc || "caso sem número",
+    [f, campo("Apelido", ap)], () => {
+      comCaso(caso.id, c => { c.titulo = ap.value.trim() || null; });
+      salvar(); fechar(); render();
+      avisar(ap.value.trim() ? "Agora é “" + ap.value.trim() + "”" : "Apelido removido");
+    }, "Salvar");
+}
+
+function dlgSistemas(g){
+  const caso = g.caso || casoDeGrupo(g);
+  const lista = ((caso.sistemas || []).map(s => Object.assign({}, s)));
+  if (!lista.length) lista.push({ nome:"", url:"" });
+  const conhecidos = sistemasConhecidos();
+  const box = el("div","partesed");
+  const f = document.createDocumentFragment();
+  f.appendChild(el("p","dica","Onde esse processo é trabalhado, e o endereço para chegar lá. "
+    + "Vale para o time inteiro — ninguém precisa perguntar em que sistema está."));
+
+  const desenha = () => {
+    box.innerHTML = "";
+    lista.forEach((s, i) => {
+      const r = el("div","pered");
+      const nm = el("input"); nm.type = "text"; nm.value = s.nome || ""; nm.placeholder = "Sistema";
+      nm.setAttribute("list", "dl-sistemas");
+      nm.addEventListener("input", e => {
+        s.nome = e.target.value;
+        /* preencheu um sistema que já existe em outro caso? traz o endereço */
+        if (!s.url && conhecidos.has(s.nome)){ s.url = conhecidos.get(s.nome); desenha(); }
+      });
+      r.appendChild(nm);
+      const u = el("input"); u.type = "url"; u.value = s.url || ""; u.placeholder = "https://…";
+      u.style.flex = "2";
+      u.addEventListener("input", e => { s.url = e.target.value; });
+      r.appendChild(u);
+      r.appendChild(botao("","lixo","pq so", () => { lista.splice(i,1); if(!lista.length) lista.push({nome:"",url:""}); desenha(); }));
+      box.appendChild(r);
+    });
+  };
+  desenha();
+  const dl = el("datalist"); dl.id = "dl-sistemas";
+  [...new Set([...conhecidos.keys(), ...SISTEMAS])].forEach(n => { const o = el("option"); o.value = n; dl.appendChild(o); });
+  f.appendChild(dl);
+  f.appendChild(box);
+  f.appendChild(botao("Acrescentar outro","mais","", () => { lista.push({ nome:"", url:"" }); desenha(); }));
+
+  modal("Onde se acessa este processo", g.proc || "caso sem número", [f], () => {
+    const limpa = lista.filter(s => (s.nome || "").trim())
+      .map(s => ({ nome: s.nome.trim(), url: (s.url || "").trim() || null }));
+    comCaso(caso.id, c => { c.sistemas = limpa; });
+    salvar(); fechar(); render();
+    avisar(limpa.length ? "Acesso guardado e enviado ao time" : "Acessos limpos");
+  }, "Salvar");
+}
+
+/* A faixa de acesso no cartão. Vazia, convida; preenchida, encolhe e sai do
+   caminho — mesma regra do bloco do Drive. */
+function blocoAcesso(g){
+  const caso = (g && g.caso) || null;
+  const sis = (caso && caso.sistemas) || [];
+  const box = el("div", sis.length ? "acc tem" : "acc vazio");
+  if (!sis.length){
+    const b = el("button","accchama"); b.type = "button";
+    b.appendChild(ico(I.link));
+    b.appendChild(el("span", null, "Onde se acessa? (PJe, Projuris…)"));
+    b.addEventListener("click", () => dlgSistemas(g));
+    box.appendChild(b);
+    return box;
+  }
+  sis.forEach(s => {
+    if (s.url){
+      const a = el("a","accl"); a.href = s.url; a.target = "_blank"; a.rel = "noopener";
+      a.appendChild(ico(I.link)); a.appendChild(el("span", null, s.nome));
+      box.appendChild(a);
+    } else {
+      const sp = el("span","accl semurl"); sp.title = "Sem endereço guardado";
+      sp.appendChild(ico(I.link)); sp.appendChild(el("span", null, s.nome));
+      box.appendChild(sp);
+    }
+  });
+  const mais = el("button","accmais"); mais.type = "button"; mais.title = "Ajustar os acessos";
+  mais.appendChild(ico(I.lapis));
+  mais.addEventListener("click", () => dlgSistemas(g));
   box.appendChild(mais);
   return box;
 }
@@ -6164,7 +6341,7 @@ function telaProcessos(){
 
   /* busca */
   const bx = el("div","bcx");
-  const bu = entrada("search", buscaProc, "Nome da parte, número do processo ou trecho da publicação");
+  const bu = entrada("search", buscaProc, "Apelido, nome da parte, número, sistema ou trecho da publicação");
   bu.addEventListener("input", e => { buscaProc = e.target.value.trim(); render();
     const nn = document.querySelector(".bcx input[type=search]");
     if (nn){ nn.focus(); nn.setSelectionRange(nn.value.length, nn.value.length); } });
@@ -6817,9 +6994,27 @@ function cartaoProcesso(g, lista){
   /* cabeça */
   const top = el("div","top");
   const nm = el("div","pnome");
-  nm.appendChild(el("div","nm", tituloDe(g)));
+  /* o próprio nome é o botão de renomear: quem quer trocar o apelido tenta
+     clicar nele antes de procurar menu */
+  const tt = el("div","nm" + (caso.titulo ? " apelidado" : ""));
+  tt.appendChild(document.createTextNode(tituloDe(g)));
+  tt.title = caso.titulo ? "Apelido que você deu. Toque para trocar." : "Toque para dar um nome que você reconheça.";
+  tt.addEventListener("click", () => dlgApelido(g));
+  nm.appendChild(tt);
   const mt = el("div","pmeta");
   if (g.proc) mt.appendChild(el("span","pr", g.proc));
+  /* O apelido fica colado no número, que é onde a pergunta nasce: "que
+     processo é esse mesmo?". Vazio, é um convite discreto; preenchido, some
+     daqui — o nome já está grande em cima, e repetir seria o mesmo erro da
+     etiqueta de polo. */
+  if (!caso.titulo){
+    const ap = el("button","apbt"); ap.type = "button";
+    ap.title = "Dar um nome que você reconheça, tipo “MARIA x CONSTRUTORA — Trabalhista”";
+    ap.appendChild(ico(I.lapis));
+    ap.appendChild(el("span", null, "dar um nome"));
+    ap.addEventListener("click", e => { e.stopPropagation(); dlgApelido(g); });
+    mt.appendChild(ap);
+  }
   else if (caso.fase) mt.appendChild(el("span","pr", rotuloFase(caso.fase)));
   if (caso.trib || g.trib) mt.appendChild(el("span", null, caso.trib || g.trib));
   const cls = caso.classe || g.classe;
@@ -6959,6 +7154,9 @@ function cartaoProcesso(g, lista){
 
   /* a gestalt do link */
   cx.appendChild(blocoDrive(g, null));
+  /* onde se acessa: só faz sentido em processo de verdade — caso extrajudicial
+     não é trabalhado em sistema de tribunal */
+  if (g.proc) cx.appendChild(blocoAcesso(g));
 
   /* "esse caso tem número? virou judicial?" */
   if (!g.proc && caso.tipo === "caso"){
