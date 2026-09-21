@@ -325,6 +325,35 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .andar b{display:block; font:700 15px/1.3 "Bricolage Grotesque",sans-serif; color:var(--ink)}
 .andar span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
 
+/* ---- situação processual no cartão ---- */
+.sitl{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap; cursor:pointer; text-align:left;
+  margin-top:9px; padding:7px 12px; border-radius:9px; border:1px solid var(--line-2); background:var(--surf-2)}
+.sitl b{font:600 14px/1.35 "Source Sans 3",sans-serif; color:var(--ink)}
+.sitl .sitf{font:400 11.5px/1.3 "IBM Plex Mono",monospace; color:var(--muted)}
+.sitl:hover{border-color:var(--azul)}
+.sitl.s-rs{border-color:var(--rosa); background:var(--rosa-s)} .sitl.s-rs b{color:var(--rosa)}
+.sitl.s-amb{border-color:var(--ambar); background:var(--ambar-s)} .sitl.s-amb b{color:var(--ambar)}
+.sitl.s-az{border-color:var(--azul); background:var(--azul-s)} .sitl.s-az b{color:var(--azul)}
+.sitl.s-vi{border-color:var(--violeta); background:var(--violeta-s)} .sitl.s-vi b{color:var(--violeta)}
+.sitl.s-escrito{border-style:solid; border-color:var(--verde); background:var(--verde-s)} .sitl.s-escrito b{color:var(--verde)}
+.tparte{font-weight:600; color:var(--ink-2)}
+/* ---- filtros recolhidos e explicação sob demanda ---- */
+.fdt{margin:4px 0 14px}
+.fdt > summary{cursor:pointer; display:flex; align-items:center; gap:10px; padding:9px 14px;
+  border:1px dashed var(--line-2); border-radius:11px;
+  font:700 11px/1.6 "IBM Plex Mono",monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.fdt > summary b{font:700 11px/1.6 "IBM Plex Mono",monospace; color:var(--azul); letter-spacing:.06em; text-transform:none}
+.fdt .filtros{margin-top:12px}
+.expl{margin-top:7px}
+.expl summary{cursor:pointer; font:600 12px/1.5 "Source Sans 3",sans-serif; color:var(--muted); text-decoration:underline}
+.expl > div{margin-top:6px; font-size:13.5px; line-height:1.5; color:var(--muted)}
+/* ---- cartão de organização recolhido ---- */
+.orgdt{margin-bottom:20px}
+.orgdt > summary{cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:11px 16px; border:1px dashed var(--line-2); border-radius:12px;
+  font:700 11px/1.6 "IBM Plex Mono",monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.orgdt > summary b{font:700 14px/1 "IBM Plex Mono",monospace; color:var(--ink-2)}
+.orgdt[open] > summary{border-bottom-left-radius:0; border-bottom-right-radius:0; margin-bottom:-1px}
 /* ---- rotinas recorrentes ---- */
 .rotlista{display:flex; flex-direction:column; gap:14px}
 .rotcard{background:var(--surface); border:1px solid var(--line); border-left:4px solid var(--line-2);
@@ -798,6 +827,10 @@ const NS = "http://www.w3.org/2000/svg";
 const sv = (t,a) => { const n = document.createElementNS(NS,t); for(const k in a) n.setAttribute(k,a[k]); return n; };
 const ico = d => { const s = sv("svg",{viewBox:"0 0 24 24"}); s.appendChild(sv("path",{d})); return s; };
 const I = {
+  /* x: quatro botoes pediam este icone desde sempre ("Manter os dois",
+     "Nao e", "Nao vai virar", "Nao, tirar do radar") e o conjunto nunca o teve;
+     saia <path d="undefined"> no console e um botao sem desenho na tela. */
+  x:"M6 6l12 12M18 6L6 18",
   check:"M4 12.5l5 5L20 6.5", mais:"M12 5v14M5 12h14", pessoa:"M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.6-6 8-6s8 2 8 6",
   calend:"M7 3v3M17 3v3M3.5 9h17M5 5h14a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 19 21H5a1.5 1.5 0 0 1-1.5-1.5v-13A1.5 1.5 0 0 1 5 5z",
   lista:"M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01", engr:"M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1v.3a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-2.8-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.5 15h-.3a2 2 0 1 1 0-4h.2A1.6 1.6 0 0 0 4.5 8.2l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5v-.3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V11a1.6 1.6 0 0 0 1.5 1h.3a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1z",
@@ -847,7 +880,20 @@ function combina(consulta, ...campos){
     const digA = campos.filter(Boolean).join(" ").replace(/\D/g, "");
     if (digA.includes(digQ)) return true;
   }
-  return q.split(" ").every(p => alvo.includes(p));
+  /* Casamento por INÍCIO DE PALAVRA, não por pedaço solto em qualquer lugar.
+     Com `alvo.includes(p)`, procurar "C" (que é nome de parte de verdade:
+     "C SILVA COMERCIO LTDA") devolvia o acervo inteiro — medido: 39 de
+     39 processos. Qualquer sobrenome curto fazia o mesmo. Agora:
+       termo com 3 letras ou mais → casa o COMEÇO de alguma palavra
+                                    ("silv" acha "SILVA", como se espera)
+       termo com 1 ou 2 letras    → precisa ser a palavra INTEIRA
+                                    ("C" acha "C SILVA", não acha "CARLOS")
+     A ordem das palavras continua não importando, e acento já saiu no
+     `normaliza`. */
+  const palavras = alvo.split(" ").filter(Boolean);
+  return q.split(" ").filter(Boolean).every(p =>
+    p.length >= 3 ? palavras.some(w => w.startsWith(p))
+                  : palavras.some(w => w === p));
 }
 
 const iniciais = n => n.trim().split(/\s+/).filter(p => p.length > 2 || /^[A-ZÀ-Ú]/.test(p)).slice(0,2).map(p => p[0]).join("").toUpperCase() || "?";
@@ -1970,7 +2016,12 @@ function anel(pct, r, sw, cor, dentro){
   s.appendChild(sv("circle",{class:dentro?"fl":"fl2",cx:size/2,cy:size/2,r,stroke:cor,
     "stroke-dasharray":c,"stroke-dashoffset":c*(1-pct)}));
   box.appendChild(s);
-  if (dentro){ const m = el("div","mid"); m.appendChild(el("b",null,Math.round(pct*100)+"%")); box.appendChild(m); }
+  /* `dentro` aceita `true` (calcula o rótulo a partir de pct) ou o rótulo já
+     pronto. Quem passava rótulo tinha ele ignorado e via o número calculado —
+     e com pct em 0–100 em vez de 0–1 isso virava "3600%". */
+  if (dentro){ const m = el("div","mid");
+    m.appendChild(el("b", null, typeof dentro === "string" ? dentro : Math.round(pct*100)+"%"));
+    box.appendChild(m); }
   return box;
 }
 function avatar(p, grande){
@@ -2837,7 +2888,7 @@ function cartao(p){
   if (p.fonte === "djen"){
     cm.appendChild(el("span","pr", b.proc));
     cm.appendChild(el("span",null, b.trib + (b.orgao ? " · " + b.orgao : "")));
-    const quemP = b.sigiloso ? "Processo em segredo de justiça" : (b.partes.length ? b.partes.slice(0,2).join(" × ") : "Partes não informadas");
+    const quemP = escrevePartes(b.partes, b.sigiloso);
     cm.appendChild(el("span",null, quemP));
   } else {
     if (b.processo) cm.appendChild(el("span","pr", b.processo));
@@ -2936,6 +2987,9 @@ function telaTodo(){
   const itens = vis();
   if (!itens.length){ f.appendChild(vazioBox("lista","Lista limpa","Nada bate com este filtro.","Nova tarefa",() => dlgTarefa())); return f; }
 
+  /* uma vez só: reagrupar o acervo dentro do laço custaria um agrupamento
+     inteiro por linha de tarefa */
+  const partesPorProc = new Map(agrupaProcessos().filter(g => g.proc).map(g => [g.proc, g.partes]));
   const gr = new Map();
   itens.forEach(p => { const k = p.data ? p.data.slice(0,7) : "0000-00"; if(!gr.has(k)) gr.set(k,[]); gr.get(k).push(p); });
   [...gr.keys()].sort().forEach(k => {
@@ -2967,6 +3021,13 @@ function telaTodo(){
       mid.appendChild(tt);
       const ts = el("div","ts");
       if (p.data) ts.appendChild(el("span",null, br(p.data)));
+      /* O nome da parte vem ANTES do número. Na lista de tarefas só apareciam
+         número e tribunal — e ninguém reconhece um caso por
+         "0000000-00.0000.0.00.0000". As abas Notificações e Agenda já mostravam
+         o nome; esta, que é a lista de trabalho, não mostrava. */
+      const nomes = (b.partes && b.partes.length) ? b.partes : partesPorProc.get(b.proc || b.processo);
+      if (b.sigiloso || (nomes && nomes.length))
+        ts.appendChild(el("span","tparte", escrevePartes(nomes, b.sigiloso)));
       const proc = b.proc || b.processo; if (proc) ts.appendChild(el("span",null, proc));
       if (b.trib) ts.appendChild(el("span",null, b.trib));
       if (p.quem){ const q = el("span","quem"); q.appendChild(avatar(pessoaDe(p.quem))); q.appendChild(el("span",null,(pessoaDe(p.quem)||{}).nome)); ts.appendChild(q); }
@@ -3286,7 +3347,7 @@ function telaDecisoes(){
     if (x.fonte === "paralelo") h.appendChild(el("span","tag t-teal","Paralelo"));
     h.appendChild(el("span","nd", br(x.disp)));
     esq.appendChild(h);
-    esq.appendChild(el("div","pnome", x.sigiloso ? "Processo em segredo de justiça" : (x.partes.slice(0,2).join(" × ") || "Partes não informadas")));
+    esq.appendChild(el("div","pnome", escrevePartes(x.partes, x.sigiloso)));
     const mt = el("div","pmeta");
     mt.appendChild(el("span","pr", x.proc));
     if (x.trib) mt.appendChild(el("span", null, x.trib + (x.orgao ? " · " + x.orgao : "")));
@@ -4214,8 +4275,11 @@ function organizacao(){
       falta:"processo sem link de pasta", dica:"O link colado no processo aparece em toda atividade dele." },
     { k:"etiq",    rot:"Com etiqueta",        q:tem(g => (g.caso && (g.caso.etiquetas || []).length) || etiquetasAuto(g).length), ico:"marca",
       falta:"processo sem etiqueta", dica:"Grau e tipo de peça vêm preenchidos do CNJ." },
-    { k:"status",  rot:"Com status escrito",  q:tem(g => g.caso && g.caso.status), ico:"balao",
-      falta:"processo sem status", dica:"“Aguardando sentença” em dez segundos." },
+    /* A barra "Com status escrito" saiu daqui em 21/09. Media no acervo real da
+       equipe: 0 de 32. Campo de texto livre que ninguém preenche em dois meses
+       não é buraco de informação, é cobrança de algo que o painel já sabe —
+       `situacaoDe()` agora deduz a situação da última publicação. Quem quiser
+       escrever a sua continua podendo, pelo próprio rótulo no cartão. */
     { k:"dono",    rot:"Com responsável",     q:tem(g => g.donos.length), ico:"pessoa",
       falta:"processo sem ninguém", dica:"Sem nome, ninguém sente que é seu." },
     { k:"triado",  rot:"Sem publicação pendente", q:tem(g => !g.semProvidencia), ico:"busca",
@@ -4258,7 +4322,13 @@ function ondeAchou(g, q){
   if (!q) return null;
   const c = g.caso || {};
   if (soDigitos(q).length >= 6 && soDigitos(g.proc || "").includes(soDigitos(q))) return "número";
-  if (combina(q, g.partes.join(" "), (c.partes || []).join(" "))) return "parte";
+  if (combina(q, g.partes.join(" "), (c.partes || []).join(" "))){
+    /* dizer QUAL parte casou. "achado por parte" não ajuda em processo com sete
+       nomes no campo: a pessoa não sabe se achou o cliente ou a outra banda. */
+    const todas = (g.partes || []).concat(c.partes || []);
+    const qual = todas.find(n => combina(q, n));
+    return qual ? "parte: " + (qual.length > 38 ? qual.slice(0, 36) + "…" : qual) : "parte";
+  }
   if (combina(q, c.titulo, c.sintese, c.status)) return "cadastro";
   if (combina(q, (c.etiquetas || []).join(" "), etiquetasAuto(g).join(" "))) return "etiqueta";
   if (combina(q, textoBuscavel(g))) return "trecho da publicação";
@@ -4369,7 +4439,9 @@ function cartaoOrganizacao(){
     : o.media >= 60 ? "Bom, mas ainda tem buraco. Cada barra abaixo leva ao que falta."
     : "Tem informação faltando em muita coisa. As barras dizem onde."));
   top.appendChild(esq);
-  top.appendChild(anel(o.media, 34, 7, o.media >= 90 ? "var(--verde)" : o.media >= 60 ? "var(--ambar)" : "var(--rosa)", o.media + "%"));
+  /* pct vai de 0 a 1; o.media vem de 0 a 100. Passar a média crua desenhava o
+     anel com dashoffset negativo e escrevia "3600%" no meio dele. */
+  top.appendChild(anel(o.media / 100, 34, 7, o.media >= 90 ? "var(--verde)" : o.media >= 60 ? "var(--ambar)" : "var(--rosa)", o.media + "%"));
   cx.appendChild(top);
 
   const gr = el("div","orgbars");
@@ -4458,7 +4530,7 @@ function dlgAtividade(g){
   const ident = el("div","aviso az");
   ident.appendChild(el("span","k","Vinculada a"));
   const nm = el("div");
-  nm.appendChild(el("b", null, (caso && caso.titulo) || g.partes.slice(0,2).join(" x ") || g.proc || "caso sem nome"));
+  nm.appendChild(el("b", null, tituloDe(g)));
   if (g.proc) nm.appendChild(el("div","mono", g.proc));
   const dvs = (caso && caso.drive) || [];
   if (dvs.length) nm.appendChild(el("div", null, "A pasta do caso vai junto: " + dvs.map(l => l.rot || "Drive").join(", ")));
@@ -4797,6 +4869,49 @@ function partesDo(g){
    cobrança "partes não conferidas" (faltaNo) volta a aparecer sozinha. */
 function conferidas(g){ return !!(g.caso && g.caso.partesOk) && !partesNovas(g).length; }
 function porPolo(g, polo){ return partesDo(g).filter(p => p.polo === polo).map(p => p.nome); }
+
+/* Um lugar só para escrever "quem contra quem". Antes eram catorze trechos
+   quase iguais, com DOIS separadores diferentes: a aba Processos dizia "A e B"
+   e a Notificações dizia "A × B" sobre o mesmo processo. O "×" afirma que um é
+   contra o outro — e enquanto ninguém conferiu os polos o painel não sabe
+   disso. Então "e" é o padrão, e "×" só sai de `tituloDe` com polo conferido. */
+function escrevePartes(partes, sigiloso, max){
+  if (sigiloso) return "Processo em segredo de justiça";
+  const n = (partes || []).filter(Boolean).slice(0, max || 2);
+  return n.length ? n.join(" e ") : "Partes não informadas";
+}
+
+/* ---------- situação processual, deduzida ----------
+   Medido no acervo real da equipe: 0 de 32 processos tinham status escrito. Um
+   campo de texto livre que ninguém preenche não é "informação faltando", é
+   desenho errado — a pessoa já disse onde o processo está quando triou a
+   publicação, e o painel a obrigava a dizer de novo.
+   Isto NÃO substitui o status escrito: quem escreveu vence sempre. É o que
+   aparece enquanto ninguém escreveu, e é honesto sobre a origem. */
+function situacaoDe(g){
+  const c = g.caso || {};
+  if (c.status) return { txt: c.status, tom: "escrito", fonte: "escrito por alguém" };
+  if (c.fora) return { txt: "Fora do radar", tom: "cz", fonte: "tirado do radar" };
+  if (!g.pubs.length) return { txt: "Ainda não é processo", tom: "cz", fonte: "sem publicação no diário" };
+
+  const ult = g.pubs.slice().sort((a, b) => String(a.disp || "").localeCompare(String(b.disp || ""))).pop();
+  const dias = diasDesde(g.ultima);
+  const venc = (g.abertas || []).filter(t => t.prazo && t.prazo < HOJE).length;
+  const prox = g.proximo && g.proximo.prazo;
+
+  if (venc) return { txt: venc === 1 ? "Prazo vencido sem registro" : venc + " prazos vencidos sem registro",
+    tom: "rs", fonte: "prazo passou e ninguém marcou" };
+  if (prox){
+    const u = uteisEntre(HOJE, prox);
+    return { txt: (g.proximo.titulo || "Prazo") + " — " + (u <= 0 ? "vence hoje" : "faltam " + u + " dias úteis"),
+      tom: u <= 3 ? "amb" : "az", fonte: "prazo em aberto" };
+  }
+  if (ult && ult.decisao) return { txt: ult.decisao.rotulo + " em " + br(ult.disp), tom: "vi", fonte: "detectado no texto da publicação" };
+  if (ult && (ult.acoes || []).length) return { txt: ult.acoes[0] + " — publicado em " + br(ult.disp), tom: "az", fonte: "ato detectado na publicação" };
+  if (ult && /distribui/i.test(ult.tipo || "")) return { txt: "Distribuído em " + br(ult.disp), tom: "az", fonte: "tipo da comunicação" };
+  if (dias != null && dias > 45) return { txt: "Sem movimento há " + dias + " dias", tom: "cz", fonte: "última publicação" };
+  return { txt: (ult && ult.tipo ? ult.tipo : "Publicação") + " em " + br(ult ? ult.disp : g.ultima), tom: "cz", fonte: "última publicação, sem ato reconhecido" };
+}
 
 /* Título do processo: "Autor × Réu" quando se sabe; senão os dois primeiros
    nomes, sem afirmar quem é quem. */
@@ -5998,9 +6113,19 @@ function telaProcessos(){
     av.appendChild(el("span","k", E.corteTarefas ? "Histórico" : "Atenção"));
     const dd = el("div");
     if (E.corteTarefas){
-      dd.appendChild(el("div", null, q + " publicações anteriores a " + br(E.corteTarefas)
-        + " contam como histórico: aparecem no processo, nas decisões e nos valores, mas não geram tarefa. "
-        + (t ? "Isso silenciou " + t + " tarefas antigas que já deviam estar feitas." : "")));
+      /* Depois que o corte existe, isto é explicação permanente — e explicação
+         permanente no topo de uma lista de prazos custa 523px medidos, todo
+         dia, para dizer algo que já foi decidido. Uma linha, e o resto a um
+         toque para quem quiser relembrar a regra. */
+      dd.appendChild(el("div", null, "Histórico até " + br(E.corteTarefas) + ": " + q
+        + (q === 1 ? " publicação não gera tarefa" : " publicações não geram tarefa")
+        + (t ? " · " + t + " antigas silenciadas" : "")));
+      const mais = el("details","expl");
+      mais.appendChild(el("summary", null, "como funciona"));
+      mais.appendChild(el("div", null, "Publicação anterior ao corte continua aparecendo no processo, "
+        + "nas decisões e nos valores, e continua sendo achada pela busca. O que ela não faz é gerar tarefa, "
+        + "entrar na agenda, contar no placar ou disparar alarme de prazo perdido."));
+      dd.appendChild(mais);
     } else {
       dd.appendChild(el("div", null, "O acervo antigo está gerando tarefa como se fosse prazo de agora. "
         + "Defina de quando em diante o painel é responsável — o que vier antes fica como histórico."));
@@ -6022,7 +6147,20 @@ function telaProcessos(){
     f.appendChild(av);
   }
 
-  f.appendChild(cartaoOrganizacao());
+  /* O cartão de organização nasce FECHADO. Medido na tela real com o acervo da
+     equipe: o primeiro processo começava a 1.308px do topo — 1,3 tela de
+     rolagem antes de aparecer um processo sequer, e num celular bem mais.
+     Painel de prazo tem de abrir mostrando processo, não medidor de si mesmo.
+     Quem quiser o diagnóstico continua a um toque. */
+  const org = el("details","orgdt");
+  const sm = el("summary");
+  sm.appendChild(el("span", null, "Organização do acervo"));
+  sm.appendChild(el("b", null, organizacao().media + "%"));
+  org.appendChild(sm);
+  org.appendChild(cartaoOrganizacao());
+  org.addEventListener("toggle", () => { try { localStorage.setItem("pp-org-aberto", org.open ? "1" : "0"); } catch(e){} });
+  try { org.open = localStorage.getItem("pp-org-aberto") === "1"; } catch(e){}
+  f.appendChild(org);
 
   /* busca */
   const bx = el("div","bcx");
@@ -6081,7 +6219,26 @@ function telaProcessos(){
     pessoasVivas().forEach(p => ops.push([p.id, p.nome.split(" ")[0], dentro.filter(g => g.donos.includes(p.id)).length]));
     grupoChips("Quem", ops, filtroProc, k => { filtroProc = k; render(); });
   }
-  f.appendChild(linhas);
+  /* Os filtros também nascem fechados. Medido na tela real: só o bloco de
+     chips ocupava 1.249px — quatorze etiquetas com nome de classe processual
+     inteira ("Procedimento do Juizado Especial Cível") quebram em muitas
+     linhas. Somados ao aviso de histórico e à busca, empurravam o primeiro
+     processo para fora de duas telas.
+     Abre sozinho quando há filtro ligado: filtro escondido que esconde
+     processo é pior que filtro ocupando espaço — a pessoa acha que sumiu. */
+  const temFiltro = filtroPrio !== "todas" || filtroEtiq !== "todas" || filtroProc !== "todos" || !!filtroOrg;
+  const fdt = el("details","fdt"); fdt.open = temFiltro;
+  const fsm = el("summary");
+  fsm.appendChild(el("span", null, "Filtros"));
+  fsm.appendChild(el("b", null, temFiltro
+    ? [filtroPrio !== "todas" ? "prioridade" : null,
+       filtroEtiq !== "todas" ? "etiqueta" : null,
+       filtroProc !== "todos" ? "quem" : null,
+       filtroOrg ? "o que falta" : null].filter(Boolean).join(" · ")
+    : "nenhum"));
+  fdt.appendChild(fsm);
+  fdt.appendChild(linhas);
+  f.appendChild(fdt);
 
   const passa = g => {
     if (!casaProcesso(g, buscaProc)) return false;
@@ -6150,7 +6307,7 @@ function telaProcessos(){
     fora.forEach(g => {
       const r = el("div","forai");
       const t = el("div");
-      t.appendChild(el("b", null, (g.caso.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome")));
+      t.appendChild(el("b", null, tituloDe(g)));
       t.appendChild(el("span","dica", (g.caso.motivoFora || "sem motivo")
         + (g.caso.foraPor ? " · por " + g.caso.foraPor : "") + (g.proc ? " · " + g.proc : "")));
       r.appendChild(t);
@@ -6518,7 +6675,7 @@ function telaFinanceiro(){
     const cx = el("div","fcard");
     const top = el("div","ftop");
     const nm = el("div");
-    nm.appendChild(el("b", null, caso.titulo || g.partes.slice(0,2).join(" x ") || g.proc || "sem nome"));
+    nm.appendChild(el("b", null, tituloDe(g)));
     const mt = el("div","pmeta");
     if (g.proc) mt.appendChild(el("span","pr", g.proc));
     if (g.trib) mt.appendChild(el("span", null, g.trib));
@@ -6669,13 +6826,36 @@ function cartaoProcesso(g, lista){
   if (cls) mt.appendChild(el("span", null, cls.length > 34 ? bonito(cls).slice(0,32) + "…" : bonito(cls)));
   if (caso.original && caso.original.trib) mt.appendChild(el("span","corr", "no diário: " + caso.original.trib));
   nm.appendChild(mt);
+  /* A situação processual vem logo abaixo do nome, antes de qualquer outra
+     coisa: é o que a pessoa quer saber ao bater o olho. Deduzida quando
+     ninguém escreveu, e sempre dizendo de onde tirou — palpite rotulado é
+     útil; palpite disfarçado de fato é que é perigoso. */
+  const sit = situacaoDe(g);
+  const sl = el("button","sitl s-" + sit.tom); sl.type = "button";
+  sl.title = "Situação " + (sit.tom === "escrito" ? "escrita à mão" : "deduzida pelo painel: " + sit.fonte)
+    + ". Toque para escrever a sua.";
+  sl.appendChild(el("b", null, sit.txt));
+  if (sit.tom !== "escrito") sl.appendChild(el("span","sitf", sit.fonte));
+  sl.addEventListener("click", () => dlgStatus(g));
+  nm.appendChild(sl);
   /* partes: quem é autor, quem é réu, e o aviso de que ninguém conferiu */
   const pt = el("div","polos");
+  /* O título já escreve os nomes. Repetir o nome inteiro na etiqueta de polo
+     logo abaixo gastava uma linha dizendo duas vezes a mesma coisa — visível
+     no acervo real, onde 14 processos têm uma parte só e o cartão ficava
+     "FULANO" e, embaixo, "AUTOR FULANO". Quando o nome já está no título, a
+     etiqueta fica só com o polo, que é a informação que ela acrescenta. */
+  const tituloAtual = normaliza(tituloDe(g));
   partesDo(g).slice(0, 5).forEach(p => {
     if (p.polo === "advogado") return;
-    const b = el("span","polo p-" + (p.polo === "?" ? "cz" : p.polo));
-    b.appendChild(el("b", null, p.polo === "?" ? "?" : rotuloPolo(p.polo)));
-    b.appendChild(el("span", null, p.nome.length > 30 ? p.nome.slice(0,28) + "…" : p.nome));
+    const jaNoTitulo = tituloAtual.includes(normaliza(p.nome));
+    /* nome já no título E polo desconhecido: a etiqueta viraria um "?" pelado,
+       sem nome e sem polo — ruído puro. Só sobrevive quem acrescenta algo. */
+    if (jaNoTitulo && p.polo === "?" && !p.nova) return;
+    const b = el("span","polo p-" + (p.polo === "?" ? "cz" : p.polo) + (p.nova ? " nova" : ""));
+    b.appendChild(el("b", null, p.polo === "?" ? (p.nova ? "nova" : "?") : rotuloPolo(p.polo)));
+    if (!jaNoTitulo) b.appendChild(el("span", null, p.nome.length > 30 ? p.nome.slice(0,28) + "…" : p.nome));
+    else b.title = p.nome;
     pt.appendChild(b);
   });
   if (g.pubs.length){
@@ -6998,7 +7178,7 @@ function telaNotificacoes(){
     else if (ds.length) l1.appendChild(el("span","tag t-verde", ds.length + (ds.length > 1 ? " providências" : " providência")));
     else l1.appendChild(el("span","tag t-ambar","o que fazer?"));
     it.appendChild(l1);
-    it.appendChild(el("div","n2", b.sigiloso ? "Processo em segredo de justiça" : ((b.partes || []).slice(0,2).join(" × ") || "Partes não informadas")));
+    it.appendChild(el("div","n2", escrevePartes(b.partes, b.sigiloso)));
     it.appendChild(el("div","n3", b.proc + " · " + b.trib));
     it.addEventListener("click", () => { notifSel = String(b.id); render(); });
     esq.appendChild(it);
@@ -7034,7 +7214,7 @@ function painelOQueFazer(p){
   h.appendChild(el("span","tag t-azul", b.tipo || "Intimação"));
   if (b.classe) h.appendChild(el("span","tag", b.classe.length > 34 ? b.classe.slice(0,32) + "…" : b.classe));
   topo.appendChild(h);
-  topo.appendChild(el("div","ct", b.sigiloso ? "Processo em segredo de justiça" : ((b.partes || []).slice(0,3).join(" × ") || "Partes não informadas")));
+  topo.appendChild(el("div","ct", escrevePartes(b.partes, b.sigiloso, 3)));
   const m = el("div","cm");
   m.appendChild(el("span","pr", b.proc));
   m.appendChild(el("span", null, b.trib + (b.orgao ? " · " + b.orgao : "")));
@@ -7278,7 +7458,7 @@ function telaParalelo(){
       if (i.classe) ch.appendChild(el("span","tag", i.classe.length > 30 ? i.classe.slice(0,28) + "…" : i.classe));
       if (!i.visto) ch.appendChild(el("span","tag novo-pill","Novo"));
       corpo.appendChild(ch);
-      corpo.appendChild(el("div","ct", i.sigiloso ? "Processo em segredo de justiça" : (i.partes.slice(0,2).join(" × ") || "Partes não informadas")));
+      corpo.appendChild(el("div","ct", escrevePartes(i.partes, i.sigiloso)));
       const cm = el("div","cm");
       cm.appendChild(el("span","pr", i.proc));
       cm.appendChild(el("span", null, i.trib + (i.orgao ? " · " + i.orgao : "")));
