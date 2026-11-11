@@ -154,7 +154,10 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .chip.ok[aria-pressed="true"]{background:var(--verde); border-color:var(--verde)}
 
 /* ---------- quinzena ---------- */
-.qz{display:grid; grid-template-columns:184px 1fr; gap:24px; align-items:start}
+/* minmax(0,1fr) e não 1fr: 1fr é minmax(auto,1fr), e um título longo sem quebra
+   esticava a coluna para 644px numa tela de 348 — a agenda inteira rolava de
+   lado no celular. */
+.qz{display:grid; grid-template-columns:184px minmax(0,1fr); gap:24px; align-items:start}
 .qzr{position:sticky; top:88px; padding:14px 0 26px}
 .qzr .a{font:700 10.5px/1 "IBM Plex Mono",monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--azul)}
 .qzr .b{font:700 19px/1.2 "Bricolage Grotesque",sans-serif; margin-top:7px; letter-spacing:-.015em}
@@ -168,7 +171,10 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .hj span{font:700 10px/1 "IBM Plex Mono",monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--rosa)}
 
 /* ---------- cartão ---------- */
-.card{display:grid; grid-template-columns:58px 1fr; gap:16px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:15px 17px 15px 15px; box-shadow:var(--sh-s); transition:.2s}
+/* mesma razão da .qz: com 1fr puro, a coluna do conteúdo crescia até caber a
+   maior palavra-sem-quebra do cartão (uma etiqueta, um nome) e o cartão saía
+   da tela no celular. */
+.card{display:grid; grid-template-columns:58px minmax(0,1fr); gap:16px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:15px 17px 15px 15px; box-shadow:var(--sh-s); transition:.2s}
 .card:hover{box-shadow:var(--sh-m); transform:translateY(-1px)}
 .card.done{opacity:.5}
 .fl{border-radius:11px; overflow:hidden; text-align:center; align-self:start; border:1px solid var(--line)}
@@ -197,6 +203,11 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .cr a{font:600 12.5px/1 "Source Sans 3",sans-serif; color:var(--azul); text-decoration:none; border-bottom:1px solid var(--line-2); padding-bottom:2px}
 .cr a:hover{border-bottom-color:var(--azul)}
 .cr .dir{margin-left:auto; display:flex; gap:8px}
+/* etiqueta com texto livre ("dispensada: <motivo escrito pela pessoa>") e campo
+   com palavra comprida não podem ser de linha única: passavam da borda do
+   cartão e faziam a aba inteira rolar de lado. */
+.cr .tag{white-space:normal; max-width:100%; line-height:1.45}
+.cm span,.ct{overflow-wrap:anywhere; min-width:0}
 
 
 /* semana */
@@ -228,7 +239,7 @@ h2{font:700 27px/1.15 "Bricolage Grotesque",sans-serif; margin:0; letter-spacing
 .lin.u .qd{color:var(--ambar)} .lin.x .qd{color:var(--rosa)} .lin.s .qd{color:var(--violeta)} .lin .qd{color:var(--azul)}
 .lin .tt2{font-size:15px; font-weight:600; line-height:1.3}
 .lin .sb2{font:400 12px/1.4 "IBM Plex Mono",monospace; color:var(--muted); margin-top:3px}
-@media (max-width:760px){ .semana{grid-template-columns:repeat(4,1fr)} .lin{grid-template-columns:auto 1fr; gap:9px} .lin .qd{text-align:left} }
+@media (max-width:760px){ .semana{grid-template-columns:repeat(4,minmax(0,1fr))} .lin{grid-template-columns:auto 1fr; gap:9px} .lin .qd{text-align:left} }
 .aviso-flut{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:150; background:var(--verde); color:var(--on-cor); padding:13px 20px; border-radius:12px; box-shadow:var(--sh-l); font:600 14.5px/1.35 "Source Sans 3",sans-serif; display:flex; align-items:center; gap:11px; max-width:min(92vw,540px); animation:sobe .3s ease-out}
 @keyframes sobe{from{opacity:0; transform:translate(-50%,14px)}to{opacity:1; transform:translate(-50%,0)}}
 .aviso-flut svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
@@ -325,6 +336,55 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 .andar b{display:block; font:700 15px/1.3 "Bricolage Grotesque",sans-serif; color:var(--ink)}
 .andar span{display:block; font:400 12.5px/1.45 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
 
+/* ---- Hoje: o cartão que abre o Painel ---- */
+.hojecx{background:var(--surface); border:1px solid var(--line); border-radius:17px; padding:18px 20px;
+  box-shadow:var(--sh-m); margin-bottom:18px; display:flex; flex-direction:column; gap:14px}
+.hojetop .k,.hojebar .k{font:700 10.5px/1 "IBM Plex Mono",monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--azul)}
+.hojetop h3{font:700 22px/1.2 "Bricolage Grotesque",sans-serif; letter-spacing:-.02em; margin:6px 0 0}
+.hojenums{display:grid; grid-template-columns:repeat(3,1fr); gap:9px}
+.hojenum{cursor:pointer; text-align:left; border:1px solid transparent; border-radius:12px; padding:11px 13px; background:var(--surf-2); min-width:0}
+.hojenum b{display:block; font:700 26px/1 "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.hojenum span{display:block; font:500 12px/1.3 "Source Sans 3",sans-serif; color:var(--muted); margin-top:6px}
+.hojenum.zero b{color:var(--muted)}
+.hojenum.rs{background:var(--rosa-s); border-color:var(--rosa)} .hojenum.rs b{color:var(--rosa)}
+.hojenum.amb{background:var(--ambar-s); border-color:var(--ambar)} .hojenum.amb b{color:var(--ambar)}
+.hojenum.az{background:var(--azul-s)} .hojenum.az b{color:var(--azul)}
+.hojenum:hover{border-color:var(--azul)}
+.hojeprox{display:flex; flex-direction:column; gap:6px}
+.hojel{display:flex; gap:12px; align-items:center; text-align:left; cursor:pointer; width:100%;
+  background:transparent; border:1px solid var(--line); border-radius:11px; padding:9px 12px; min-width:0}
+.hojel:hover{border-color:var(--azul); background:var(--azul-s)}
+.hojel .hd{flex:none; width:44px; font:700 12px/1.2 "IBM Plex Mono",monospace; color:var(--ink-2)}
+.hojel .hm{flex:1; min-width:0}
+.hojel .hm b{display:block; font:600 14px/1.3 "Source Sans 3",sans-serif; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.hojel .hm span{display:block; font:400 12.3px/1.35 "Source Sans 3",sans-serif; color:var(--muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.hojel .tag{flex:none}
+.hojelinks{display:flex; gap:8px; flex-wrap:wrap}
+.hojelinks a.bt{text-decoration:none}
+/* ---- Agenda: faixa de hoje, separador do passado, link da quinzena ---- */
+.hojebar{display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  border:1px solid var(--rosa); background:var(--rosa-s); border-radius:13px; padding:12px 16px; margin-bottom:8px}
+.hojebar .k{color:var(--rosa); margin-right:9px}
+.hojebar b{font:700 16px/1.3 "Bricolage Grotesque",sans-serif; letter-spacing:-.01em}
+.hojebar .hs{display:block; font:400 12.8px/1.4 "Source Sans 3",sans-serif; color:var(--ink-2); margin-top:3px}
+.hojebar a.bt{text-decoration:none; background:var(--surface)}
+.sepag{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; margin:26px 0 4px; padding-top:18px; border-top:2px solid var(--line-2)}
+.sepag b{font:700 17px/1.2 "Bricolage Grotesque",sans-serif; letter-spacing:-.015em}
+.sepag span{font:400 12.8px/1.4 "Source Sans 3",sans-serif; color:var(--muted)}
+.qz.passou .qzr .a,.qz.passou .qzr .b{color:var(--muted)}
+.qzg{display:inline-block; margin-top:10px; font:600 11.5px/1.4 "Source Sans 3",sans-serif; color:var(--azul); text-decoration:none; border-bottom:1px solid var(--line-2)}
+/* ---- "está na agenda?" dentro do cartão ---- */
+.fag{display:inline-flex; gap:8px 10px; align-items:center; flex-wrap:wrap}
+.fag.perg{background:var(--ambar-s); border:1px solid var(--ambar); border-radius:10px; padding:6px 10px}
+.fag.perg b{font:600 13px/1.3 "Source Sans 3",sans-serif; color:var(--ink)}
+.lk{background:none; border:0; padding:0; cursor:pointer; font:500 12px/1 "Source Sans 3",sans-serif; color:var(--muted); text-decoration:underline}
+.lk:hover{color:var(--rosa)}
+/* ---- Drive: procurar e criar ---- */
+.dvproc,.dvnovo{display:inline-flex; gap:7px; align-items:center; text-decoration:none; padding:6px 12px; border-radius:9px;
+  border:1px dashed var(--line-2); color:var(--ink-2); font:600 12.8px/1.2 "Source Sans 3",sans-serif}
+.dvproc{margin-top:8px}
+.dvproc svg,.dvnovo svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.dvproc:hover,.dvnovo:hover{border-color:var(--azul); border-style:solid; color:var(--azul)}
 /* ---- apelido do processo ---- */
 .apbt{display:inline-flex; gap:5px; align-items:center; cursor:pointer; padding:1px 8px; border-radius:99px;
   border:1px dashed var(--line-2); background:transparent; color:var(--muted);
@@ -818,7 +878,7 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
 
 @media (max-width:980px){ .placar{grid-template-columns:1fr} }
 @media (max-width:760px){
-  .qz{grid-template-columns:1fr; gap:8px}
+  .qz{grid-template-columns:minmax(0,1fr); gap:8px}
   .qzr{position:static; padding:10px 0 0}
   .hero h1{font-size:32px}
   .dupla{grid-template-columns:1fr}
@@ -832,6 +892,36 @@ body.modo-widget .wrap{padding:0 16px 60px; max-width:640px}
   .pcard .pprio span{max-width:none}
   .sitl{width:100%}
   .acc{width:100%}
+  /* ABAS NUMA LINHA SÓ. Treze abas quebrando em seis linhas ocupavam 229px —
+     com o cabeçalho, 320px de uma tela de 726: quase metade do celular gasta
+     antes de aparecer conteúdo. Uma fileira que desliza de lado custa 45px, e
+     a sombra na borda direita avisa que tem mais. */
+  .topo-in{padding:10px 14px; gap:10px}
+  .abas{flex-wrap:nowrap; overflow-x:auto; width:100%; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%);
+            mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 26px),transparent 100%)}
+  .abas::-webkit-scrollbar{display:none}
+  .aba{flex:none; padding:9px 12px}
+  /* O cartão "Está solto": o botão não encolhia e espremia o texto a uma
+     palavra por linha — quatro cobranças mediam 1.096px. O botão desce. */
+  .cobri{flex-wrap:wrap}
+  .cobri > div:nth-child(2){flex:1 1 0}
+  .cobrbt{flex:1 1 100%; text-align:center; margin-top:2px}
+  .hojenums{gap:6px}
+  .hojenum{padding:10px 10px}
+  .hojenum b{font-size:22px}
+  .hojel{flex-wrap:wrap}
+  .hojel .hm{flex:1 1 60%}
+  .hojebar a.bt{width:100%; justify-content:center}
+  /* três sobras que faziam a página rolar de lado: aviso com botão na mesma
+     linha, tabela de Ajustes, e etiqueta com o nome inteiro da classe */
+  .aviso{flex-wrap:wrap}
+  table.tab{display:block; overflow-x:auto; max-width:100%}
+  .petiq .tag{max-width:100%; overflow:hidden; text-overflow:ellipsis}
+  .qzi > *{min-width:0}
+  /* a fileira de ações do cartão (.ics, Delegar, O que fazer, Concluir…) não
+     quebrava: seis botões em linha passavam da borda */
+  .cr .dir{flex-wrap:wrap; margin-left:0; width:100%; justify-content:flex-start}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
 </style>
@@ -956,6 +1046,7 @@ const somaUteis = (d,n) => { let x = new Date(d); for(let i=0;i<n;i++) x = proxU
 const antUtil = d => { const x = new Date(d); do { x.setUTCDate(x.getUTCDate()-1); } while(!util(x)); return x; };
 const subUteis = (d,n) => { let x = new Date(d); for(let i=0;i<n;i++) x = antUtil(x); return x; };
 const internoDe = iso => iso ? isoDe(subUteis(new Date(iso+"T00:00:00Z"), Math.max(0, E.antecedencia||0))) : null;
+const uteisTxt = n => n === 1 ? "1 dia útil" : n + " dias úteis";
 function uteisEntre(a,b){ let n=0; const d=new Date(a+"T00:00:00Z"), f=new Date(b+"T00:00:00Z");
   while(d<f){ d.setUTCDate(d.getUTCDate()+1); if(util(d)) n++; } return n; }
 
@@ -1053,6 +1144,7 @@ function provTodas(){
     quem: i.pessoaId || null,
     feita: !!i.feita, quemFez: i.feitaPor || null,
     dispensada: !!i.dispensada, motivo: i.motivoDispensa || null, dePor: i.delegadaPorNome || null,
+    noCalendario: !!i.agenda,
   }));
 }
 
@@ -1070,6 +1162,7 @@ function provDjen(){
     quem: i.pessoaId || null,
     feita: !!i.feita, quemFez: i.feitaPor || null,
     dispensada: !!i.dispensada, motivo: i.motivoDispensa || null, dePor: i.delegadaPorNome || null,
+    noCalendario: !!i.agenda,
   }));
 }
 function provManual(){
@@ -1077,6 +1170,7 @@ function provManual(){
     key:"t"+t.id, fonte:"manual", bruto:t, tipo:"manual",
     data: t.prazo || null, titulo: t.titulo, quem: t.pessoaId || null, feita: !!t.feita, quemFez: t.feitaPor || null,
     dispensada: !!t.dispensada, motivo: t.motivoDispensa || null, dePor: t.delegadaPorNome || null,
+    noCalendario: !!t.agenda,
   }));
 }
 const TODAS = () => provDjen().concat(provManual());
@@ -1220,7 +1314,7 @@ function dlgDesdobrar(p){
           prazo: prazoDoAto(b, c.dias),
           processo: b.proc,
           pessoaId: quem.value || null,
-          nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + c.dias + " dias úteis" : " · sem prazo"),
+          nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + uteisTxt(c.dias) : " · sem prazo"),
           feita: false, criada: HOJE,
           daIntimacao: String(b.id),
         };
@@ -1684,6 +1778,89 @@ function linkGoogle(p, todos){
   if (gente.length) campos.add = gente.join(",");
   return "https://calendar.google.com/calendar/render?" + new URLSearchParams(campos).toString();
 }
+/* ============================================================
+   PONTES COM O GOOGLE — SEM LOGIN, SEM CHAVE, SEM SERVIDOR
+   ------------------------------------------------------------
+   O painel é uma página estática: não tem como ler a agenda nem o Drive de
+   ninguém, e pedir OAuth exigiria um projeto no Google Cloud e uma tela de
+   consentimento que o escritório teria de manter. O que dá para fazer com
+   honestidade é levar a pessoa ao lugar certo já com tudo preenchido, e
+   LEMBRAR o que ela disse que fez. Tudo aqui é endereço público do Google.
+   ============================================================ */
+
+/* o dia inteiro aberto no Google Agenda: é onde se confere se o prazo está lá */
+const linkDiaGoogle = iso => "https://calendar.google.com/calendar/r/day/"
+  + Number(iso.slice(0,4)) + "/" + Number(iso.slice(5,7)) + "/" + Number(iso.slice(8,10));
+const linkBuscaAgenda = q => "https://calendar.google.com/calendar/r/search?q=" + encodeURIComponent(q);
+const linkBuscaDrive  = q => "https://drive.google.com/drive/search?q=" + encodeURIComponent(q);
+
+/* id da pasta, tirado do link que a pessoa colou (…/folders/<id> ou ?id=<id>) */
+function idDaPastaDrive(url){
+  const t = String(url || "");
+  const m = t.match(/\/folders\/([A-Za-z0-9_-]{10,})/) || t.match(/[?&]id=([A-Za-z0-9_-]{10,})/);
+  return m ? m[1] : null;
+}
+/* documento novo JÁ dentro da pasta do caso e já com nome. Sem pasta conhecida,
+   cria no Meu Drive com o nome certo — ainda poupa o "Documento sem título". */
+function linkNovoDoc(titulo, pastaId){
+  return "https://docs.google.com/document/create?usp=drive_web"
+    + (pastaId ? "&folder=" + encodeURIComponent(pastaId) : "")
+    + "&title=" + encodeURIComponent(titulo);
+}
+
+/* ---------- "está na agenda?" ----------
+   Defeito que isto conserta: o painel cobrava "N prazos fora da sua agenda"
+   lendo um campo `noCalendario` que NENHUM lugar do código gravava. Apertar
+   "Pôr na agenda" abria o Google e não registrava nada, então a cobrança nunca
+   diminuía — cobrança que não baixa quando a pessoa faz o que ela pede ensina a
+   ignorar cobrança.
+   O painel não enxerga a agenda de ninguém, então não marca sozinho: depois de
+   abrir o Google ele PERGUNTA se salvou. Marcar por conta própria erraria para
+   o lado perigoso — "na agenda ✓" num prazo que não está lá. */
+const perguntaAgenda = new Set();   /* chaves que abriram o Google nesta sessão */
+function marcarNaAgenda(p, sim){
+  const b = p.bruto;
+  b.agenda = sim ? { por:(E.time && E.time.meuNome) || "você", em:agoraISO() } : null;
+  perguntaAgenda.delete(p.key);
+  tocou(b); salvar();
+}
+/* a faixa de agenda de um cartão: botão, pergunta ou confirmação, conforme o estado */
+function faixaAgenda(p){
+  const box = el("span","fag");
+  if (!p.data) return box;
+  if (p.noCalendario){
+    const ok = el("span","tag t-verde","na agenda ✓");
+    const ag = p.bruto.agenda || {};
+    ok.title = "Marcado por " + (ag.por || "alguém") + (ag.em ? " em " + br(String(ag.em).slice(0,10)) : "");
+    box.appendChild(ok);
+    const v = el("a", null, "ver o dia"); v.href = linkDiaGoogle(p.data); v.target = "_blank"; v.rel = "noopener";
+    box.appendChild(v);
+    const d = el("button","lk"); d.type = "button"; d.textContent = "não está mais";
+    d.addEventListener("click", () => { marcarNaAgenda(p, false); render(); });
+    box.appendChild(d);
+    return box;
+  }
+  if (perguntaAgenda.has(p.key)){
+    box.classList.add("perg");
+    box.appendChild(el("b", null, "Salvou no Google Agenda?"));
+    box.appendChild(botao("Salvei","check","pri pq", () => { marcarNaAgenda(p, true); render(); avisar("Marcado: está na agenda"); }));
+    box.appendChild(botao("Não salvei","x","pq", () => { perguntaAgenda.delete(p.key); render(); }));
+    return box;
+  }
+  const nome = ((pessoaDe(p.quem) || {}).nome || "").split(" ")[0];
+  box.appendChild(botao(convidados(p).length && nome ? "Pôr na agenda e convidar " + nome : "Pôr na agenda", "calend", "agenda pq", () => {
+    try { window.open(linkGoogle(p), "_blank"); } catch(e){ location.href = linkGoogle(p); }
+    perguntaAgenda.add(p.key); render();
+  }));
+  if (pessoasVivas().filter(x => x.email).length > 1){
+    box.appendChild(botao("…e a equipe toda","pessoa","pq", () => {
+      try { window.open(linkGoogle(p, true), "_blank"); } catch(e){}
+      perguntaAgenda.add(p.key); render();
+    }));
+  }
+  return box;
+}
+
 async function salvarArquivo(nome, texto, mime){
   try {
     const dl = window.claude && await window.claude.use("downloads");
@@ -1957,6 +2134,16 @@ async function sincronizarTime(silencioso){
     /* o corte do histórico é uma data só, compartilhada: quem sincroniza adota
        a do time, senão cada navegador silenciaria um conjunto diferente */
     try { const c = await lerCorte(); if (c && c.em && c.em !== E.corteTarefas) E.corteTarefas = c.em; } catch(x){}
+    /* idem para o Drive do time. Quem tem o link e o time ainda não, semeia. */
+    try {
+      /* vence o mais recente, inclusive quando o mais recente é "tirei o link":
+         sem a data, um aparelho com o link antigo o ressuscitaria toda vez */
+      const l = await lerLinksDoTime();
+      if (l && l.em){
+        if (String(l.em) > String(E.driveTimeEm || "")){ E.driveTime = l.driveTime || null; E.driveTimeEm = l.em; }
+        else if (String(l.em) < String(E.driveTimeEm || "")) await gravaLinksDoTime();
+      } else if (E.driveTime) await gravaLinksDoTime();
+    } catch(x){}
     E.time.sincronizadoEm = agoraISO();
     salvar();
     if (enviou) await baterSinal(); else { try { sinalVisto = await lerSinal(); } catch(x){} }
@@ -2326,6 +2513,12 @@ function renderAbas(){
       try { scrollTo({top:0,behavior:"smooth"}); } catch(e){} });
     box.appendChild(b);
   });
+  /* Com as abas numa fileira que desliza, a aba ativa pode ficar fora da vista.
+     Mexe só no scrollLeft da fileira — scrollIntoView rolaria a página junto. */
+  const sel = box.querySelector('[aria-selected="true"]');
+  if (sel && box.scrollWidth > box.clientWidth)
+    box.scrollLeft = Math.max(0, (sel.getBoundingClientRect().left - box.getBoundingClientRect().left + box.scrollLeft)
+      - (box.clientWidth - sel.offsetWidth) / 2);
 }
 
 /* ---------- boas-vindas ---------- */
@@ -2641,9 +2834,91 @@ function listaCurta(){
   return f;
 }
 
+/* como chamar a providência por um nome de gente: apelido do caso, senão as
+   partes, senão o número */
+function nomeDaProvidencia(p){
+  const b = p.bruto, num = b.proc || b.processo;
+  const c = num ? casoDoProc(num) : (b.casoId ? casoPorId(b.casoId) : null);
+  if (c && c.titulo) return c.titulo;
+  if (b.sigiloso) return "Processo em segredo de justiça";
+  if (b.partes && b.partes.length) return escrevePartes(b.partes, false);
+  return num || "";
+}
+
+/* ============================================================
+   HOJE — a primeira coisa do Painel
+   ------------------------------------------------------------
+   Medido no celular com o acervo real: o Painel abria com 229px de abas, depois
+   um cartão de cobranças de 1.096px, a pergunta do dia e o desafio — os prazos
+   de verdade só começavam 2,5 telas abaixo. Quem abre um painel de prazos quer
+   saber três coisas antes de qualquer outra: tem algo vencido, tem algo para
+   hoje, e o que vem a seguir. Isto responde as três na primeira tela, e deixa
+   à mão as duas portas para fora do painel: a agenda e o Drive.
+   ============================================================ */
+function cartaoHoje(){
+  const abertas = TODAS().filter(p => !p.feita && !p.dispensada && p.data);
+  const perd = abertas.filter(perdida);
+  const hoje = abertas.filter(p => p.data === HOJE);
+  const hojeD = new Date(HOJE + "T00:00:00Z");
+  const lim = isoDe(new Date(hojeD.getTime() + 7 * 864e5));
+  const semana = abertas.filter(p => p.data > HOJE && p.data <= lim);
+  const prox = abertas.filter(p => p.data >= HOJE).sort((a, b) => a.data.localeCompare(b.data)).slice(0, 3);
+
+  const cx = el("div","hojecx");
+  const top = el("div","hojetop");
+  top.appendChild(el("span","k","Hoje"));
+  top.appendChild(el("h3", null, DIAS_SEM[hojeD.getUTCDay()] + ", " + hojeD.getUTCDate() + " de " + MESES[hojeD.getUTCMonth()]));
+  cx.appendChild(top);
+
+  const nums = el("div","hojenums");
+  const num = (n, rot, tom, ir) => {
+    const b = el("button","hojenum" + (n ? " " + tom : " zero")); b.type = "button";
+    b.appendChild(el("b", null, String(n)));
+    b.appendChild(el("span", null, rot));
+    b.addEventListener("click", ir);
+    nums.appendChild(b);
+  };
+  const irAgenda = () => { aba = "agenda"; render(); try { scrollTo({ top:0 }); } catch(e){} };
+  num(perd.length, perd.length === 1 ? "vencido sem registro" : "vencidos sem registro", "rs", () => { aba = "todo"; render(); });
+  num(hoje.length, hoje.length === 1 ? "vence hoje" : "vencem hoje", "amb", irAgenda);
+  num(semana.length, "nos próximos 7 dias", "az", irAgenda);
+  cx.appendChild(nums);
+
+  if (prox.length){
+    const lista = el("div","hojeprox");
+    prox.forEach(p => {
+      const l = el("button","hojel"); l.type = "button";
+      l.appendChild(el("span","hd", p.data === HOJE ? "hoje" : br(p.data).slice(0,5)));
+      const m = el("span","hm");
+      m.appendChild(el("b", null, p.titulo));
+      const nome = nomeDaProvidencia(p);
+      if (nome) m.appendChild(el("span", null, nome));
+      l.appendChild(m);
+      l.appendChild(el("span","tag " + (p.noCalendario ? "t-verde" : "t-ambar"), p.noCalendario ? "na agenda" : "fora da agenda"));
+      l.addEventListener("click", irAgenda);
+      lista.appendChild(l);
+    });
+    cx.appendChild(lista);
+  } else {
+    cx.appendChild(el("p","dica", perd.length ? "Nada com data daqui para a frente — só o que ficou para trás." : "Nada com data em aberto. Mesa limpa."));
+  }
+
+  const lk = el("div","hojelinks");
+  const mk = (rot, icone, href) => { const a = el("a","bt pq"); a.href = href; a.target = "_blank"; a.rel = "noopener";
+    a.appendChild(ico(I[icone])); a.appendChild(el("span", null, rot)); lk.appendChild(a); };
+  mk("Google Agenda de hoje", "calend", linkDiaGoogle(HOJE));
+  if (E.driveTime) mk("Drive do time", "pasta", E.driveTime);
+  else lk.appendChild(botao("Ligar o Drive do time","pasta","pq", () =>
+    dlgLinkGeral("driveTime", "Drive do time", "A pasta que todo mundo abre primeiro. Uma pessoa cola, o time inteiro recebe.")));
+  if (E.driveFin) mk("Pasta do financeiro", "moeda", E.driveFin);
+  cx.appendChild(lk);
+  return cx;
+}
+
 function telaPainel(){
   const f = document.createDocumentFragment();
   const pl = placar(), nv = nivelDe(pl.pontos);
+  f.appendChild(cartaoHoje());
   const cx = caixaDeEntrada(); if (cx) f.appendChild(cx);
   const cr2 = caixaDeRecados(); if (cr2) f.appendChild(cr2);
   const cb = cartaoCobrancas(); if (cb) f.appendChild(cb);
@@ -2832,7 +3107,7 @@ function telaAgenda(){
   const f = document.createDocumentFragment();
   const cab = el("div","cab");
   const d = el("div"); d.appendChild(el("h2",null,"Agenda quinzenal"));
-  d.appendChild(el("p",null,"Prazos, sessões e tarefas com data, agrupados por quinzena do calendário."));
+  d.appendChild(el("p",null,"Começa em hoje. O que vem pela frente primeiro; o que já passou depois, do mais recente para o mais antigo."));
   cab.appendChild(d);
   const dirC = el("div"); dirC.style.cssText = "display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end";
   if (pessoasVivas().length){
@@ -2848,35 +3123,92 @@ function telaAgenda(){
   dirC.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
   cab.appendChild(dirC);
   f.appendChild(cab);
-  f.appendChild(barraFiltros());
 
   const dePessoa = p => filtroAgenda === "todos" ? true
     : filtroAgenda === "eu" ? souEu(p.quem)
     : p.quem === filtroAgenda;
   const itens = vis().filter(p => p.data && dePessoa(p)).sort((a,b) => a.data.localeCompare(b.data));
+  /* ORDEM DA AGENDA: hoje primeiro.
+     Antes era tudo em ordem crescente, então a tela abria na quinzena mais
+     ANTIGA. Medido no acervo real em 10/11/2026: 57 itens, 54 já passados, e o
+     marcador de "hoje" a 18.004px do topo — umas 25 telas de rolagem no celular
+     para chegar ao único lugar que interessa numa agenda.
+     Agora: uma faixa de hoje no topo, depois o que vem pela frente em ordem
+     crescente (o mais próximo primeiro), e só então o que já passou, do mais
+     recente para o mais antigo. */
+  const futuros  = itens.filter(p => p.data >= HOJE);
+  const passados = itens.filter(p => p.data < HOJE).reverse();
+  const aberto = p => !p.feita && !p.dispensada;
+
+  const hojeD = new Date(HOJE + "T00:00:00Z");
+  const hb = el("div","hojebar");
+  const hl = el("div");
+  hl.appendChild(el("span","k","Hoje"));
+  hl.appendChild(el("b", null, DIAS_SEM[hojeD.getUTCDay()] + ", " + hojeD.getUTCDate() + " de " + MESES[hojeD.getUTCMonth()]));
+  /* A faixa de hoje fala do que EXISTE, não do que o filtro deixou passar:
+     com "Concluídas" ligado ela diria "nada vence hoje" sobre um dia cheio. */
+  const reais = TODAS().filter(p => p.data && dePessoa(p) && aberto(p)).sort((a,b) => a.data.localeCompare(b.data));
+  const deHoje = reais.filter(p => p.data === HOJE).length;
+  const prox = reais.find(p => p.data > HOJE);
+  hl.appendChild(el("span","hs", deHoje ? deHoje + (deHoje === 1 ? " vence hoje" : " vencem hoje")
+    : prox ? "nada vence hoje · próximo em " + br(prox.data) + " (" + uteisTxt(uteisEntre(HOJE, prox.data)) + ")"
+    : "nada com data daqui para a frente"));
+  hb.appendChild(hl);
+  const ga = el("a","bt pq"); ga.href = linkDiaGoogle(HOJE); ga.target = "_blank"; ga.rel = "noopener";
+  ga.appendChild(ico(I.calend)); ga.appendChild(el("span", null, "Abrir hoje no Google Agenda"));
+  hb.appendChild(ga);
+  f.appendChild(hb);
+
+  /* Busca e filtros recolhidos, pela mesma razão da aba Processos: abertos,
+     ocupavam a tela inteira do celular e a faixa de hoje ficava a 685px do
+     topo. Abrem sozinhos quando há filtro ou busca valendo — filtro escondido
+     que esconde prazo é pior que filtro ocupando espaço. */
+  const filtrando = filtro !== "tudo" || !!busca;
+  const fdt = el("details","fdt"); fdt.open = filtrando;
+  const fsm = el("summary");
+  fsm.appendChild(el("span", null, "Buscar e filtrar"));
+  fsm.appendChild(el("b", null, filtrando ? [busca ? "busca: " + busca : null, filtro !== "tudo" ? "filtro ligado" : null].filter(Boolean).join(" · ") : "mostrando tudo"));
+  fdt.appendChild(fsm);
+  fdt.appendChild(barraFiltros());
+  f.appendChild(fdt);
+
   if (!itens.length){ f.appendChild(vazioBox("calend","Nada nesta seleção","Sem prazo, sessão ou tarefa com data para este filtro.", "Nova tarefa", () => dlgTarefa())); return f; }
 
-  const gr = new Map();
-  itens.forEach(p => { const k = qzDe(p.data); if(!gr.has(k)) gr.set(k,[]); gr.get(k).push(p); });
-  [...gr.keys()].sort().forEach(k => {
-    const lista = gr.get(k), r = rotuloQz(k);
+  const blocoQz = (k, lista, passado) => {
+    const r = rotuloQz(k);
     const nf = lista.filter(p => p.feita).length, limpa = nf === lista.length;
-    const bl = el("div","qz");
+    const bl = el("div","qz" + (passado ? " passou" : ""));
     const rail = el("div","qzr" + (limpa ? " limpa" : ""));
     rail.appendChild(el("div","a",r.a)); rail.appendChild(el("div","b",r.b)); rail.appendChild(el("div","c",r.c));
     rail.appendChild(el("div","p", limpa ? "quinzena limpa" : nf + " de " + lista.length));
     const ba = el("div","barra"); const bi = el("i"); bi.style.width = (nf/lista.length*100)+"%"; ba.appendChild(bi);
     rail.appendChild(ba);
+    /* o primeiro dia com algo em aberto, aberto no Google: confere-se a
+       quinzena inteira rolando a agenda a partir dali */
+    const alvo = (lista.find(aberto) || lista[0]).data;
+    const lg = el("a","qzg","ver no Google Agenda"); lg.href = linkDiaGoogle(alvo); lg.target = "_blank"; lg.rel = "noopener";
+    rail.appendChild(lg);
     bl.appendChild(rail);
     const box = el("div","qzi");
-    let marcou = false;
-    lista.forEach(p => {
-      if (!marcou && p.data >= HOJE && k === qzDe(HOJE)){ const h = el("div","hj"); h.appendChild(el("span",null,"hoje · "+br(HOJE))); box.appendChild(h); marcou = true; }
-      box.appendChild(cartao(p));
-    });
+    lista.forEach(p => box.appendChild(cartao(p)));
     bl.appendChild(box);
-    f.appendChild(bl);
-  });
+    return bl;
+  };
+  /* Map guarda a ordem de inserção: nos futuros ela é crescente, nos passados
+     decrescente, e é exatamente a ordem em que as quinzenas têm de sair. */
+  const agrupa = lista => { const g = new Map(); lista.forEach(p => { const k = qzDe(p.data); if (!g.has(k)) g.set(k, []); g.get(k).push(p); }); return g; };
+
+  agrupa(futuros).forEach((lista, k) => f.appendChild(blocoQz(k, lista, false)));
+
+  if (passados.length){
+    const ab = passados.filter(aberto).length;
+    const sp = el("div","sepag");
+    sp.appendChild(el("b", null, "Já passou"));
+    sp.appendChild(el("span", null, "do mais recente para o mais antigo · " + passados.length + (passados.length === 1 ? " item" : " itens")));
+    if (ab) sp.appendChild(el("span","tag t-rosa", ab + (ab === 1 ? " ainda em aberto" : " ainda em aberto")));
+    f.appendChild(sp);
+    agrupa(passados).forEach((lista, k) => f.appendChild(blocoQz(k, lista, true)));
+  }
   return f;
 }
 
@@ -2948,7 +3280,7 @@ function cartao(p){
       cw.appendChild(document.createTextNode(" → inicia "));
       cw.appendChild(el("b",null,br(b.inicio)));
       cw.appendChild(document.createTextNode(" → "));
-      cw.appendChild(el("b",null,b.dias+" dias úteis"));
+      cw.appendChild(el("b",null,uteisTxt(b.dias)));
       cw.appendChild(document.createTextNode(". No texto: "));
       cw.appendChild(el("code",null,b.trecho_prazo));
     } else cw.appendChild(document.createTextNode("Providência identificada no texto da publicação, sem prazo declarado."));
@@ -2970,18 +3302,23 @@ function cartao(p){
     a1.target = "_blank"; a1.rel = "noopener"; cr.appendChild(a1);
     if (b.link){ const a2 = el("a",null,"Inteiro teor"); a2.href = b.link; a2.target = "_blank"; a2.rel = "noopener"; cr.appendChild(a2); }
   }
-  if (p.data){
-    /* botão de verdade, não link discreto: entrar na agenda é a ação que
-       transforma o painel em lembrete, e precisa saltar. */
-    const ga = botao(convidados(p).length ? "Pôr na agenda e convidar " + ((pessoaDe(p.quem)||{}).nome||"").split(" ")[0] : "Pôr na agenda", "calend", "agenda pq", () => {
-      try { window.open(linkGoogle(p), "_blank"); } catch(e){ location.href = linkGoogle(p); }
-      avisar("Agenda aberta — confirme para salvar");
-    });
-    cr.appendChild(ga);
-    if (pessoasVivas().filter(x => x.email).length > 1){
-      cr.appendChild(botao("…e a equipe toda","pessoa","pq", () => {
-        try { window.open(linkGoogle(p, true), "_blank"); } catch(e){}
-      }));
+  /* Agenda e Drive do caso, lado a lado: são os dois lugares fora do painel
+     onde esse prazo precisa existir. A pasta aparece aqui porque é na hora de
+     cumprir a tarefa que se precisa dela — antes só existia no cartão do
+     processo, a uma aba de distância. */
+  cr.appendChild(faixaAgenda(p));
+  {
+    const numProc = b.proc || b.processo;
+    const casoP = numProc ? casoDoProc(numProc) : (b.casoId ? casoPorId(b.casoId) : null);
+    const pasta = casoP && (casoP.drive || []).find(l => l.url);
+    if (pasta){
+      const a = el("a","dvl"); a.href = pasta.url; a.target = "_blank"; a.rel = "noopener";
+      a.appendChild(ico(I.pasta)); a.appendChild(el("span", null, pasta.rot || "Pasta"));
+      cr.appendChild(a);
+    } else if (numProc){
+      const a = el("a", null, "procurar no Drive"); a.href = linkBuscaDrive(numProc); a.target = "_blank"; a.rel = "noopener";
+      a.title = "Procura o número do processo no seu Google Drive";
+      cr.appendChild(a);
     }
   }
   const dir = el("div","dir");
@@ -3171,7 +3508,7 @@ function comoAnda(g){
     if (g.proximo.prazo < HOJE) return { txt: "prazo vencido", cor: "x" };
     if (f === 0) return { txt: "vence hoje", cor: "x" };
     if (f <= 5) return { txt: "vence em " + f + (f === 1 ? " dia útil" : " dias úteis"), cor: "u" };
-    return { txt: "próximo prazo em " + f + " dias úteis", cor: "" };
+    return { txt: "próximo prazo em " + uteisTxt(f), cor: "" };
   }
   if (g.semProvidencia) return { txt: g.semProvidencia + (g.semProvidencia === 1 ? " publicação sem providência" : " publicações sem providência"), cor: "u" };
   if (g.abertas.length) return { txt: g.abertas.length + " em aberto, sem data", cor: "" };
@@ -4000,7 +4337,7 @@ function prioridadeCalc(g){
     const f = uteisEntre(HOJE, g.proximo.prazo);
     if (g.proximo.prazo < HOJE) return { p:"alta", pq:"prazo vencido" };
     if (f <= 3) return { p:"alta", pq:"prazo em " + f + (f === 1 ? " dia útil" : " dias úteis") };
-    if (f <= 10) return { p:"media", pq:"prazo em " + f + " dias úteis" };
+    if (f <= 10) return { p:"media", pq:"prazo em " + uteisTxt(f) };
   }
   /* mesma razão da pasta: triagem pendente de três meses atrás não é média
      prioridade, senão o acervo inteiro fica "médio" e nada se destaca */
@@ -4395,6 +4732,15 @@ function blocoDrive(g, aoMudar){
     b.appendChild(t);
     b.addEventListener("click", () => dlgDrive(g, aoMudar));
     box.appendChild(b);
+    /* Quem não colou o link quase sempre é porque não lembra onde a pasta
+       está. A busca do próprio Drive pelo número do processo (ou pelo apelido)
+       acha a pasta em um toque — aí é copiar o endereço e colar acima. */
+    const termo = (g && (g.proc || (g.caso && g.caso.titulo))) || "";
+    if (termo){
+      const pr = el("a","dvproc"); pr.href = linkBuscaDrive(termo); pr.target = "_blank"; pr.rel = "noopener";
+      pr.appendChild(ico(I.busca)); pr.appendChild(el("span", null, "Procurar a pasta no meu Drive"));
+      box.appendChild(pr);
+    }
     return box;
   }
   links.forEach(l => {
@@ -4403,6 +4749,16 @@ function blocoDrive(g, aoMudar){
     a.appendChild(el("span", null, l.rot || "Pasta no Drive"));
     box.appendChild(a);
   });
+  /* documento novo já DENTRO da pasta do caso e já com o nome dele: poupa o
+     caminho Drive → pasta → Novo → renomear, que é onde nasce o "Documento sem
+     título" perdido no Meu Drive. Só aparece quando o link é de pasta. */
+  const pastaId = idDaPastaDrive((links.find(l => idDaPastaDrive(l.url)) || {}).url);
+  if (pastaId && g){
+    const nd = el("a","dvnovo"); nd.href = linkNovoDoc(tituloDe(g) + " — ", pastaId); nd.target = "_blank"; nd.rel = "noopener";
+    nd.title = "Cria um Google Docs dentro da pasta deste caso";
+    nd.appendChild(ico(I.mais)); nd.appendChild(el("span", null, "Nova peça nesta pasta"));
+    box.appendChild(nd);
+  }
   const mais = el("button","dvmais"); mais.type = "button"; mais.title = "Mais links";
   mais.appendChild(ico(I.mais));
   mais.addEventListener("click", () => dlgDrive(g, aoMudar));
@@ -4686,7 +5042,7 @@ function dlgAtividade(g){
   const sel = el("select");
   const vazioOp = el("option", null, "Escolher da lista…"); vazioOp.value = ""; sel.appendChild(vazioOp);
   ATIVIDADES.forEach(([nome, dias]) => {
-    const o = el("option", null, nome + (dias ? "  ·  " + dias + " dias úteis" : ""));
+    const o = el("option", null, nome + (dias ? "  ·  " + uteisTxt(dias) : ""));
     o.value = nome; o.dataset.dias = dias || ""; sel.appendChild(o);
   });
   const outra = el("option", null, "Outra — escrevo eu"); outra.value = "__livre"; sel.appendChild(outra);
@@ -5080,7 +5436,7 @@ function situacaoDe(g){
     tom: "rs", fonte: "prazo passou e ninguém marcou" };
   if (prox){
     const u = uteisEntre(HOJE, prox);
-    return { txt: (g.proximo.titulo || "Prazo") + " — " + (u <= 0 ? "vence hoje" : "faltam " + u + " dias úteis"),
+    return { txt: (g.proximo.titulo || "Prazo") + " — " + (u <= 0 ? "vence hoje" : u === 1 ? "falta 1 dia útil" : "faltam " + u + " dias úteis"),
       tom: u <= 3 ? "amb" : "az", fonte: "prazo em aberto" };
   }
   if (ult && ult.decisao) return { txt: ult.decisao.rotulo + " em " + br(ult.disp), tom: "vi", fonte: "detectado no texto da publicação" };
@@ -6893,11 +7249,29 @@ function telaFinanceiro(){
   return f;
 }
 
+/* O "Drive do time" era descrito como "a pasta que todo mundo abre primeiro",
+   mas ficava só no aparelho de quem colou: cada pessoa teria de colar de novo,
+   e na prática só uma tinha. Agora mora em meta/links, como o corte do
+   histórico: uma pessoa cola, todos recebem na sincronização seguinte. */
+async function lerLinksDoTime(){
+  if (!E.time) return null;
+  try { const d = await fsChama(caminho("meta", "links"), { method:"GET" }); return d ? deDoc(d) : null; }
+  catch(e){ return null; }
+}
+async function gravaLinksDoTime(){
+  if (!E.time) return;
+  if (!E.driveTimeEm) E.driveTimeEm = agoraISO();
+  try { await fsGrava("meta", "links", { driveTime: E.driveTime || "", por: E.time.meuNome || "", em: E.driveTimeEm }); } catch(e){}
+}
+
 function dlgLinkGeral(chave, rot, dica){
   const i = entrada("url", E[chave] || "", "https://drive.google.com/…");
   modal(rot, dica, [campo("Endereço", i)], () => {
     E[chave] = i.value.trim() || null; salvar(); fechar(); render();
-    avisar(E[chave] ? rot + " guardado" : "Link removido");
+    /* só o Drive do time sobe; a pasta do financeiro continua no aparelho, pela
+       mesma razão dos valores (ver COLECOES) */
+    if (chave === "driveTime"){ E.driveTimeEm = agoraISO(); salvar(); gravaLinksDoTime(); }
+    avisar(E[chave] ? rot + (chave === "driveTime" && E.time ? " guardado e enviado ao time" : " guardado") : "Link removido");
   }, "Salvar");
 }
 
@@ -7514,7 +7888,7 @@ function painelOQueFazer(p){
     criar.forEach(c => {
       const t = { id: uid(), titulo: c.rot + (parte ? " — " + parte : ""), prazo: prazoDoAto(b, c.dias),
         processo: b.proc, pessoaId: quem.value || null,
-        nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + c.dias + " dias úteis" : " · sem prazo"),
+        nota: "de intimação de " + br(b.disp) + " · " + b.trib + (c.dias ? " · prazo padrão de " + uteisTxt(c.dias) : " · sem prazo"),
         feita: false, criada: HOJE, daIntimacao: String(b.id) };
       if (quem.value){
         t.delegadaPor = (E.time && E.time.pessoaId) || null;
