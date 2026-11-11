@@ -95,6 +95,8 @@ button{font-family:inherit}
 .bt.ok{background:var(--verde); border-color:var(--verde); color:var(--on-cor)}
 .bt.ok:hover{color:var(--on-cor); filter:brightness(1.08)}
 .bt.pq{padding:7px 11px; font-size:12.5px; border-radius:8px}
+.bt.zap{color:var(--verde); border-color:color-mix(in srgb,var(--verde) 45%,var(--line-2))}
+.bt.zap:hover{color:var(--verde); filter:brightness(1.08)}
 .bt[disabled]{opacity:.45; cursor:not-allowed}
 input,select,textarea{font:400 15px/1.35 "Source Sans 3",sans-serif; color:var(--ink); background:var(--surface); border:1px solid var(--line-2); border-radius:10px; padding:11px 13px; width:100%}
 input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--azul); outline-offset:1px}
@@ -2320,6 +2322,7 @@ function dlgOab(){
 function dlgPessoa(existente){
   const nome = entrada("text", existente ? existente.nome : "", "Nome completo");
   const email = entrada("email", existente ? (existente.email || "") : "", "nome@escritorio.com.br (opcional)");
+  const fone = entrada("tel", existente ? foneBonito(existente.fone) : "", "(11) 90000-0000 (opcional)");
   const papel = el("select");
   ["Advogado","Advogada","Estagiário","Estagiária","Secretaria","Financeiro","Cliente","Outro"].forEach(p => papel.appendChild(new Option(p,p)));
   if (existente) papel.value = existente.papel;
@@ -2331,15 +2334,17 @@ function dlgPessoa(existente){
     cores.appendChild(b); });
   const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
   modal(existente ? "Editar pessoa" : "Cadastrar pessoa",
-    "Quem pode receber tarefas. Não precisa ser advogado. Com e-mail preenchido, a pessoa entra como convidada nos eventos de calendário que você gerar.",
-    [campo("Nome", nome), campo("E-mail", email), campo("Papel", papel), campo("Cor", cores), st],
+    "Quem pode receber tarefas. Não precisa ser advogado. Com e-mail preenchido, a pessoa entra como convidada nos eventos de calendário que você gerar. Com celular, o botão de WhatsApp já abre na conversa dela.",
+    [campo("Nome", nome), campo("E-mail", email), campo("WhatsApp (celular com DDD)", fone), campo("Papel", papel), campo("Cor", cores), st],
     () => {
       const n = nome.value.trim();
       if (!n){ st.textContent = "Informe o nome."; return false; }
       const em = email.value.trim();
       if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ st.textContent = "Esse e-mail não parece válido."; return false; }
-      if (existente){ existente.nome = n; existente.papel = papel.value; existente.cor = cor; existente.email = em || null; tocou(existente); }
-      else { const nova = { id:uid(), nome:n, papel:papel.value, cor, email:em || null }; tocou(nova); E.pessoas.push(nova); }
+      const fn = foneLimpo(fone.value);
+      if (fn && !foneValido(fn)){ st.textContent = "Esse celular não parece completo. Confira o DDD; fora do Brasil, comece com +."; return false; }
+      if (existente){ existente.nome = n; existente.papel = papel.value; existente.cor = cor; existente.email = em || null; existente.fone = fn || null; tocou(existente); }
+      else { const nova = { id:uid(), nome:n, papel:papel.value, cor, email:em || null, fone:fn || null }; tocou(nova); E.pessoas.push(nova); }
       salvar(); render(); return true;
     });
 }
@@ -2911,6 +2916,7 @@ function cartaoHoje(){
   else lk.appendChild(botao("Ligar o Drive do time","pasta","pq", () =>
     dlgLinkGeral("driveTime", "Drive do time", "A pasta que todo mundo abre primeiro. Uma pessoa cola, o time inteiro recebe.")));
   if (E.driveFin) mk("Pasta do financeiro", "moeda", E.driveFin);
+  lk.appendChild(botao("Pendências da quinzena no WhatsApp","balao","zap pq", () => zapQuinzena("todos")));
   cx.appendChild(lk);
   return cx;
 }
@@ -3120,6 +3126,9 @@ function telaAgenda(){
     sel.addEventListener("change", e => { filtroAgenda = e.target.value; render(); });
     dirC.appendChild(campo("De quem", sel));
   }
+  /* segue o seletor "De quem": time inteiro vai para a conversa que você
+     escolher (o grupo); uma pessoa só, direto para ela */
+  dirC.appendChild(botao("Quinzena no WhatsApp","balao","zap", () => zapQuinzena(filtroAgenda)));
   dirC.appendChild(botao("Nova tarefa","mais","pri", () => dlgTarefa()));
   cab.appendChild(dirC);
   f.appendChild(cab);
@@ -3323,6 +3332,7 @@ function cartao(p){
   }
   const dir = el("div","dir");
   if (p.data) dir.appendChild(botao(".ics","calend","pq", () => baixarIcs([p], "prazo")));
+  if (!p.feita && !p.dispensada) dir.appendChild(botao("WhatsApp","balao","zap pq", () => zapTarefa(p)));
   dir.appendChild(botao(p.quem ? "Trocar" : "Delegar", "pessoa", "pq", () => dlgDelegar(p)));
   if (p.fonte === "manual") dir.appendChild(botao("Editar","lapis","pq", () => dlgTarefa(p.bruto)));
   if (p.fonte === "manual"){
@@ -8086,7 +8096,7 @@ function telaEquipe(){
     const top = el("div","top");
     top.appendChild(avatar(p,true));
     const nm = el("div"); nm.appendChild(el("div","nm",p.nome));
-    nm.appendChild(el("div","pp", p.papel + (p.email ? " · " + p.email : "")));
+    nm.appendChild(el("div","pp", p.papel + (p.email ? " · " + p.email : "") + (p.fone ? " · " + foneBonito(p.fone) : "")));
     top.appendChild(nm);
     c.appendChild(top);
     const nums = el("div","nums");
@@ -8108,6 +8118,8 @@ function telaEquipe(){
       ac.appendChild(botao("Calendário dela","calend","pq", () => baixarIcs(suas.filter(x => !x.feita), (p.nome.split(" ")[0]||"pessoa").toLowerCase())));
     }
     if (p.email) ac.appendChild(botao("Cobrar por e-mail","seta","email pq", () => mandarEmail(p, suas.filter(x => !x.feita))));
+    if (suas.some(x => !x.feita && !x.dispensada))
+      ac.appendChild(botao("Cobrar pelo WhatsApp","balao","zap pq", () => zapPessoa(p, suas)));
     ac.appendChild(botao("Remover","lixo","pq", () => {
       if (confirm("Remover " + p.nome + "? As tarefas dela voltam para você.")){
         E.tarefas.forEach(t => { if (t.pessoaId === p.id){ t.pessoaId = null; tocou(t); } });
@@ -8182,6 +8194,198 @@ function mandarEmail(pessoa, lista){
     + "?subject=" + encodeURIComponent(assunto)
     + "&body=" + encodeURIComponent(corpo);
   try { window.open(url, "_blank"); } catch(e){ location.href = url; }
+}
+
+/* ============================================================
+   WHATSAPP — sem servidor e sem conta de empresa
+   ------------------------------------------------------------
+   O painel é uma página: não manda mensagem sozinho, e fingir que manda seria
+   o erro perigoso (alguém confia num lembrete que nunca saiu). O que ele faz é
+   abrir o WhatsApp com o texto pronto e, quando a pessoa tem celular
+   cadastrado, já na conversa dela — quem aperta "enviar" é sempre gente.
+   O texto também vai para a área de transferência: se o WhatsApp abrir vazio
+   (acontece no computador sem o aplicativo), é só colar.
+   ============================================================ */
+const ZAP_MAX = 2800;   // acima disso o endereço fica longo demais para alguns aparelhos
+const primeiroNome = p => (p && p.nome ? p.nome.trim().split(/\s+/)[0] : "");
+
+/* Guarda só dígitos, já com o país. DDD + número (10 ou 11 dígitos) é tratado
+   como Brasil; número de outro país tem de vir com "+". */
+function foneLimpo(txt){
+  const cru = String(txt || "").trim();
+  let d = cru.replace(/\D/g, "");
+  if (!d) return "";
+  if (cru.startsWith("+")) return d;
+  if (d.startsWith("00")) return d.slice(2);
+  d = d.replace(/^0+/, "");
+  return (d.length === 10 || d.length === 11) ? "55" + d : d;
+}
+const foneValido = d => /^\d{10,15}$/.test(d);
+function foneBonito(d){
+  if (!d) return "";
+  if (/^55\d{10,11}$/.test(d)){ const n = d.slice(4); return "(" + d.slice(2,4) + ") " + n.slice(0, n.length - 4) + "-" + n.slice(-4); }
+  return "+" + d;
+}
+
+function abrirZap(texto, fone, completo){
+  const url = "https://wa.me/" + (fone || "") + "?text=" + encodeURIComponent(texto);
+  try { navigator.clipboard.writeText(completo || texto).then(
+    () => avisar("Abrindo o WhatsApp — o texto também foi copiado"), () => {}); } catch(e){}
+  let j = null;
+  try { j = window.open(url, "_blank"); } catch(e){}
+  if (!j) location.href = url;
+}
+
+/* Para quem vai: com celular cadastrado abre direto na conversa; sem celular
+   pergunta UMA vez (e guarda); sem pessoa, o WhatsApp deixa escolher a conversa
+   ou o grupo. */
+function zapPara(pessoa, texto, completo){
+  if (!pessoa || souEu(pessoa.id)){ abrirZap(texto, "", completo); return; }
+  if (pessoa.fone && foneValido(pessoa.fone)){ abrirZap(texto, pessoa.fone, completo); return; }
+  const fone = entrada("tel", "", "(11) 90000-0000");
+  const st = el("p","sb",""); st.style.margin = "0"; st.style.color = "var(--rosa)";
+  modal("WhatsApp de " + primeiroNome(pessoa),
+    "Ainda não há celular cadastrado. Com o número, a conversa já abre nela e fica guardado para as próximas. Em branco, você escolhe a conversa dentro do WhatsApp. Número de fora do Brasil começa com +.",
+    [campo("Celular com DDD (opcional)", fone), st],
+    () => {
+      const cru = fone.value.trim();
+      if (!cru){ abrirZap(texto, "", completo); return true; }
+      const d = foneLimpo(cru);
+      if (!foneValido(d)){ st.textContent = "Esse número não parece completo. Confira o DDD."; return false; }
+      pessoa.fone = d; tocou(pessoa); salvar(); render();
+      abrirZap(texto, d, completo); return true;
+    }, "Abrir o WhatsApp");
+}
+
+const diaCurto = iso => br(iso).slice(0,5) + " " + DIAS_SEM[new Date(iso + "T00:00:00Z").getUTCDay()].slice(0,3);
+
+/* Providência só "identificada no texto" (sem prazo declarado) carrega a data
+   da PUBLICAÇÃO, não um vencimento. Numa mensagem que vai para um grupo ela não
+   pode sair como "vencida": aqui ela tem seção própria. */
+const semPrazoDeclarado = p => p.tipo === "acao";
+
+function linhaZap(p, comQuem){
+  const nome = nomeDaProvidencia(p);
+  const resp = comQuem && p.quem ? primeiroNome(pessoaDe(p.quem)) : "";
+  const quando = !p.data ? "sem data" : semPrazoDeclarado(p) ? "publ. " + br(p.data).slice(0,5) : diaCurto(p.data);
+  return "• " + quando + " — " + p.titulo + (nome ? " — " + nome : "") + (resp ? " (" + resp + ")" : "");
+}
+
+function compromissosAte(lim, idsListados){
+  const grupos = agrupaProcessos();
+  return audiencias()
+    .filter(a => a.quando && a.quando.slice(0,10) >= HOJE && a.quando.slice(0,10) <= lim && !(a.pubId && idsListados.has(a.pubId)))
+    .sort((a, b) => a.quando.localeCompare(b.quando))
+    .map(a => {
+      const g = grupos.find(x => (x.caso ? x.caso.id : "p:" + x.proc) === a.casoRef);
+      return "• " + diaCurto(a.quando.slice(0,10)) + " " + a.quando.slice(11,16) + " — " + rotuloAud(a.tipo) + (g ? " — " + tituloDe(g) : "");
+    });
+}
+
+/* Monta a lista de pendências. o.lim = último dia que entra (null = sem
+   horizonte). Devolve null quando não há nada em aberto — mensagem vazia não
+   se manda. */
+function textoPendencias(lista, o, max){
+  const NL = String.fromCharCode(10);
+  const abertas = lista.filter(p => !p.feita && !p.dispensada);
+  const porData = (a, b) => (a.data || "9").localeCompare(b.data || "9");
+  const comPrazo = abertas.filter(p => p.data && !semPrazoDeclarado(p)).sort(porData);
+  const venc = comPrazo.filter(perdida);
+  const hoje = comPrazo.filter(p => p.data === HOJE);
+  const prox = comPrazo.filter(p => p.data > HOJE && (!o.lim || p.data <= o.lim));
+  const soltas = abertas.filter(semPrazoDeclarado).sort(porData);
+  const semData = abertas.filter(p => !p.data);
+  const linhas = ps => ps.map(p => linhaZap(p, o.comQuem));
+  const comp = o.compromissos
+    ? compromissosAte(o.lim, new Set(venc.concat(hoje, prox).map(p => p.bruto.id))) : [];
+  const secoes = [
+    ["VENCIDAS sem registro no painel", linhas(venc)],
+    ["Vencem HOJE", linhas(hoje)],
+    [o.lim ? "Até " + br(o.lim).slice(0,5) : "Próximas", linhas(prox)],
+    ["Audiências e compromissos", comp],
+    ["Providências sem prazo declarado", linhas(soltas)],
+    ["Sem data — falta definir", linhas(semData)],
+  ];
+  const total = secoes.reduce((n, s) => n + s[1].length, 0);
+  if (!total) return null;
+
+  const L = [];
+  if (o.saud) L.push(o.saud, "");
+  L.push("*" + o.titulo + "*");
+  L.push((o.sub ? o.sub + " · " : "") + total + " em aberto");
+  const rod = ["", "_Datas sugeridas pelo painel a partir do diário. Confira nos autos._"];
+  const teto = max || Infinity;
+  let usado = L.join(NL).length + rod.join(NL).length + 40, fora = 0;
+  secoes.forEach(([rot, ls]) => {
+    if (!ls.length) return;
+    const tit = "*" + rot + " (" + ls.length + ")*";
+    let abriu = false;
+    ls.forEach(l => {
+      const custo = l.length + 1 + (abriu ? 0 : tit.length + 2);
+      if (usado + custo > teto){ fora++; return; }
+      if (!abriu){ L.push("", tit); abriu = true; }
+      L.push(l); usado += custo;
+    });
+  });
+  if (fora) L.push("", "… e mais " + fora + " no painel.");
+  return { texto: L.concat(rod).join(NL), total, fora };
+}
+
+function mandaPendencias(lista, o, pessoa){
+  const curto = textoPendencias(lista, o, ZAP_MAX);
+  if (!curto){ avisar("Nada em aberto para mandar"); return; }
+  const inteiro = curto.fora ? textoPendencias(lista, o).texto : curto.texto;
+  zapPara(pessoa, curto.texto, inteiro);
+}
+
+/* Os 15 dias a partir de hoje (hoje + 14), mais o que ficou vencido para trás.
+   quem = "todos" | "eu" | id da pessoa — o mesmo seletor da Agenda. */
+function zapQuinzena(quem){
+  const alvo = (quem !== "todos" && quem !== "eu") ? pessoaDe(quem) : null;
+  const lim = isoDe(new Date(new Date(HOJE + "T00:00:00Z").getTime() + 14 * 864e5));
+  const lista = TODAS().filter(p => quem === "todos" ? true : quem === "eu" ? souEu(p.quem) : p.quem === quem);
+  const deQuem = alvo ? "" : quem === "eu" ? "só o que está comigo" : (E.time && E.time.nome ? "time " + E.time.nome : "");
+  mandaPendencias(lista, {
+    titulo: "Pendências da quinzena",
+    sub: br(HOJE).slice(0,5) + " a " + br(lim).slice(0,5) + (deQuem ? " · " + deQuem : ""),
+    lim, comQuem: quem === "todos", compromissos: !alvo,
+    saud: alvo && !souEu(alvo.id) ? "Oi, " + primeiroNome(alvo) + "! Segue o que está com você:" : null,
+  }, alvo);
+}
+
+/* Tudo o que está aberto com a pessoa, sem horizonte — é a cobrança da aba Equipe. */
+function zapPessoa(pessoa, lista){
+  mandaPendencias(lista, {
+    titulo: "Suas pendências", sub: "", lim: null, comQuem: false, compromissos: false,
+    saud: souEu(pessoa.id) ? null : "Oi, " + primeiroNome(pessoa) + "! Passando para lembrar:",
+  }, pessoa);
+}
+
+/* Uma tarefa só, a partir do cartão dela. Vai para quem está com a tarefa; se
+   é sua ou de ninguém, você escolhe a conversa. */
+function zapTarefa(p){
+  const NL = String.fromCharCode(10);
+  const resp = p.quem && !souEu(p.quem) ? pessoaDe(p.quem) : null;
+  const b = p.bruto, num = b.proc || b.processo, nome = nomeDaProvidencia(p);
+  const L = [];
+  if (resp) L.push("Oi, " + primeiroNome(resp) + "! Passando para lembrar:", "");
+  L.push("*" + p.titulo + "*");
+  if (nome && nome !== num) L.push(nome);
+  if (num) L.push("Processo " + num + (b.trib ? " · " + b.trib : ""));
+  if (!p.data) L.push("Sem data definida.");
+  else if (semPrazoDeclarado(p)) L.push("Publicado em " + br(p.data) + ", sem prazo declarado no texto.");
+  else if (p.tipo === "sessao") L.push("Sessão em " + br(p.data)
+    + (p.data === HOJE ? " — é HOJE" : p.data > HOJE ? " (em " + uteisTxt(uteisEntre(HOJE, p.data)) + ")" : " — já passou"));
+  else {
+    L.push((p.fonte === "manual" ? "Prazo: " : "Prazo fatal: ") + br(p.data)
+      + (p.data < HOJE ? " — JÁ PASSOU, conferir nos autos" : p.data === HOJE ? " — é HOJE"
+        : " (faltam " + uteisTxt(uteisEntre(HOJE, p.data)) + ")"));
+    if (p.data >= HOJE && p.tipo !== "manual") L.push("Preparar até: " + br(internoDe(p.data)));
+  }
+  if (b.nota) L.push(b.nota);
+  /* data de tarefa manual foi escrita por gente; só a que veio do diário é sugestão */
+  if (p.fonte === "djen") L.push("", "_Data sugerida pelo painel a partir do diário. Confira nos autos._");
+  zapPara(resp, L.join(NL));
 }
 
 function dlgCriarTime(){
